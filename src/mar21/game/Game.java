@@ -8,17 +8,15 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 import mar21.entity.Entity;
-import mar21.entity.Entity.State;
+import mar21.entity.Entity.OnUpdateAction;
 import mar21.entity.FallingEntity;
 import mar21.entity.items.Coin;
 import mar21.entity.items.Meteor;
 import mar21.entity.player.Player;
 import mar21.event.GameEvent;
-import mar21.input.InputManager;
-import mar21.input.bind.StrokeType;
+import mar21.input.InputHandler;
 import mar21.resources.ResourceManager;
 
 public class Game {
@@ -50,32 +48,25 @@ public class Game {
 	private Overlay overlay;
 	
 	private ArrayList<Entity> entities = new ArrayList<Entity>();
-	private InputManager input;
+	private InputHandler input;
 	private Player player;
 	
-	public Game(Group content, InputManager input) {
+	public Game(Group content, InputHandler input) {
 		this.content = content;
 		this.input = input;
-		input.bind(KeyCode.NUMPAD0, StrokeType.KEY_PRESSED, () -> {
-			if (FallingEntity.SPEED == 6) {
-				FallingEntity.SPEED = 3;
-			} else {
-				FallingEntity.SPEED = 6;
-			}
-		});
 		
 		scene = new Scene(content, SCREEN_WIDTH, SCREEN_HEIGHT);
-		
-		content.getChildren().add(ResourceManager.requestInstance().buildImageView("bg7", SCREEN_WIDTH, SCREEN_HEIGHT));
-		
 		player = new Player((SCREEN_WIDTH - Player.WIDTH) / 2, GROUND, input);
-		content.getChildren().add(player.getImageView());
-		
 		overlay = new Overlay(SCREEN_WIDTH, SCREEN_HEIGHT);
-		overlay.init(player);
-		content.getChildren().add(overlay);
 		
-		updateImageViews();
+		content.getChildren().addAll(
+			ResourceManager.requestInstance().buildImageView("bg7", SCREEN_WIDTH, SCREEN_HEIGHT),
+			player.getView(),
+			overlay
+		);
+
+		overlay.init(player);
+		
 		spawner.play();
 	}
 	
@@ -83,29 +74,25 @@ public class Game {
 		Platform.runLater(() -> {
 			Upgrades.load();
 			
-			content.getChildren().remove(player.getImageView());
-			for (Entity e : entities) {
-				content.getChildren().remove(e.getImageView());
-			}
-			
+			content.getChildren().remove(1, content.getChildren().size());
 			entities.clear();
 		
-			player = new Player((SCREEN_WIDTH - Player.WIDTH) / 2, GROUND, input);
-			content.getChildren().add(player.getImageView());
-			overlay.init(player);
+			player = new Player((SCREEN_WIDTH - Player.WIDTH) / 2, GROUND, input);	
+			content.getChildren().add(player.getView());
 			
-			updateImageViews();
+			overlay.init(player);
+		
 			spawner.play();
 		});
 	}
 	
 	public Scene getScene() {
-		return this.scene;
+		return scene;
 	}
 	
 	private void add(Entity... entity) {
 		for (Entity e : entity) {
-			content.getChildren().add(e.getImageView());
+			content.getChildren().add(e.getView());
 			entities.add(e);
 		}
 	}
@@ -113,7 +100,7 @@ public class Game {
 	public void remove(Entity... entity) {
 		Platform.runLater(() -> {
 			for (Entity e : entity) {
-				content.getChildren().remove(e.getImageView());
+				content.getChildren().remove(e.getView());
 				entities.remove(e);
 			}
 		});
@@ -122,8 +109,8 @@ public class Game {
 	public void removeSheduled() {
 		Platform.runLater(() -> {
 			entities.removeIf((Entity) -> {
-				if (Entity.state().equals(State.MARKED_FOR_REMOVAL)) {
-					content.getChildren().remove(Entity.getImageView());
+				if (Entity.getAction().equals(OnUpdateAction.REMOVAL)) {
+					content.getChildren().remove(Entity.getView());
 					return true;
 				} else {
 					return false;
@@ -132,35 +119,32 @@ public class Game {
 		});
 	}
 	
-	private void updateImageViews() {
-		player.updateImageView();
-		entities.forEach(Entity::updateImageView);
-	}
-	
 	private void updateEntities() {
 		player.update();
 		entities.forEach((Entity) -> {
-			switch (Entity.state()) {
+			switch (Entity.getAction()) {
 				case NONE:
 					{
 						Entity.update();
-						if (Entity.getImageView().intersects(player.x(), player.y(), Player.HEIGHT - Player.COLLISION_HEIGHT_OFFSET, Player.WIDTH)) {
-							if (Entity instanceof Meteor) {
+						if (Entity instanceof Meteor) {
+							if (player.getView().intersects(Entity.getX() + 6, Entity.getY() + 6, Entity.getWidth() - 12, Entity.getHeight() - 12)) {	
 								player.applyDamage();
-							} else {
-								Upgrades.getInstance().addCoins();
+								Entity.requestRemoval(true);
 							}
-							
-							Entity.requestAnimatedRemoval();
+						} else {
+							if (player.getView().intersects(Entity.getView().getBoundsInLocal())) {
+								Upgrades.getInstance().addCoins();
+								Entity.requestRemoval(true);
+							}
 						}
 					}					
 					break;
-				case REMOVAL_ANIMATION:
+				case ANIMATION:
 					{
 						Entity.update();
 					}
 					break;
-				case MARKED_FOR_REMOVAL:
+				case REMOVAL:
 					{
 					
 					}
@@ -173,7 +157,7 @@ public class Game {
 	
 	public void update() {		
 		updateEntities();
-		updateImageViews();
+		
 		overlay.update();
 		
 		if (player.getHealth() <= 0) {

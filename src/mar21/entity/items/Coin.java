@@ -13,19 +13,19 @@ public final class Coin extends FallingEntity {
 		spin.setCycleCount(Timeline.INDEFINITE);
 		spin.getKeyFrames().addAll(
 			new KeyFrame(Duration.millis(80),e -> {
-				this.imageView.setScaleX(1);
-				this.imageView.shatter(0, 0);
+				view.setScaleX(1);
+				view.shatter(0, 0);
 			}),
-			new KeyFrame(Duration.millis(160), e -> this.imageView.shatter(0, 1)),
-			new KeyFrame(Duration.millis(240), e -> this.imageView.shatter(0, 2)),
-			new KeyFrame(Duration.millis(320), e -> this.imageView.shatter(0, 3)),
-			new KeyFrame(Duration.millis(400), e -> this.imageView.shatter(0, 4)),
+			new KeyFrame(Duration.millis(160), e -> view.shatter(0, 1)),
+			new KeyFrame(Duration.millis(240), e -> view.shatter(0, 2)),
+			new KeyFrame(Duration.millis(320), e -> view.shatter(0, 3)),
+			new KeyFrame(Duration.millis(400), e -> view.shatter(0, 4)),
 			new KeyFrame(Duration.millis(480),e -> {
-				this.imageView.setScaleX(-1);
-				this.imageView.shatter(0, 3);
+				view.setScaleX(-1);
+				view.shatter(0, 3);
 			}),
-			new KeyFrame(Duration.millis(560), e -> this.imageView.shatter(0, 2)),
-			new KeyFrame(Duration.millis(640), e -> this.imageView.shatter(0, 1))
+			new KeyFrame(Duration.millis(560), e -> view.shatter(0, 2)),
+			new KeyFrame(Duration.millis(640), e -> view.shatter(0, 1))
 		);
 	}
 	

@@ -9,15 +9,13 @@ import javafx.stage.Stage;
 import mar21.event.GameEvent;
 import mar21.game.Game;
 import mar21.game.Upgrades;
-import mar21.input.EventAdapter;
-import mar21.input.InputManager;
-import mar21.input.bind.StrokeType;
+import mar21.input.InputHandler;
+import mar21.input.bind.KeyStroke;
 import mar21.resources.ResourceManager;
 
 public class Start extends Application {	
-	public InputManager input;
-	private EventAdapter adapter;
-
+	
+	public InputHandler input;
 	private Game level;
 	
 	@Override
@@ -31,22 +29,23 @@ public class Start extends Application {
 			"/res/meteor0.png",
 			"/res/player.png"
 		);
+		
 		Upgrades.load();
 
-		this.adapter = new EventAdapter();
-		this.input = new InputManager(adapter);
-		stage.addEventHandler(KeyEvent.ANY, adapter);
+		input = new InputHandler();
+		input.bind(KeyCode.ESCAPE, KeyStroke.KEY_PRESSED, () -> {
+			stage.fireEvent(new GameEvent(GameEvent.GAME_OVER));
+		});
 		
-		this.level = new Game(new Group(), input);
-		stage.setScene(level.getScene());	
+		level = new Game(new Group(), input);
 		
+		stage.setScene(level.getScene());
+		stage.addEventHandler(KeyEvent.ANY, input);
 		stage.addEventHandler(GameEvent.GAME_OVER, e -> {
 			level.reset();
 			e.consume();
 		});
 		
-		input.bind(KeyCode.ESCAPE, StrokeType.KEY_PRESSED, () -> stage.fireEvent(new GameEvent(GameEvent.GAME_OVER)));
-	
 		stage.sizeToScene();
 		stage.setResizable(false);
 		stage.centerOnScreen();

@@ -1,41 +1,36 @@
 package mar21.entity;
 
-import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import mar21.game.Game;
 import mar21.resources.ShatteredImageView;
 
 public class FallingEntity extends Entity {
-
-	public static final double SIZE = 40;
-	public static double SPEED = 6; // - Upgrades.getInstance().get(UpgradeType.FALL_SPEED);
 	
-	private final FadeTransition fade = new FadeTransition();
-	{
-		this.fade.setNode(this.imageView);
-		this.fade.setDuration(Duration.millis(200));
-		this.fade.setFromValue(1.0);
-		this.fade.setToValue(0.0);
-		this.fade.setOnFinished(e -> requestRemoval());
-	}
+	public final static double SIZE = 40;
+	public final static double SPEED = 3; // - Upgrades.getInstance().get(UpgradeType.FALL_SPEED);
 
-	public FallingEntity(double x, double y, ShatteredImageView imageView) {
-		super(x, y, imageView);
-		this.dy = 1;
+	public FallingEntity(double x, double y, ShatteredImageView view) {
+		super(x, y, view);
 		
-		assignAction(State.REMOVAL_ANIMATION, () -> {
-			this.dy = -1;
-			this.fade.play();
+		dy = SPEED;
+		
+		removalAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(200), e -> {
+			
+		}));
+		
+		assignAction(OnUpdateAction.ANIMATION, () -> {
+			dy = -SPEED;
 		});
 	}
-
+	
 	@Override
 	public void update() {
-		this.x += dx * SPEED;
-		this.y += dy * SPEED;
+		move(dx * SPEED, dy * SPEED);
 		
-		if (this.y >= Game.GROUND + SIZE) {
-			requestRemoval();
+		if (getY() >= Game.GROUND + SIZE) {
+			requestRemoval(false);
 		}
 	}
+	
 }
