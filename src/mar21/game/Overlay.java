@@ -6,7 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import mar21.entity.player.Player;
+import mar21.entity.Player;
 import mar21.resources.ResourceManager;
 
 public class Overlay extends Group {

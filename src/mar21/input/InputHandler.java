@@ -8,8 +8,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import mar21.input.bind.KeyBind;
-import mar21.input.bind.KeyStroke;
 
 public class InputHandler implements EventHandler<Event> {
 
@@ -33,7 +31,7 @@ public class InputHandler implements EventHandler<Event> {
 	
 	private final HashMap<KeyCode, Boolean> kP = new HashMap<>(), kC = new HashMap<>();
 	private final HashMap<MouseButton, Boolean> mP = new HashMap<>(), mC = new HashMap<>();
-	private final HashMap<Pair<KeyCode, KeyStroke>, KeyBind> kB = new HashMap<>();
+	private final HashMap<Pair<KeyCode, KeyStroke>, Action> kB = new HashMap<>();
 	private double mX, mY;
 	
 	@Override
@@ -98,7 +96,7 @@ public class InputHandler implements EventHandler<Event> {
 		kP.putAll(kC);
 	}
 	
-	public void bind(KeyCode key, KeyStroke stroke, KeyBind bind) {
+	public void bind(KeyCode key, KeyStroke stroke, Action bind) {
 		kB.put(new Pair<>(key, stroke), bind);
 	}
 	

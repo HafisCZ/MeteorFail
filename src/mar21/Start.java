@@ -10,7 +10,7 @@ import mar21.event.GameEvent;
 import mar21.game.Game;
 import mar21.game.Upgrades;
 import mar21.input.InputHandler;
-import mar21.input.bind.KeyStroke;
+import mar21.input.KeyStroke;
 import mar21.resources.ResourceManager;
 
 public class Start extends Application {	

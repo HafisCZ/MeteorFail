@@ -1,13 +1,14 @@
 package mar21.entity;
 
-import javafx.scene.image.ImageView;
-
 import java.util.Objects;
 
 import javafx.animation.Timeline;
-import mar21.resources.ShatteredImageView;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Bounds;
+import javafx.scene.image.ImageView;
+import mar21.input.Action;
+import mar21.resources.ShatteredImageView;
 
 public abstract class Entity {
 	
@@ -15,20 +16,20 @@ public abstract class Entity {
 		NONE, ANIMATION, REMOVAL
 	}
 	
-	protected DoubleProperty xProperty;
-	protected DoubleProperty yProperty;
-	protected DoubleProperty widthProperty;
-	protected DoubleProperty heightProperty;
+	protected final DoubleProperty xProperty;
+	protected final DoubleProperty yProperty;
+	protected final DoubleProperty widthProperty;
+	protected final DoubleProperty heightProperty;
 	
-	protected ShatteredImageView view;
-	protected Timeline removalAnimation = new Timeline();
+	protected final ShatteredImageView view;
+	protected final Timeline removalAnimation = new Timeline();
 	{
 		removalAnimation.setOnFinished(e -> {
 			requestRemoval(false);
 		});
 	}
 	
-	private Runnable onRemoval, onAnimation;
+	private Action onRemoval, onAnimation;
 	
 	protected double dx, dy;
 	protected OnUpdateAction onUpdate = OnUpdateAction.NONE;
@@ -45,15 +46,15 @@ public abstract class Entity {
 		view.yProperty().bind(yProperty);
 	}
 	
-	public final void assignAction(OnUpdateAction action, Runnable runnable) {
-		switch (action) {
+	public final void assignAction(OnUpdateAction type, Action action) {
+		switch (type) {
 			case NONE:
-				throw new IllegalArgumentException(action + " not applicable to assignAction()!");
+				throw new IllegalArgumentException(type + " not applicable to assignAction()!");
 			case REMOVAL:
-				onRemoval = runnable;
+				onRemoval = action;
 				break;
 			case ANIMATION:
-				onAnimation = runnable;
+				onAnimation = action;
 				break;
 		}
 	}
@@ -67,12 +68,12 @@ public abstract class Entity {
 			onUpdate = OnUpdateAction.ANIMATION;
 			removalAnimation.play();
 			if (Objects.nonNull(onAnimation)) {
-				onAnimation.run();
+				onAnimation.handle();
 			}
 		} else {
 			onUpdate = OnUpdateAction.REMOVAL;
 			if (Objects.nonNull(onRemoval)) {
-				onRemoval.run();
+				onRemoval.handle();
 			}
 		}
 	}
@@ -124,8 +125,12 @@ public abstract class Entity {
 	}
 	
 	public final void move(double dx, double dy) {
-		xProperty.setValue(xProperty.add(dx).getValue());
-		yProperty.setValue(yProperty.add(dy).getValue());
+		xProperty.setValue(xProperty.get() + dx);
+		yProperty.setValue(yProperty.get() + dy);
+	}
+	
+	public Bounds getBounds() {
+		return view.getBoundsInLocal();
 	}
 	
 	public abstract void update();

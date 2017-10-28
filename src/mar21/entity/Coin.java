@@ -1,9 +1,8 @@
-package mar21.entity.items;
+package mar21.entity;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
-import mar21.entity.FallingEntity;
 import mar21.resources.ShatteredImageView;
 
 public final class Coin extends FallingEntity {

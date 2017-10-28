@@ -1,8 +1,8 @@
-package mar21.entity.items;
+package mar21.entity;
 
 import java.util.Random;
-
-import mar21.entity.FallingEntity;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import mar21.resources.ShatteredImageView;
 
 public final class Meteor extends FallingEntity {
@@ -24,4 +24,10 @@ public final class Meteor extends FallingEntity {
 			view.setScaleY(-1);
 		}
 	}
+	
+	@Override
+	public Bounds getBounds() {
+		return  new BoundingBox(getX() + 6, getY() + 6, getWidth() - 12, getHeight() - 12);
+	}
+	
 }

@@ -9,12 +9,12 @@ import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.util.Duration;
+import mar21.entity.Coin;
 import mar21.entity.Entity;
 import mar21.entity.Entity.OnUpdateAction;
 import mar21.entity.FallingEntity;
-import mar21.entity.items.Coin;
-import mar21.entity.items.Meteor;
-import mar21.entity.player.Player;
+import mar21.entity.Meteor;
+import mar21.entity.Player;
 import mar21.event.GameEvent;
 import mar21.input.InputHandler;
 import mar21.resources.ResourceManager;
@@ -27,10 +27,20 @@ public class Game {
 	public static final double SCREEN_HEIGHT = 700;
 	public static final double GROUND = 490;
 	
-	private final Timeline spawner = new Timeline();
-	{
-		spawner.setCycleCount(Timeline.INDEFINITE);
-		spawner.getKeyFrames().add(
+	private Scene scene;
+	private Group content;
+	private Overlay overlay;
+	private Timeline spawner;
+	private InputHandler input;
+	
+	private Player player;
+	private ArrayList<Entity> entities = new ArrayList<Entity>();
+	
+	public Game(Group content, InputHandler input) {
+		this.content = content;
+		this.input = input;
+		
+		spawner = new Timeline(
 			new KeyFrame(Duration.millis(200), e -> {
 				double rndX = RANDOM.nextDouble() * (SCREEN_WIDTH - 40 - FallingEntity.SIZE) + 20;
 				double rndY = -50;
@@ -41,19 +51,8 @@ public class Game {
 				}
 			})
 		);
-	}
-	
-	private Scene scene;
-	private Group content;
-	private Overlay overlay;
-	
-	private ArrayList<Entity> entities = new ArrayList<Entity>();
-	private InputHandler input;
-	private Player player;
-	
-	public Game(Group content, InputHandler input) {
-		this.content = content;
-		this.input = input;
+		spawner.setCycleCount(Timeline.INDEFINITE);
+		spawner.play();
 		
 		scene = new Scene(content, SCREEN_WIDTH, SCREEN_HEIGHT);
 		player = new Player((SCREEN_WIDTH - Player.WIDTH) / 2, GROUND, input);
@@ -61,21 +60,19 @@ public class Game {
 		
 		content.getChildren().addAll(
 			ResourceManager.requestInstance().buildImageView("bg7", SCREEN_WIDTH, SCREEN_HEIGHT),
-			player.getView(),
-			overlay
+			overlay,
+			player.getView()
 		);
 
 		overlay.init(player);
-		
-		spawner.play();
 	}
 	
 	public void reset() {
 		Platform.runLater(() -> {
 			Upgrades.load();
 			
-			content.getChildren().remove(1, content.getChildren().size());
 			entities.clear();
+			content.getChildren().remove(2, content.getChildren().size());
 		
 			player = new Player((SCREEN_WIDTH - Player.WIDTH) / 2, GROUND, input);	
 			content.getChildren().add(player.getView());
@@ -126,16 +123,14 @@ public class Game {
 				case NONE:
 					{
 						Entity.update();
-						if (Entity instanceof Meteor) {
-							if (player.getView().intersects(Entity.getX() + 6, Entity.getY() + 6, Entity.getWidth() - 12, Entity.getHeight() - 12)) {	
+						if (player.getBounds().intersects(Entity.getBounds())) {
+							if (Entity instanceof Meteor) {
 								player.applyDamage();
-								Entity.requestRemoval(true);
-							}
-						} else {
-							if (player.getView().intersects(Entity.getView().getBoundsInLocal())) {
+							} else {
 								Upgrades.getInstance().addCoins();
-								Entity.requestRemoval(true);
 							}
+							
+							Entity.requestRemoval(true);
 						}
 					}					
 					break;

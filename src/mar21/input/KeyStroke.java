@@ -1,4 +1,4 @@
-package mar21.input.bind;
+package mar21.input;
 
 public enum KeyStroke {
 	KEY_HELD,
