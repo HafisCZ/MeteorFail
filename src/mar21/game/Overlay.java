@@ -3,11 +3,11 @@ package mar21.game;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
-import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import mar21.entity.Player;
-import mar21.resources.ResourceManager;
+import mar21.resources.ResourceLoader;
 
 public class Overlay extends Group {
 
@@ -15,20 +15,26 @@ public class Overlay extends Group {
 	private static final double Y_OFFSET = 0;
 	private static final double HEARTS_SPRITE_WIDTH = 500;
 	private static final double HEARTS_SPRITE_HEIGHT = 100;
-	
-	private final ResourceManager resources = ResourceManager.requestInstance();
-	
+
 	private Player player;
 	private ImageView hearts;
 	private Text text;
 	
 	public Overlay(double screenWidth, double screenHeight) {
-		hearts = resources.buildImageView("heart0", HEARTS_SPRITE_WIDTH / 3, HEARTS_SPRITE_HEIGHT / 3);
+		hearts = new ImageView();
+		hearts.setImage(ResourceLoader.getTexture("heart0"));
+		hearts.setFitWidth(HEARTS_SPRITE_WIDTH / 3);
+		hearts.setFitHeight(HEARTS_SPRITE_HEIGHT / 3);
 		hearts.setX(X_OFFSET);
 		hearts.setY(screenHeight - Y_OFFSET - HEARTS_SPRITE_HEIGHT / 2);
 		this.getChildren().add(hearts);
 		
-		ImageView coin = resources.buildImageView("coin0", HEARTS_SPRITE_WIDTH / 15, HEARTS_SPRITE_HEIGHT / 3);
+		ImageView coin = new ImageView();
+		coin.setImage(ResourceLoader.getTexture("coin0"));
+		coin.setFitWidth( HEARTS_SPRITE_WIDTH / 15);
+		coin.setFitHeight(HEARTS_SPRITE_HEIGHT / 3);
+		hearts.setX(X_OFFSET);
+		hearts.setY(screenHeight - Y_OFFSET - HEARTS_SPRITE_HEIGHT / 2);
 		coin.setX(X_OFFSET);
 		coin.setY(screenHeight - Y_OFFSET - 90);
 		this.getChildren().add(coin);

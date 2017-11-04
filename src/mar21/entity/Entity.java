@@ -7,77 +7,61 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Bounds;
 import javafx.scene.image.ImageView;
-import mar21.input.Action;
-import mar21.resources.ShatteredImageView;
+import mar21.resources.SheetView;
 
 public abstract class Entity {
 	
-	public static enum OnUpdateAction {
-		NONE, ANIMATION, REMOVAL
+	public static enum State {
+		MARKED_AS_ANIMATED, MARKED_AS_REMOVED
 	}
 	
-	protected final DoubleProperty xProperty;
-	protected final DoubleProperty yProperty;
-	protected final DoubleProperty widthProperty;
-	protected final DoubleProperty heightProperty;
-	
-	protected final ShatteredImageView view;
-	protected final Timeline removalAnimation = new Timeline();
-	{
-		removalAnimation.setOnFinished(e -> {
-			requestRemoval(false);
-		});
-	}
-	
-	private Action onRemoval, onAnimation;
+	protected final DoubleProperty xProperty, yProperty;
+	protected final DoubleProperty widthProperty, heightProperty;
+	protected final SheetView view;
 	
 	protected double dx, dy;
-	protected OnUpdateAction onUpdate = OnUpdateAction.NONE;
 	
-	public Entity(double x, double y, ShatteredImageView view) {
+	protected State state = null;
+	
+	protected final Timeline timeline;
+
+	protected Entity(double x, double y, SheetView view) {
+		this.view = Objects.requireNonNull(view);
+		widthProperty = view.fitWidthProperty();
+		heightProperty = view.fitHeightProperty();
+		
 		xProperty = new SimpleDoubleProperty(x);
 		yProperty = new SimpleDoubleProperty(y);
 		
-		this.view = view;
-		widthProperty = new SimpleDoubleProperty(view.getFitWidth());
-		heightProperty = new SimpleDoubleProperty(view.getFitHeight());
-		
 		view.xProperty().bind(xProperty);
 		view.yProperty().bind(yProperty);
+		
+		timeline = new Timeline();
+		timeline.setOnFinished(e -> {
+			setState(State.MARKED_AS_REMOVED);
+		});
+	}
+
+	public final State getState() {
+		return state;
 	}
 	
-	public final void assignAction(OnUpdateAction type, Action action) {
-		switch (type) {
-			case NONE:
-				throw new IllegalArgumentException(type + " not applicable to assignAction()!");
-			case REMOVAL:
-				onRemoval = action;
+	protected void onMarkedAsAnimated() { }
+	protected void onMarkedAsRemoved() { }
+	
+	public final void setState(State state) {
+		this.state = Objects.requireNonNull(state);
+		switch (state) {
+			case MARKED_AS_ANIMATED:
+				timeline.playFromStart();
+				onMarkedAsAnimated();
 				break;
-			case ANIMATION:
-				onAnimation = action;
+			case MARKED_AS_REMOVED:
+				onMarkedAsRemoved();
 				break;
 		}
 	}
-	
-	public final OnUpdateAction getAction() {
-		return onUpdate;
-	}
-	
-	public final void requestRemoval(boolean animated) {
-		if (animated) {
-			onUpdate = OnUpdateAction.ANIMATION;
-			removalAnimation.play();
-			if (Objects.nonNull(onAnimation)) {
-				onAnimation.handle();
-			}
-		} else {
-			onUpdate = OnUpdateAction.REMOVAL;
-			if (Objects.nonNull(onRemoval)) {
-				onRemoval.handle();
-			}
-		}
-	}
-	
+
 	public final ImageView getView() {
 		return view;
 	}

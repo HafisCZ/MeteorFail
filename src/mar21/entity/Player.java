@@ -2,6 +2,8 @@ package mar21.entity;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.input.KeyCode;
@@ -11,31 +13,38 @@ import mar21.game.Upgrades;
 import mar21.game.Upgrades.UpgradeType;
 import mar21.input.InputHandler;
 import mar21.input.KeyStroke;
-import mar21.resources.ShatteredImageView;
+import mar21.resources.SheetView;
 
 public final class Player extends Entity {
 
 	public static final double HEIGHT = 80, WIDTH = 66;
-	private final Timeline walking = new Timeline();
-	{
-		walking.setCycleCount(Timeline.INDEFINITE);
-		walking.getKeyFrames().addAll(
-			new KeyFrame(Duration.millis(000), e -> view.shatter(1, 0)), 
-			new KeyFrame(Duration.millis(100), e -> view.shatter(1, 1)), 
-			new KeyFrame(Duration.millis(200), e -> view.shatter(1, 2)), 
-			new KeyFrame(Duration.millis(300), e -> view.shatter(1, 3))
-		);
-	}
-
-	private Upgrades upgrades = Upgrades.getInstance();
-	private boolean onGround, isWalking;
 	
-	private int health = 1 + upgrades.get(UpgradeType.LIFE);
+	private boolean walkR, walkL;
+	
+	private Upgrades upgrades = Upgrades.getInstance();
+	
+	private Timeline walk;
+
+	private boolean onGround;
+	
+	private IntegerProperty hp;
+	
 	private double speed = 5 + upgrades.get(UpgradeType.SPEED);
 	private double jump = -12 - upgrades.get(UpgradeType.JUMP_HEIGHT);
 	
 	public Player(double x, double y, InputHandler input) {
-		super(x, y, new ShatteredImageView("player", 4 * WIDTH, 2 * HEIGHT, 2, 4));
+		super(x, y, new SheetView("player", WIDTH, HEIGHT, 2, 4));
+	
+		hp = new SimpleIntegerProperty(1 + upgrades.get(UpgradeType.LIFE));
+		
+		walk = new Timeline();
+		walk.setCycleCount(Timeline.INDEFINITE);
+		walk.getKeyFrames().addAll(
+			new KeyFrame(Duration.millis(000), e -> view.show(1, 0)), 
+			new KeyFrame(Duration.millis(100), e -> view.show(1, 1)), 
+			new KeyFrame(Duration.millis(200), e -> view.show(1, 2)), 
+			new KeyFrame(Duration.millis(300), e -> view.show(1, 3))
+		);
 		
 		xProperty.addListener(e -> {
 			if (xProperty.get() < 0) {
@@ -62,15 +71,11 @@ public final class Player extends Entity {
 		});
 
 		input.bind(KeyCode.A, KeyStroke.KEY_HELD, () -> {
-			move(-speed, 0);
-			isWalking = true;
-			view.setScaleX(-1);
+			walkL = true;
 		});
 		
 		input.bind(KeyCode.D, KeyStroke.KEY_HELD, () -> {
-			move(speed, 0);
-			isWalking = true;
-			view.setScaleX(1);
+			walkR = true;
 		});
 	}
 	
@@ -78,22 +83,39 @@ public final class Player extends Entity {
 	public void update() {
 		dy += (onGround ? (dy >= 0.5 ? -dy : 0) : 0.5);
 		move(dx, dy);
-		
-		if (isWalking) {
-			walking.play();
-			isWalking = false;
+
+		if (walkR && !walkL) {
+			move(speed, 0);
+			view.setScaleX(1);
+			walk.play();
+		} else if (!walkR && walkL) {
+			move(-speed, 0);
+			walk.play();
+			view.setScaleX(-1);
 		} else {
-			walking.stop();
-			view.shatter(0, 0);
+			walk.stop();
+			view.show(0, 0);
 		}
+		
+		walkR = false;
+		walkL = false;
 	}
 	
-	public void applyDamage() {
-		this.health -= 1;
+	public void reset(double x, double y) {
+		hp.set(1 + upgrades.get(UpgradeType.LIFE));
+		setPosition(x, y);
+	}
+	
+	public IntegerProperty getHealthProperty() {
+		return hp;
+	}
+	
+	public void reduceHealth() {
+		hp.set(hp.get() - 1);
 	}
 	
 	public int getHealth() {
-		return this.health;
+		return hp.get();
 	}
 	
 	@Override

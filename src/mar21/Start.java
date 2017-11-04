@@ -11,7 +11,7 @@ import mar21.game.Game;
 import mar21.game.Upgrades;
 import mar21.input.InputHandler;
 import mar21.input.KeyStroke;
-import mar21.resources.ResourceManager;
+import mar21.resources.ResourceLoader;
 
 public class Start extends Application {	
 	
@@ -20,8 +20,7 @@ public class Start extends Application {
 	
 	@Override
 	public void start(Stage stage) throws Exception {
-		ResourceManager resources = ResourceManager.requestInstance();
-		resources.loadFiles(
+		ResourceLoader.load(
 			"/res/bg7.png",
 			"/res/coin.png",
 			"/res/coin0.png",
@@ -29,7 +28,7 @@ public class Start extends Application {
 			"/res/meteor0.png",
 			"/res/player.png"
 		);
-		
+
 		Upgrades.load();
 
 		input = new InputHandler();
@@ -45,7 +44,7 @@ public class Start extends Application {
 			level.reset();
 			e.consume();
 		});
-		
+
 		stage.sizeToScene();
 		stage.setResizable(false);
 		stage.centerOnScreen();

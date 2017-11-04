@@ -3,25 +3,26 @@ package mar21.entity;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import mar21.game.Game;
-import mar21.resources.ShatteredImageView;
+import mar21.resources.SheetView;
 
 public class FallingEntity extends Entity {
 	
 	public final static double SIZE = 40;
-	public final static double SPEED = 3; // - Upgrades.getInstance().get(UpgradeType.FALL_SPEED);
+	public final static double SPEED = 3;
 
-	public FallingEntity(double x, double y, ShatteredImageView view) {
+	public FallingEntity(double x, double y, SheetView view) {
 		super(x, y, view);
 		
 		dy = SPEED;
 		
-		removalAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(200), e -> {
-			
+		timeline.getKeyFrames().add(new KeyFrame(Duration.millis(200), e -> {
+	
 		}));
-		
-		assignAction(OnUpdateAction.ANIMATION, () -> {
-			dy = -SPEED;
-		});
+	}
+	
+	@Override
+	protected void onMarkedAsAnimated() {
+		dy = -SPEED;
 	}
 	
 	@Override
@@ -29,7 +30,7 @@ public class FallingEntity extends Entity {
 		move(dx * SPEED, dy * SPEED);
 		
 		if (getY() >= Game.GROUND + SIZE) {
-			requestRemoval(false);
+			setState(State.MARKED_AS_REMOVED);
 		}
 	}
 	
