@@ -1,53 +1,56 @@
 package mar21.resources;
 
+import javafx.geometry.Rectangle2D;
+import javafx.scene.image.Image;
+
 public class SheetView extends javafx.scene.image.ImageView {
 	
 	private int cols, rows;
-	private double ow, oh, iw, ih;
-	
-	public SheetView(SheetViewBuilder b) {
-		this(b.res, b.rw, b.rh, b.rows, b.cols);
+	private double sheetWidth, sheetHeight, textureWidth, textureHeight;
+
+	public SheetView(SheetViewBuilder builder) {
+		this(builder.id, builder.requestedWidth, builder.requestedHeight, builder.rows, builder.cols);
 	}
 	
-	public SheetView(String res, double rw, double rh, int rows, int cols) {
-		super(ResourceLoader.getTexture(res));
+	public SheetView(String id, double requestedWidth, double requestedHeight, int rows, int cols) {
+		Image image = ResourceLoader.getTexture(id);
+		setImage(image);
+		setFitWidth(requestedWidth);
+		setFitHeight(requestedHeight);
 		
 		this.rows = rows;
 		this.cols = cols;
 		
-		this.ow = this.getImage().getWidth();
-		this.oh = this.getImage().getHeight();
+		sheetWidth = image.getWidth();
+		sheetHeight = image.getHeight();
 		
-		this.iw = ow / cols;
-		this.ih = oh / rows;
+		textureWidth = sheetWidth / cols;
+		textureHeight = sheetHeight / rows;
 		
-		this.setFitWidth(rw);
-		this.setFitHeight(rh);
-		
-		show(0, 0);
+		setViewport(new Rectangle2D(0, 0, textureWidth, textureHeight));
 	}
 	
 	public void show(int row, int col) {
 		if (row >= rows || col >= cols) {
-			throw new IllegalArgumentException("Out of bounds.");
+			throw new IllegalArgumentException();
 		}
 		
-		setViewport(new javafx.geometry.Rectangle2D(col * iw, row * ih, iw, ih));
+		setViewport(new Rectangle2D(col * textureWidth, row * textureHeight, textureWidth, textureHeight));
 	}
 	
 	public static class SheetViewBuilder {
 		
-		private final String res;
-		private double rw, rh;
+		private final String id;
+		private double requestedWidth, requestedHeight;
 		private int cols = 1, rows = 1;
 		
-		public SheetViewBuilder(String res) {
-			this.res = res;
+		public SheetViewBuilder(String id) {
+			this.id = id;
 		}
 		
-		public SheetViewBuilder setDimensions(double w, double h) {
-			rw = w;
-			rh = h;
+		public SheetViewBuilder setDimensions(double width, double height) {
+			requestedWidth = width;
+			requestedHeight = height;
 			return this;
 		}
 		

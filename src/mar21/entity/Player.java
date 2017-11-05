@@ -4,10 +4,9 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
+import mar21.entity.collision.CollisionBox;
 import mar21.game.Game;
 import mar21.game.Upgrades;
 import mar21.game.Upgrades.UpgradeType;
@@ -33,8 +32,10 @@ public final class Player extends Entity {
 	private double jump = -12 - upgrades.get(UpgradeType.JUMP_HEIGHT);
 	
 	public Player(double x, double y, InputHandler input) {
-		super(x, y, new SheetView("player", WIDTH, HEIGHT, 2, 4));
+		super(x, y, new SheetView("player", WIDTH, HEIGHT, 2, 4), null);
 	
+		collisionBox = new CollisionBox(this, 4, 0, WIDTH - 4, HEIGHT);
+		
 		hp = new SimpleIntegerProperty(1 + upgrades.get(UpgradeType.LIFE));
 		
 		walk = new Timeline();
@@ -117,10 +118,4 @@ public final class Player extends Entity {
 	public int getHealth() {
 		return hp.get();
 	}
-	
-	@Override
-	public Bounds getBounds() {
-		return new BoundingBox(getX() + 4, getY(), getWidth() - 8, getHeight());
-	}
-
 }

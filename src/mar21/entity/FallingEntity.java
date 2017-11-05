@@ -2,6 +2,7 @@ package mar21.entity;
 
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
+import mar21.entity.collision.CollisionBox;
 import mar21.game.Game;
 import mar21.resources.SheetView;
 
@@ -9,9 +10,9 @@ public class FallingEntity extends Entity {
 	
 	public final static double SIZE = 40;
 	public final static double SPEED = 3;
-
-	public FallingEntity(double x, double y, SheetView view) {
-		super(x, y, view);
+	
+	public FallingEntity(double x, double y, SheetView view, CollisionBox box) {
+		super(x, y, view, box);
 		
 		dy = SPEED;
 		

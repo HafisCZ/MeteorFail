@@ -11,7 +11,12 @@ public class ResourceLoader {
 	
 	public static void load(String... paths) {
 		for (String path : paths) {
-			resourceMap.put(strip(path), new Image(ClassLoader.class.getResourceAsStream(path)));
+			Image image = new Image(ClassLoader.class.getResourceAsStream(path));
+			if (image.isError()) {
+				System.err.println("Missing texture " + path);
+			}
+			
+			resourceMap.put(strip(path), image);
 		}
 	}
 

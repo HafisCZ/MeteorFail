@@ -29,7 +29,7 @@ public final class Coin extends FallingEntity {
 	}
 	
 	public Coin(double x, double y) {
-		super(x, y, new SheetView("coin", 30, 30, 1, 5));
+		super(x, y, new SheetView("coin", 30, 30, 1, 5), null);
 		spin.play();
 	}
 

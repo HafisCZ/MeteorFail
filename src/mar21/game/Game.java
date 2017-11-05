@@ -137,7 +137,8 @@ public class Game {
 			
 			if (Objects.isNull(Entity.getState())) {
 				Entity.update();
-				if (player.getBounds().intersects(Entity.getBounds())) {
+				
+				if (player.getCollisionBox().collides(Entity.getCollisionBox())) {
 					if (Entity instanceof Meteor) {
 						player.reduceHealth();
 					} else if (Entity instanceof Coin) {

@@ -5,8 +5,7 @@ import java.util.Objects;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.geometry.Bounds;
-import javafx.scene.image.ImageView;
+import mar21.entity.collision.CollisionBox;
 import mar21.resources.SheetView;
 
 public abstract class Entity {
@@ -16,25 +15,25 @@ public abstract class Entity {
 	}
 	
 	protected final DoubleProperty xProperty, yProperty;
-	protected final DoubleProperty widthProperty, heightProperty;
 	protected final SheetView view;
+	protected final Timeline timeline;
 	
-	protected double dx, dy;
+	protected CollisionBox collisionBox;
+	protected double width, height, dx, dy;
 	
 	protected State state = null;
 	
-	protected final Timeline timeline;
-
-	protected Entity(double x, double y, SheetView view) {
-		this.view = Objects.requireNonNull(view);
-		widthProperty = view.fitWidthProperty();
-		heightProperty = view.fitHeightProperty();
-		
+	protected Entity(double x, double y, SheetView view, CollisionBox box) {
 		xProperty = new SimpleDoubleProperty(x);
 		yProperty = new SimpleDoubleProperty(y);
 		
-		view.xProperty().bind(xProperty);
-		view.yProperty().bind(yProperty);
+		this.view = Objects.requireNonNull(view);
+		this.view.xProperty().bind(xProperty);
+		this.view.yProperty().bind(yProperty);
+		width = view.getFitWidth();
+		height = view.getFitHeight();
+		
+		collisionBox = (Objects.nonNull(box) ? box : new CollisionBox(this));
 		
 		timeline = new Timeline();
 		timeline.setOnFinished(e -> {
@@ -62,7 +61,7 @@ public abstract class Entity {
 		}
 	}
 
-	public final ImageView getView() {
+	public final SheetView getView() {
 		return view;
 	}
 	
@@ -83,19 +82,11 @@ public abstract class Entity {
 	}
 	
 	public final double getWidth() {
-		return widthProperty.get();
+		return width;
 	}
 	
 	public final double getHeight() {
-		return heightProperty.get();
-	}
-	
-	public final DoubleProperty getWidthProperty() {
-		return widthProperty;
-	}
-	
-	public final DoubleProperty getHeightProperty() {
-		return heightProperty;
+		return height;
 	}
 	
 	public final void setPosition(Double x, Double y) {
@@ -113,8 +104,8 @@ public abstract class Entity {
 		yProperty.setValue(yProperty.get() + dy);
 	}
 	
-	public Bounds getBounds() {
-		return view.getBoundsInLocal();
+	public CollisionBox getCollisionBox() {
+		return collisionBox;
 	}
 	
 	public abstract void update();
