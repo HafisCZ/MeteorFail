@@ -1,4 +1,4 @@
-package mar21.event;
+package com.hiraishin.undefined.event;
 
 import javafx.event.EventType;
 

@@ -1,11 +1,16 @@
-package mar21.entity;
+package com.hiraishin.undefined.entity.mob;
+
+import com.hiraishin.undefined.entity.Mob;
+import com.hiraishin.undefined.entity.collision.CollisionBox;
+import com.hiraishin.undefined.sheetview.SheetView;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
-import mar21.resources.SheetView;
 
-public final class Coin extends FallingEntity {
+public final class Item extends Mob {
+	
+	public static final CollisionBox DEFAULT_COLLISION_BOX_ITEM = new CollisionBox(0, 0, 30, 30, 30, 30);
 	
 	private final Timeline spin = new Timeline();
 	{
@@ -28,8 +33,8 @@ public final class Coin extends FallingEntity {
 		);
 	}
 	
-	public Coin(double x, double y) {
-		super(x, y, new SheetView("coin", 30, 30, 1, 5), null);
+	public Item(double x, double y) {
+		super(x, y, new SheetView("coin", 30, 30, 1, 5), DEFAULT_COLLISION_BOX_ITEM);
 		spin.play();
 	}
 

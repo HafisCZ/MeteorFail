@@ -1,8 +1,10 @@
-package mar21.game;
+package com.hiraishin.undefined.scene.overlay;
 
 import java.util.prefs.Preferences;
 
-public class Upgrades {
+import com.hiraishin.undefined.Game;
+
+public class Upgrade {
 	
 	public static enum UpgradeType {
 		LIFE, SPEED, JUMP_HEIGHT, FALL_SPEED
@@ -21,18 +23,18 @@ public class Upgrades {
 	private int coins = 0;
 	private int[] boughtUpgrades = new int[5];
 	
-	private static Upgrades upgrade;
+	private static Upgrade upgrade;
 	
-	public static Upgrades getInstance() {
+	public static Upgrade getInstance() {
 		if (upgrade == null) {
-			upgrade = new Upgrades();
+			upgrade = new Upgrade();
 		}
 		
 		return upgrade;
 	}
 	
 	public static void save() {
-		Upgrades upgrade = Upgrades.getInstance();
+		Upgrade upgrade = Upgrade.getInstance();
 		JREG_PREFERECES.putInt(PREFIX_KEY_0, upgrade.coins);
 		for (int i = 0; i < upgrade.boughtUpgrades.length; i++) {
 			JREG_PREFERECES.putInt(PREFIX_KEY_1 + i, upgrade.boughtUpgrades[i]);
@@ -40,7 +42,7 @@ public class Upgrades {
 	}
 	
 	public static void load() {
-		Upgrades upgrade = Upgrades.getInstance();
+		Upgrade upgrade = Upgrade.getInstance();
 		upgrade.coins = JREG_PREFERECES.getInt(PREFIX_KEY_0, 0);
 		for (int i = 0; i < upgrade.boughtUpgrades.length; i++) {
 			upgrade.boughtUpgrades[i] = JREG_PREFERECES.getInt(PREFIX_KEY_1 + i, 0);
@@ -84,6 +86,6 @@ public class Upgrades {
 	}
 	
 	public int get(UpgradeType upgrade) {
-		return this.boughtUpgrades[Upgrades.toInt(upgrade)];
+		return this.boughtUpgrades[Upgrade.toInt(upgrade)];
 	}
 }

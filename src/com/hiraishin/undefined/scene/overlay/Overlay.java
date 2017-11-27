@@ -1,4 +1,7 @@
-package mar21.game;
+package com.hiraishin.undefined.scene.overlay;
+
+import com.hiraishin.undefined.entity.mob.Player;
+import com.hiraishin.undefined.utils.ResourceLoader;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
@@ -6,8 +9,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import mar21.entity.Player;
-import mar21.resources.ResourceLoader;
 
 public class Overlay extends Group {
 
@@ -54,6 +55,6 @@ public class Overlay extends Group {
 	
 	public void update() {
 		hearts.setViewport(new Rectangle2D(0, (player.getHealth() - 1) * HEARTS_SPRITE_HEIGHT, HEARTS_SPRITE_WIDTH, HEARTS_SPRITE_HEIGHT));
-		text.setText("" + Upgrades.getInstance().getCoins());
+		text.setText("" + Upgrade.getInstance().getCoins());
 	}
 }

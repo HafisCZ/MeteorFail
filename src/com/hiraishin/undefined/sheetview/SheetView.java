@@ -1,4 +1,6 @@
-package mar21.resources;
+package com.hiraishin.undefined.sheetview;
+
+import com.hiraishin.undefined.utils.ResourceLoader;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;

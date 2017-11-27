@@ -1,6 +1,9 @@
-package mar21.input;
+package com.hiraishin.undefined.input;
 
 import java.util.HashMap;
+
+import com.hiraishin.undefined.input.bind.KeyAction;
+import com.hiraishin.undefined.input.bind.KeyStroke;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -9,9 +12,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
-public class InputHandler implements EventHandler<Event> {
+public class UIAdapter implements EventHandler<Event> {
 
 	private class Pair<T, U> {
+		
 		private T t;
 		private U u;
 		
@@ -21,17 +25,18 @@ public class InputHandler implements EventHandler<Event> {
 		}
 		
 		public T first() {
-			return t;
+			return this.t;
 		}
 		
 		public U second() {
-			return u;
+			return this.u;
 		}
+		
 	}
 	
 	private final HashMap<KeyCode, Boolean> kP = new HashMap<>(), kC = new HashMap<>();
 	private final HashMap<MouseButton, Boolean> mP = new HashMap<>(), mC = new HashMap<>();
-	private final HashMap<Pair<KeyCode, KeyStroke>, Action> kB = new HashMap<>();
+	private final HashMap<Pair<KeyCode, KeyStroke>, KeyAction> kB = new HashMap<>();
 	private double mX, mY;
 	
 	@Override
@@ -96,7 +101,7 @@ public class InputHandler implements EventHandler<Event> {
 		kP.putAll(kC);
 	}
 	
-	public void bind(KeyCode key, KeyStroke stroke, Action bind) {
+	public void bind(KeyCode key, KeyStroke stroke, KeyAction bind) {
 		kB.put(new Pair<>(key, stroke), bind);
 	}
 	
@@ -155,5 +160,5 @@ public class InputHandler implements EventHandler<Event> {
 	public double getY() {
 		return mY;
 	}
-
+	
 }
