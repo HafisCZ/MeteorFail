@@ -1,107 +1,112 @@
 package com.hiraishin.undefined;
 
-import com.hiraishin.undefined.event.GameEvent;
-import com.hiraishin.undefined.input.UIAdapter;
-import com.hiraishin.undefined.input.bind.KeyStroke;
-import com.hiraishin.undefined.scene.GameScene;
-import com.hiraishin.undefined.scene.LevelScene;
-import com.hiraishin.undefined.utils.ReportManager;
-import com.hiraishin.undefined.utils.ResourceLoader;
+import com.hiraishin.undefined._entity.controller.Controller;
+import com.hiraishin.undefined._event.GameEvent;
+import com.hiraishin.undefined._input.InputEventAdapter;
+import com.hiraishin.undefined._level.Level;
+import com.hiraishin.undefined._util.Dimensions;
+import com.hiraishin.undefined._util.logger.Logger;
+import com.hiraishin.undefined._util.logger.Severity;
+import com.hiraishin.undefined._util.resource.ResourceLoader;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventType;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class Game extends Application {
-	
-	public static final double RES_WIDTH = 1000;
-	public static final double RES_HEIGHT = 700;
-	
-	public GameScene gameScene;
+
+	public enum State {
+		SETUP, PLAY, MENU, EXIT
+	}
+
+	private State state = State.SETUP;
+	private Level level;
 
 	@Override
 	public void start(Stage stage) {
-		
-		/**
-		 * Load textures
-		 */
-		ResourceLoader.load(
-			"/res/bg.png",
-			"/res/coin.png",
-			"/res/coin0.png",
-			"/res/heart0.png",
-			"/res/meteor0.png",
-			"/res/player.png",
-			"/res/pixel.png"		
-		);
-		
-		/**
-		 * Printout all errors
-		 */
-		ReportManager.ss13ok();
-		ReportManager.clear();
-		
-		/**
-		 * Create adapter and global bindings
-		 */
-		UIAdapter adapter = new UIAdapter();
-		adapter.bind(KeyCode.ESCAPE, KeyStroke.KEY_PRESSED, () -> {
-			stage.fireEvent(new GameEvent(GameEvent.GAME_PAUSE));
-		});
-		
-		/**
-		 * Add handlers
-		 */
-		stage.addEventHandler(KeyEvent.ANY, adapter);
-		stage.addEventHandler(GameEvent.GAME_OVER, e -> {
-			gameScene.reset();
-		});
-		stage.addEventHandler(GameEvent.GAME_PAUSE, e -> {
-			// pause game
-		});
-		stage.addEventHandler(GameEvent.GAME_PLAY, e -> {
-			// start game
+		ResourceLoader.INSTANCE.load("/res/bg.png", "/res/coin.png", "/res/coin0.png", "/res/heart0.png",
+				"/res/meteor0.png", "/res/player.png", "/res/pixel.png");
+
+		Logger.INSTANCE.print();
+		Logger.INSTANCE.flush();
+
+		Group local = new Group();
+		Scene scene = new Scene(local, Dimensions.SCREEN_WIDTH, Dimensions.SCREEN_HEIGHT);
+		stage.setScene(scene);
+
+		Controller globalController = new Controller();
+
+		InputEventAdapter inputEventAdapter = new InputEventAdapter(stage);
+		inputEventAdapter.addController(globalController);
+
+		stage.setOnCloseRequest(e -> Platform.exit());
+
+		stage.addEventFilter(GameEvent.GAME_ANY, e -> {
+			EventType<?> type = e.getEventType();
+			if (type == GameEvent.GAME_OVER) {
+				globalController.detach();
+				local.getChildren().clear();
+				level = null;
+				state = State.MENU;
+			} else if (type == GameEvent.GAME_MENU) {
+				// WHEN GO INTO MENU
+			} else if (type == GameEvent.GAME_SHOP) {
+				// WHEN GO INTO SHOP
+			} else if (type == GameEvent.GAME_START) {
+				level = new Level(local, globalController);
+				state = State.PLAY;
+			} else {
+				Logger.INSTANCE.log(Severity.WARNING, "Invalid event captured");
+			}
 		});
 
-		/**
-		 * Set up game scene
-		 */
-		gameScene = new LevelScene(adapter);
-		stage.setScene(gameScene.getScene());
-		stage.sizeToScene();
-		stage.setResizable(false);
-		stage.centerOnScreen();
-		stage.show();
-		
-		/**
-		 * Launch game loop
-		 */
 		new AnimationTimer() {
 			@Override
 			public void handle(long l) {
 				/**
-				 * Update input adapter
+				 * TEST CODE
 				 */
-				adapter.update();
-				
-				/**
-				 * Update game scene
-				 */
-				gameScene.update();
-				
-				/**
-				 * Printout all errors
-				 */
-				ReportManager.ss13ok();
-				ReportManager.clear();
+				if (inputEventAdapter.isPressed(KeyCode.ESCAPE)) {
+					stage.fireEvent(new GameEvent(GameEvent.GAME_OVER));
+				}
+
+				if (inputEventAdapter.isPressed(KeyCode.F1)) {
+					stage.fireEvent(new GameEvent(GameEvent.GAME_START));
+				}
+
+				switch (state) {
+				case SETUP:
+					break;
+				case PLAY:
+					level.tick();
+					break;
+				case MENU:
+					break;
+				case EXIT:
+					stop();
+				}
+
+				inputEventAdapter.update();
+
+				Logger.INSTANCE.print();
+				Logger.INSTANCE.flush();
 			}
 		}.start();
+
+		stage.setTitle("Undefined");
+		stage.setResizable(false);
+		stage.sizeToScene();
+		stage.centerOnScreen();
+		stage.show();
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
+
 }
