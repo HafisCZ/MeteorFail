@@ -6,16 +6,19 @@ import java.util.Map;
 import com.hiraishin.undefined._essentials.upgrade.Upgrade;
 import com.hiraishin.undefined._util.resource.RegistryStorage;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 public enum Upgrades {
 
 	INSTANCE;
 
-	private static final String MONEY_KEY = "MONEY";
-
 	private final Map<Upgrade, Integer> upgrades;
-	private int money;
+	private final IntegerProperty moneyProperty;
 
 	private Upgrades() {
+		moneyProperty = new SimpleIntegerProperty();
+
 		upgrades = new HashMap<>();
 		for (Upgrade upgrade : Upgrade.values()) {
 			upgrades.put(upgrade, 0);
@@ -26,8 +29,8 @@ public enum Upgrades {
 		int nextLevel = upgrades.get(upgrade) + 1;
 		if (nextLevel < upgrade.getRawData().length) {
 			int levelCost = upgrade.getCost(nextLevel);
-			if (levelCost <= money) {
-				money -= levelCost;
+			if (levelCost <= moneyProperty.get()) {
+				moneyProperty.set(moneyProperty.get() - levelCost);
 				upgrades.compute(upgrade, (U, L) -> L + 1);
 			}
 		}
@@ -42,17 +45,32 @@ public enum Upgrades {
 	}
 
 	public void addMoney(int amount) {
-		money += amount;
+		moneyProperty.set(moneyProperty.get() + 1);
 	}
 
 	public void load() {
-		money = RegistryStorage.INSTANCE.readInteger(MONEY_KEY, 0);
-		upgrades.forEach((K, V) -> V = RegistryStorage.INSTANCE.readInteger(K.toString(), 0));
+		moneyProperty.set(RegistryStorage.INSTANCE.readInteger("money", 0));
+		for (Map.Entry<Upgrade, Integer> entry : upgrades.entrySet()) {
+			int level = RegistryStorage.INSTANCE.readInteger(entry.getKey().toString().toLowerCase(), 0);
+			if (level < 0) {
+				entry.setValue(0);
+			} else if (level >= entry.getKey().getRawData().length) {
+				entry.setValue(entry.getKey().getRawData().length - 1);
+			} else {
+				entry.setValue(level);
+			}
+		}
 	}
 
 	public void save() {
-		RegistryStorage.INSTANCE.write(MONEY_KEY, money);
-		upgrades.forEach((K, V) -> RegistryStorage.INSTANCE.write(K.toString(), V));
+		RegistryStorage.INSTANCE.write("money", moneyProperty.get());
+		for (Map.Entry<Upgrade, Integer> entry : upgrades.entrySet()) {
+			RegistryStorage.INSTANCE.write(entry.getKey().toString().toLowerCase(), entry.getValue());
+		}
+	}
+
+	public IntegerProperty moneyProperty() {
+		return moneyProperty;
 	}
 
 }

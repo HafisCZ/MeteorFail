@@ -1,6 +1,7 @@
 package com.hiraishin.undefined;
 
 import com.hiraishin.undefined._entity.controller.Controller;
+import com.hiraishin.undefined._essentials.Upgrades;
 import com.hiraishin.undefined._event.GameEvent;
 import com.hiraishin.undefined._input.InputEventAdapter;
 import com.hiraishin.undefined._level.Level;
@@ -49,6 +50,8 @@ public class Game extends Application {
 		stage.addEventFilter(GameEvent.GAME_ANY, e -> {
 			EventType<?> type = e.getEventType();
 			if (type == GameEvent.GAME_OVER) {
+				Upgrades.INSTANCE.save();
+				
 				globalController.detach();
 				local.getChildren().clear();
 				level = null;
@@ -58,6 +61,8 @@ public class Game extends Application {
 			} else if (type == GameEvent.GAME_SHOP) {
 				// WHEN GO INTO SHOP
 			} else if (type == GameEvent.GAME_START) {
+				Upgrades.INSTANCE.load();
+				
 				level = new Level(local, globalController);
 				state = State.PLAY;
 			} else {

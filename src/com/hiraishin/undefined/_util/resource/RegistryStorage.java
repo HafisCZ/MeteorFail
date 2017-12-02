@@ -7,7 +7,7 @@ import com.hiraishin.undefined._util.logger.Severity;
 
 public enum RegistryStorage {
 
-	INSTANCE(RegistryStorage.class);
+	INSTANCE(com.hiraishin.undefined.Game.class);
 
 	private final Preferences preferences;
 

@@ -17,6 +17,7 @@ import com.hiraishin.undefined._util.PortView;
 import com.hiraishin.undefined._util.logger.Logger;
 import com.hiraishin.undefined._util.logger.Severity;
 import com.hiraishin.undefined._util.resource.ResourceLoader;
+import com.hiraishin.undefined.scene.Overlay;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -55,9 +56,7 @@ public class Level {
 
 		playerController.setTarget(player);
 
-		/**
-		 * OVERLAY SETUP
-		 */
+		new Overlay(group, player);
 
 		itemSpawner.start();
 		enemySpawner.start();
