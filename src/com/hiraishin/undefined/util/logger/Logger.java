@@ -1,0 +1,51 @@
+package com.hiraishin.undefined.util.logger;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import javafx.application.Platform;
+
+public enum Logger {
+
+	INSTANCE;
+
+	private final List<Log> logs;
+
+	private Logger() {
+		logs = new ArrayList<>();
+	}
+
+	public void log(Severity severity, String message) {
+		logs.add(new Log(severity, message, LocalDateTime.now()));
+		if (severity.equals(Severity.ERROR)) {
+			print();
+			Platform.exit();
+		}
+	}
+
+	public void flush() {
+		logs.clear();
+	}
+
+	public List<Log> getLogs() {
+		return logs;
+	}
+
+	public void print() {
+		for (Log log : logs) {
+			switch (log.getSeverity()) {
+			case INFORMATION:
+			case WARNING: {
+				System.out.println(log.getSeverity() + "\t" + log.getDateTime() + "\t" + log.getMessage());
+				break;
+			}
+			case ERROR: {
+				System.err.println(log.getSeverity() + "\t" + log.getDateTime() + "\t" + log.getMessage());
+				break;
+			}
+			}
+		}
+	}
+
+}

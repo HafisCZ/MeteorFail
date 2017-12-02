@@ -1,14 +1,15 @@
 package com.hiraishin.undefined;
 
-import com.hiraishin.undefined._entity.controller.Controller;
-import com.hiraishin.undefined._essentials.Upgrades;
-import com.hiraishin.undefined._event.GameEvent;
-import com.hiraishin.undefined._input.InputEventAdapter;
-import com.hiraishin.undefined._level.Level;
-import com.hiraishin.undefined._util.Dimensions;
-import com.hiraishin.undefined._util.logger.Logger;
-import com.hiraishin.undefined._util.logger.Severity;
-import com.hiraishin.undefined._util.resource.ResourceLoader;
+import com.hiraishin.undefined.entity.controller.Controller;
+import com.hiraishin.undefined.event.GameEvent;
+import com.hiraishin.undefined.game.Upgrades;
+import com.hiraishin.undefined.input.InputEventAdapter;
+import com.hiraishin.undefined.level.Level;
+import com.hiraishin.undefined.scene.Menu;
+import com.hiraishin.undefined.util.Commons;
+import com.hiraishin.undefined.util.logger.Logger;
+import com.hiraishin.undefined.util.logger.Severity;
+import com.hiraishin.undefined.util.resource.ResourceLoader;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -28,6 +29,8 @@ public class Game extends Application {
 	private State state = State.SETUP;
 	private Level level;
 
+	private Scene playScene, menuScene;
+
 	@Override
 	public void start(Stage stage) {
 		ResourceLoader.INSTANCE.load("/res/bg.png", "/res/coin.png", "/res/coin0.png", "/res/heart0.png",
@@ -37,8 +40,9 @@ public class Game extends Application {
 		Logger.INSTANCE.flush();
 
 		Group local = new Group();
-		Scene scene = new Scene(local, Dimensions.SCREEN_WIDTH, Dimensions.SCREEN_HEIGHT);
-		stage.setScene(scene);
+		playScene = new Scene(local, Commons.SCREEN_WIDTH, Commons.SCREEN_HEIGHT);
+
+		menuScene = Menu.INSTANCE.getScene();
 
 		Controller globalController = new Controller();
 
@@ -51,10 +55,13 @@ public class Game extends Application {
 			EventType<?> type = e.getEventType();
 			if (type == GameEvent.GAME_OVER) {
 				Upgrades.INSTANCE.save();
-				
+
 				globalController.detach();
 				local.getChildren().clear();
 				level = null;
+
+				stage.setScene(menuScene);
+
 				state = State.MENU;
 			} else if (type == GameEvent.GAME_MENU) {
 				// WHEN GO INTO MENU
@@ -62,9 +69,13 @@ public class Game extends Application {
 				// WHEN GO INTO SHOP
 			} else if (type == GameEvent.GAME_START) {
 				Upgrades.INSTANCE.load();
-				
+
+				stage.setScene(playScene);
+
 				level = new Level(local, globalController);
 				state = State.PLAY;
+			} else if (type == GameEvent.GAME_QUIT) {
+				Platform.exit();
 			} else {
 				Logger.INSTANCE.log(Severity.WARNING, "Invalid event captured");
 			}
@@ -86,6 +97,8 @@ public class Game extends Application {
 
 				switch (state) {
 				case SETUP:
+					stage.setScene(menuScene);
+					state = State.MENU;
 					break;
 				case PLAY:
 					level.tick();
