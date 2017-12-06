@@ -1,0 +1,14 @@
+package com.hiraishin.rain.entity.mob;
+
+import java.util.Objects;
+
+import com.hiraishin.rain.entity.Entity;
+import com.hiraishin.rain.graphics.Sprite;
+
+public abstract class Mob extends Entity {
+
+	protected Mob(double x, double y, double width, double height, Sprite sprite) {
+		super(x, y, width, height, Objects.requireNonNull(sprite));
+	}
+
+}
