@@ -11,22 +11,10 @@ import javafx.scene.image.Image;
 
 public enum ImagePreloader {
 
-	/**
-	 * Create only single ImagePreloader instance
-	 */
-	DEFAULT_LOADER();
+	DEFAULT_LOADER;
 
-	/**
-	 * Map for storing images
-	 */
 	private final Map<String, Image> images = new HashMap<>();
 
-	/**
-	 * Load requested images
-	 * 
-	 * @param useClassLoader
-	 * @param paths
-	 */
 	public void load(boolean useClassLoader, String... paths) {
 		if (useClassLoader) {
 			for (String path : paths) {
@@ -50,22 +38,10 @@ public enum ImagePreloader {
 		}
 	}
 
-	/**
-	 * Get image associated with id
-	 * 
-	 * @param id
-	 * @return image
-	 */
 	public Image getImage(String id) {
 		return images.get(id);
 	}
 
-	/**
-	 * Strip image url to id
-	 * 
-	 * @param url
-	 * @return id
-	 */
 	private static String strip(String url) {
 		StringBuilder builder = new StringBuilder().append(url);
 

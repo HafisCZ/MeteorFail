@@ -5,32 +5,20 @@ import javafx.scene.image.Image;
 
 public class Sprite {
 
-	/**
-	 * Source image
-	 */
 	private final Image image;
 
-	/**
-	 * Row and column count in sheet
-	 */
 	private final int rows;
 	private final int cols;
 
-	/**
-	 * Sprite dimensions
-	 */
 	private final double width;
 	private final double height;
 
-	/**
-	 * Selected subimage from image
-	 */
 	private int selRow = 0;
 	private int selCol = 0;
 
-	/**
-	 * Transformations
-	 */
+	private int strRow = 1;
+	private int strCol = 1;
+
 	private boolean flipX = false;
 	private boolean flipY = false;
 
@@ -63,13 +51,26 @@ public class Sprite {
 		}
 	}
 
-	public void draw(GraphicsContext gc, double x, double y) {
-		draw(gc, (int) x, (int) y);
+	public void stretch(int rows, int cols) {
+		if (rows >= 0 && rows <= this.rows && cols >= 0 && cols <= this.cols) {
+			strRow = rows;
+			strCol = cols;
+		}
 	}
 
-	private void draw(GraphicsContext gc, int x, int y) {
-		gc.drawImage(image, selCol * (int) width, selRow * (int) height, (int) width, (int) height, x, y,
-				(flipX ? -1 : 1) * (int) width, (flipY ? -1 : 1) * (int) height);
+	public void draw(GraphicsContext gc, double x, double y) {
+		if (strRow > 0 && strCol > 0) {
+			gc.drawImage(
+				image,
+				selCol * width, 
+				selRow * height, 
+				strCol * width, 
+				strRow * height, 
+				x + (flipX ? width * strCol : 0), 
+				y + (flipY ? height * strRow : 0), 
+				(flipX ? -1 : 1) * width * strCol,
+				(flipY ? -1 : 1) * height * strRow);
+		}
 	}
 
 	public double getWidth() {

@@ -4,21 +4,10 @@ import java.util.prefs.Preferences;
 
 public enum RegistryManager {
 
-	/**
-	 * Create single RegistryManager instance
-	 */
 	INSTANCE(com.hiraishin.rain.Application.class);
 
-	/**
-	 * Preferences
-	 */
 	private final Preferences preferences;
 
-	/**
-	 * Use class as root
-	 * 
-	 * @param userNode
-	 */
 	private RegistryManager(Class<?> userNode) {
 		preferences = Preferences.userNodeForPackage(userNode);
 	}

@@ -4,11 +4,17 @@ import java.util.Objects;
 
 import com.hiraishin.rain.entity.Entity;
 import com.hiraishin.rain.graphics.Sprite;
+import com.hiraishin.rain.level.Level;
 
 public abstract class Mob extends Entity {
 
-	protected Mob(double x, double y, double width, double height, Sprite sprite) {
-		super(x, y, width, height, Objects.requireNonNull(sprite));
+	protected Mob(double x, double y, double width, double height, Sprite sprite, Level level) {
+		super(x, y, width, height, Objects.requireNonNull(sprite), level);
+	}
+
+	@Override
+	public void tick() {
+
 	}
 
 }

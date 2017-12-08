@@ -1,6 +1,6 @@
 package com.hiraishin.rain.entity;
 
-public enum UpdateCycle {
+public enum Lifetime {
 
 	DEFAULT, SUSPENDED, CLOSED
 

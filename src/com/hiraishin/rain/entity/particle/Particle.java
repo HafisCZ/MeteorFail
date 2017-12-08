@@ -1,21 +1,14 @@
 package com.hiraishin.rain.entity.particle;
 
 import com.hiraishin.rain.entity.Entity;
+import com.hiraishin.rain.level.Level;
 
 public abstract class Particle extends Entity {
 
-	/**
-	 * 
-	 * @param x
-	 * @param y
-	 */
-	protected Particle(double x, double y, double width, double height) {
-		super(x, y, width, height);
+	protected Particle(double x, double y, double width, double height, Level level) {
+		super(x, y, width, height, level);
 	}
 
-	/**
-	 * Tick
-	 */
 	public abstract void tick();
 
 }
