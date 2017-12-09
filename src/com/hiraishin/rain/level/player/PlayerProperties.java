@@ -1,9 +1,9 @@
-package com.hiraishin.rain.level;
+package com.hiraishin.rain.level.player;
 
 import java.util.Objects;
 
 import com.hiraishin.rain.entity.Entity;
-import com.hiraishin.rain.level.skill.Skill;
+import com.hiraishin.rain.level.Level;
 import com.hiraishin.rain.util.RegistryManager;
 
 import javafx.beans.property.IntegerProperty;

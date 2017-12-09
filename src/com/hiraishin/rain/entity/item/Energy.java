@@ -2,7 +2,7 @@ package com.hiraishin.rain.entity.item;
 
 import com.hiraishin.rain.graphics.Sprite;
 import com.hiraishin.rain.level.Level;
-import com.hiraishin.rain.util.ImagePreloader;
+import com.hiraishin.rain.util.ImageLoader;
 
 import javafx.scene.image.Image;
 
@@ -14,7 +14,7 @@ public class Energy extends Item {
 	public static final double WIDTH = 7;
 	public static final double HEIGHT = 7;
 
-	public static final Image IMAGE = ImagePreloader.DEFAULT_LOADER.getImage("energy");
+	public static final Image IMAGE = ImageLoader.DEFAULT.requestImage("entity/energy");
 	public static final int IMAGE_ROWS = 1;
 	public static final int IMAGE_COLS = 1;
 	public static final double SPRITE_X_OFFSET = -4;
@@ -32,6 +32,6 @@ public class Energy extends Item {
 	 */
 	@Override
 	public void effect() {
-		level.getPlayerProperties().addEnergy();
+		this.level.getPlayerProperties().addEnergy();
 	}
 }

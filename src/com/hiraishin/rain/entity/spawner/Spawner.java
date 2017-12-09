@@ -33,7 +33,7 @@ public abstract class Spawner extends Entity {
 		this.variation = variation;
 		this.rate = rate;
 
-		frameLimit = rate;
+		this.frameLimit = rate;
 	}
 
 	/*
@@ -41,12 +41,12 @@ public abstract class Spawner extends Entity {
 	 */
 	@Override
 	public final void tick() {
-		if (frameCount++ >= frameLimit) {
-			frameCount = 0;
-			frameLimit = rate + ((variation > 1) ? Commons.RANDOM.nextInt(variation) : 0);
+		if (this.frameCount++ >= this.frameLimit) {
+			this.frameCount = 0;
+			this.frameLimit = this.rate + (this.variation > 1 ? Commons.RANDOM.nextInt(this.variation) : 0);
 
-			if (Objects.nonNull(level)) {
-				for (int i = 0; i < count; i++) {
+			if (Objects.nonNull(this.level)) {
+				for (int i = 0; i < this.count; i++) {
 					spawn();
 				}
 			}
@@ -57,11 +57,11 @@ public abstract class Spawner extends Entity {
 	 * Getters & Setters
 	 */
 	protected double getRandomX() {
-		return x + ((width == 0) ? 0 : Commons.RANDOM.nextInt((int) width));
+		return this.x + (this.width == 0 ? 0 : Commons.RANDOM.nextInt((int) this.width));
 	}
 
 	protected double getRandomY() {
-		return y + ((height == 0) ? 0 : Commons.RANDOM.nextInt((int) height));
+		return this.y + (this.height == 0 ? 0 : Commons.RANDOM.nextInt((int) this.height));
 	}
 
 	/*

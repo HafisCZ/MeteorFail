@@ -4,14 +4,26 @@ import java.util.prefs.Preferences;
 
 public enum RegistryManager {
 
+	/*
+	 * Definitions
+	 */
 	INSTANCE(com.hiraishin.rain.Application.class);
 
+	/*
+	 * Instance final variables
+	 */
 	private final Preferences preferences;
 
+	/*
+	 * Constructors
+	 */
 	private RegistryManager(Class<?> userNode) {
 		preferences = Preferences.userNodeForPackage(userNode);
 	}
 
+	/*
+	 * Instance functions
+	 */
 	public void writeInteger(String key, Integer value) {
 		preferences.putInt(key, value);
 	}

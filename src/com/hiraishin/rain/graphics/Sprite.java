@@ -5,6 +5,9 @@ import javafx.scene.image.Image;
 
 public class Sprite {
 
+	/*
+	 * Instance final variables
+	 */
 	private final Image image;
 
 	private final int rows;
@@ -13,6 +16,9 @@ public class Sprite {
 	private final double width;
 	private final double height;
 
+	/*
+	 * Instance variables
+	 */
 	private int selRow = 0;
 	private int selCol = 0;
 
@@ -22,62 +28,61 @@ public class Sprite {
 	private boolean flipX = false;
 	private boolean flipY = false;
 
-	public Sprite(Image image) {
-		this(image, 1, 1);
-	}
-
-	public Sprite(Image image, int size) {
-		this(image, size, size);
-	}
-
+	/*
+	 * Constructors
+	 */
 	public Sprite(Image image, int rows, int columns) {
+		if (rows < 1 || columns < 1) {
+			throw new IllegalArgumentException();
+		}
+
 		this.image = image;
 		this.rows = rows;
 		this.cols = columns;
 
-		width = image.getWidth() / columns;
-		height = image.getHeight() / rows;
+		this.width = image.getWidth() / columns;
+		this.height = image.getHeight() / rows;
 	}
 
+	/*
+	 * Instance functions
+	 */
 	public void setFlip(boolean flipX, boolean flipY) {
 		this.flipX = flipX;
 		this.flipY = flipY;
 	}
 
 	public void select(int row, int col) {
-		if (row < rows && col < cols) {
-			selRow = row;
-			selCol = col;
+		if (row < this.rows && col < this.cols) {
+			this.selRow = row;
+			this.selCol = col;
 		}
 	}
 
 	public void stretch(int rows, int cols) {
 		if (rows >= 0 && rows <= this.rows && cols >= 0 && cols <= this.cols) {
-			strRow = rows;
-			strCol = cols;
+			this.strRow = rows;
+			this.strCol = cols;
 		}
 	}
 
 	public void draw(GraphicsContext gc, double x, double y) {
-		if (strRow > 0 && strCol > 0) {
-			gc.drawImage(
-				image,
-				selCol * width, 
-				selRow * height, 
-				strCol * width, 
-				strRow * height, 
-				x + (flipX ? width * strCol : 0), 
-				y + (flipY ? height * strRow : 0), 
-				(flipX ? -1 : 1) * width * strCol,
-				(flipY ? -1 : 1) * height * strRow);
+		if (this.strRow > 0 && this.strCol > 0) {
+			gc.drawImage(this.image, this.selCol * this.width, this.selRow * this.height, this.strCol * this.width,
+					this.strRow * this.height, x + (this.flipX ? this.width * this.strCol : 0),
+					y + (this.flipY ? this.height * this.strRow : 0), (this.flipX ? -1 : 1) * this.width * this.strCol,
+					(this.flipY ? -1 : 1) * this.height * this.strRow);
 		}
 	}
 
+	/*
+	 * Getters & Setters
+	 */
 	public double getWidth() {
-		return width;
+		return this.width;
 	}
 
 	public double getHeight() {
-		return height;
+		return this.height;
 	}
 }

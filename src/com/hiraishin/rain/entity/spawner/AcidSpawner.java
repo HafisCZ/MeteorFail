@@ -18,7 +18,7 @@ public class AcidSpawner extends Spawner {
 	 */
 	@Override
 	public void spawn() {
-		level.add(new Acid(getRandomX(), getRandomY(), level));
+		this.level.add(new Acid(getRandomX(), getRandomY(), this.level));
 	}
 
 }

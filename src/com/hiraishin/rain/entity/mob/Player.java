@@ -7,9 +7,9 @@ import com.hiraishin.rain.graphics.animation.AnimatedSprite;
 import com.hiraishin.rain.graphics.animation.Step;
 import com.hiraishin.rain.input.Keyboard;
 import com.hiraishin.rain.level.Level;
-import com.hiraishin.rain.level.PlayerProperties;
+import com.hiraishin.rain.level.player.PlayerProperties;
 import com.hiraishin.rain.util.Commons;
-import com.hiraishin.rain.util.ImagePreloader;
+import com.hiraishin.rain.util.ImageLoader;
 
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -27,7 +27,7 @@ public class Player extends Entity {
 	public static final double SPEED_X_INCREMENT2 = 0.6;
 	public static final double SPEED_Y_INCREMENT = 0.5;
 
-	public static final Image IMAGE = ImagePreloader.DEFAULT_LOADER.getImage("player");
+	public static final Image IMAGE = ImageLoader.DEFAULT.requestImage("entity/player");
 	public static final int IMAGE_ROWS = 2;
 	public static final int IMAGE_COLS = 4;
 	public static final double SPRITE_X_OFFSET = -4;
@@ -64,66 +64,66 @@ public class Player extends Entity {
 	 */
 	@Override
 	public void tick() {
-		if (keyboard.isHeld(KeyCode.D) && !keyboard.isHeld(KeyCode.A)) {
-			dx = Math.min(dx + speed, SPEED_X_LIMIT);
+		if (this.keyboard.isHeld(KeyCode.D) && !this.keyboard.isHeld(KeyCode.A)) {
+			this.dx = Math.min(this.dx + this.speed, SPEED_X_LIMIT);
 		}
 
-		if (keyboard.isHeld(KeyCode.A) && !keyboard.isHeld(KeyCode.D)) {
-			dx = Math.max(dx - speed, -SPEED_X_LIMIT);
+		if (this.keyboard.isHeld(KeyCode.A) && !this.keyboard.isHeld(KeyCode.D)) {
+			this.dx = Math.max(this.dx - this.speed, -SPEED_X_LIMIT);
 		}
 
-		if (!keyboard.isHeld(KeyCode.A) && !keyboard.isHeld(KeyCode.D)) {
-			if (dx > 0) {
-				dx = Math.max(dx - speed, 0);
-			} else if (dx < 0) {
-				dx = Math.min(dx + speed, 0);
+		if (!this.keyboard.isHeld(KeyCode.A) && !this.keyboard.isHeld(KeyCode.D)) {
+			if (this.dx > 0) {
+				this.dx = Math.max(this.dx - this.speed, 0);
+			} else if (this.dx < 0) {
+				this.dx = Math.min(this.dx + this.speed, 0);
 			}
 		}
 
-		if (keyboard.isHeld(KeyCode.SPACE)) {
-			if (!jump) {
-				jump = true;
-				dy = SPEED_Y_LIMIT;
+		if (this.keyboard.isHeld(KeyCode.SPACE)) {
+			if (!this.jump) {
+				this.jump = true;
+				this.dy = SPEED_Y_LIMIT;
 			}
 		}
 
-		if (keyboard.isPressed(KeyCode.F)) {
-			level.getPlayerProperties().activateSkill(this, level);
+		if (this.keyboard.isPressed(KeyCode.F)) {
+			this.level.getPlayerProperties().activateSkill(this, this.level);
 		}
 
-		this.x += dx;
-		this.y += dy;
+		this.x += this.dx;
+		this.y += this.dy;
 
-		if (jump) {
-			dy += SPEED_Y_INCREMENT;
+		if (this.jump) {
+			this.dy += SPEED_Y_INCREMENT;
 		}
 
-		if (x < Commons.ZERO) {
-			x = 0;
-			dx = 0;
-		} else if (x + width > Commons.SCENE_WIDTH) {
-			x = Commons.SCENE_WIDTH - width;
-			dx = 0;
+		if (this.x < Commons.ZERO) {
+			this.x = 0;
+			this.dx = 0;
+		} else if (this.x + this.width > Commons.SCENE_WIDTH) {
+			this.x = Commons.SCENE_WIDTH - this.width;
+			this.dx = 0;
 		}
 
-		if (y < Commons.ZERO) {
-			y = 0;
-			dy = 0;
-		} else if (y + height > Commons.SCENE_GROUND) {
-			y = Commons.SCENE_GROUND - height;
-			dy = 0;
+		if (this.y < Commons.ZERO) {
+			this.y = 0;
+			this.dy = 0;
+		} else if (this.y + this.height > Commons.SCENE_GROUND) {
+			this.y = Commons.SCENE_GROUND - this.height;
+			this.dy = 0;
 
-			jump = false;
+			this.jump = false;
 		}
 
-		if (dx != 0) {
-			sprite.setFlip(dx > 0 ? false : true, false);
-			((AnimatedSprite) sprite).start();
+		if (this.dx != 0) {
+			this.sprite.setFlip(this.dx > 0 ? false : true, false);
+			((AnimatedSprite) this.sprite).play();
 		} else {
-			((AnimatedSprite) sprite).stop();
+			((AnimatedSprite) this.sprite).stop();
 		}
 
-		((AnimatedSprite) sprite).tick();
+		((AnimatedSprite) this.sprite).tick();
 	}
 
 }

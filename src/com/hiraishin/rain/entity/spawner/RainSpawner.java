@@ -30,8 +30,8 @@ public final class RainSpawner extends Spawner {
 	 */
 	@Override
 	public void spawn() {
-		level.add(new RainParticle(getRandomX(), getRandomY(), WIDTH,
+		this.level.add(new RainParticle(getRandomX(), getRandomY(), WIDTH,
 				HEIGHT_MIN + Commons.RANDOM.nextInt(HEIGHT_MAX - HEIGHT_MIN + 1), SPEED_X,
-				SPEED_Y_MIN + Commons.RANDOM.nextInt(SPEED_Y_MAX - SPEED_Y_MIN + 1), level));
+				SPEED_Y_MIN + Commons.RANDOM.nextInt(SPEED_Y_MAX - SPEED_Y_MIN + 1), this.level));
 	}
 }

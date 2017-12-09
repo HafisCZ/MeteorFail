@@ -1,37 +1,50 @@
-package com.hiraishin.rain.level;
+package com.hiraishin.rain.level.overlay;
 
 import java.util.Objects;
 
 import com.hiraishin.rain.graphics.Drawable;
 import com.hiraishin.rain.graphics.Sprite;
-import com.hiraishin.rain.level.skill.Skill;
-import com.hiraishin.rain.util.ImagePreloader;
+import com.hiraishin.rain.level.player.PlayerProperties;
+import com.hiraishin.rain.level.player.Skill;
+import com.hiraishin.rain.util.ImageLoader;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Overlay implements Drawable {
 
-	private static final Sprite HLT_BAR = new Sprite(ImagePreloader.DEFAULT_LOADER.getImage("heart"), 1, 10);
-	private static final Sprite ARM_BAR = new Sprite(ImagePreloader.DEFAULT_LOADER.getImage("heart_armor"), 1, 10);
-	private static final Sprite EXP_BAR = new Sprite(ImagePreloader.DEFAULT_LOADER.getImage("xpbar"), 1, 100);
-	private static final Sprite PWR_BAR = new Sprite(ImagePreloader.DEFAULT_LOADER.getImage("energybar"), 2, 100);
+	/*
+	 * Definitions
+	 */
+	private static final Sprite HLT_BAR = new Sprite(ImageLoader.DEFAULT.requestImage("gui/bars/health"), 1, 10);
+	private static final Sprite ARM_BAR = new Sprite(ImageLoader.DEFAULT.requestImage("gui/bars/armor"), 1, 10);
+	private static final Sprite EXP_BAR = new Sprite(ImageLoader.DEFAULT.requestImage("gui/bars/experience"), 1, 100);
+	private static final Sprite PWR_BAR = new Sprite(ImageLoader.DEFAULT.requestImage("gui/bars/energy"), 2, 100);
 
-	private static final Sprite ABL_ICO = new Sprite(ImagePreloader.DEFAULT_LOADER.getImage("abilities"), 1, 4);
-	private static final Sprite HLC_ICO = new Sprite(ImagePreloader.DEFAULT_LOADER.getImage("heart_icon"), 1, 1);
-	private static final Sprite EXP_ICO = new Sprite(ImagePreloader.DEFAULT_LOADER.getImage("xp_icon"), 1, 1);
-	private static final Sprite PWR_ICO = new Sprite(ImagePreloader.DEFAULT_LOADER.getImage("power_icon"), 1, 1);
+	private static final Sprite ABL_ICO = new Sprite(ImageLoader.DEFAULT.requestImage("gui/icons/ability"), 1, 4);
+	private static final Sprite HLC_ICO = new Sprite(ImageLoader.DEFAULT.requestImage("gui/icons/health"), 1, 1);
+	private static final Sprite EXP_ICO = new Sprite(ImageLoader.DEFAULT.requestImage("gui/icons/experience"), 1, 1);
+	private static final Sprite PWR_ICO = new Sprite(ImageLoader.DEFAULT.requestImage("gui/icons/energy"), 1, 1);
 
-	private static final Sprite SQ_FRAME = new Sprite(ImagePreloader.DEFAULT_LOADER.getImage("icon_frame"), 1, 1);
-	private static final Sprite RC_FRAME = new Sprite(ImagePreloader.DEFAULT_LOADER.getImage("bar_outline"), 1, 1);
+	private static final Sprite SQ_FRAME = new Sprite(ImageLoader.DEFAULT.requestImage("gui/icons/frame"), 1, 1);
+	private static final Sprite RC_FRAME = new Sprite(ImageLoader.DEFAULT.requestImage("gui/bars/frame"), 1, 1);
 
+	/*
+	 * Instance final variables
+	 */
 	private final double x;
 	private final double y;
 
+	/*
+	 * Instance variables
+	 */
 	private Skill skill;
 
 	private int level;
 
+	/*
+	 * Constructors
+	 */
 	public Overlay(double x, double y, PlayerProperties properties) {
 		this.x = x;
 		this.y = y;
@@ -85,6 +98,9 @@ public class Overlay implements Drawable {
 		});
 	}
 
+	/*
+	 * Instance functions
+	 */
 	private void drawStatic(GraphicsContext gc) {
 		HLC_ICO.draw(gc, x + 2, y + 10);
 		EXP_ICO.draw(gc, x + 2, y + 30);

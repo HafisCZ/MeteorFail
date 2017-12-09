@@ -1,48 +1,146 @@
 package com.hiraishin.rain;
 
-import com.hiraishin.rain.input.Keyboard;
-import com.hiraishin.rain.scene.Menu;
-import com.hiraishin.rain.util.ImagePreloader;
-import com.hiraishin.rain.util.logger.Logger;
+import java.util.Objects;
 
-import javafx.animation.AnimationTimer;
+import com.hiraishin.rain.event.StateEvent;
+import com.hiraishin.rain.input.Keyboard;
+import com.hiraishin.rain.layout.pane.HelpPane;
+import com.hiraishin.rain.layout.pane.MenuPane;
+import com.hiraishin.rain.layout.pane.PausePane;
+import com.hiraishin.rain.layout.pane.ShopPane;
+import com.hiraishin.rain.layout.pane.StatPane;
+import com.hiraishin.rain.util.Commons;
+
+import javafx.application.Platform;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Application extends javafx.application.Application {
 
+	/*
+	 * Screen nodes
+	 */
+	private Scene scene;
+	private Group root;
+	private Group group;
+
+	/*
+	 * Keyboard listener
+	 */
+	private Keyboard keyboard;
+
+	/*
+	 * Game
+	 */
+	private Game game;
+
+	/*
+	 * Menu panes
+	 */
+	private Pane paneMenu = new MenuPane();
+	private Pane paneShop = new ShopPane();
+	private Pane paneStat = new StatPane();
+	private Pane paneHelp = new HelpPane();
+	private Pane panePause = new PausePane();
+
+	/*
+	 * Main function
+	 */
 	public static void main(String... args) {
 		launch(args);
 	}
 
+	/*
+	 * Start function
+	 */
 	@Override
 	public void start(Stage stage) throws Exception {
-		ImagePreloader.DEFAULT_LOADER.load(false, "res/coin.png", "res/acid.png", "res/heart.png", "res/player.png",
-				"res/bg.png", "res/armor.png", "res/heart_frame.png", "res/heart_armor.png", "res/xpbar.png",
-				"res/bar_outline.png", "res/energybar.png", "res/energy.png", "res/abilities.png", "res/icon_frame.png",
-				"res/heart_icon.png", "res/xp_icon.png", "res/power_icon.png");
+		/*
+		 * Create keyboard
+		 */
+		this.keyboard = new Keyboard(stage);
 
-		Logger.INSTANCE.print(System.out::println);
+		/*
+		 * Create game
+		 */
+		this.game = new Game(this.keyboard);
 
-		final Keyboard keyboard = new Keyboard(stage);
+		/*
+		 * Create groups
+		 */
+		this.group = new Group();
+		this.root = new Group(this.game.getCanvas(), this.group);
 
-		Menu.INSTANCE.setKeyboard(keyboard);
+		/*
+		 * Create scene
+		 */
+		this.scene = new Scene(this.root, Commons.SCENE_WIDTH, Commons.SCENE_HEIGHT);
 
-		stage.setScene(Menu.INSTANCE.getScene());
-		// stage.setScene(scene);
+		/*
+		 * Size window to scene
+		 */
+		stage.setScene(this.scene);
+		stage.sizeToScene();
 
-		stage.setTitle("Rain");
-		stage.show();
-
-		new AnimationTimer() {
-
-			@Override
-			public void handle(long arg0) {
-				// keyboard.update();
-
-				Menu.INSTANCE.getGame().update();
+		/*
+		 * Add State event listener
+		 */
+		stage.addEventHandler(StateEvent.STATE, event -> {
+			if (Objects.equals(event.getEventType(), StateEvent.MENU)) {
+				switchPane(this.group, this.paneMenu);
+			} else if (Objects.equals(event.getEventType(), StateEvent.PLAY)) {
+				switchPane(this.group, null);
+				this.game.play();
+			} else if (Objects.equals(event.getEventType(), StateEvent.SHOP)) {
+				switchPane(this.group, this.paneShop);
+			} else if (Objects.equals(event.getEventType(), StateEvent.STAT)) {
+				switchPane(this.group, this.paneStat);
+			} else if (Objects.equals(event.getEventType(), StateEvent.QUIT)) {
+				Platform.exit();
+			} else if (Objects.equals(event.getEventType(), StateEvent.HELP)) {
+				switchPane(this.group, this.paneHelp);
+			} else if (Objects.equals(event.getEventType(), StateEvent.PAUSE)) {
+				switchPane(this.group, this.panePause);
+				this.game.pause();
+			} else if (Objects.equals(event.getEventType(), StateEvent.UNPAUSE)) {
+				switchPane(this.group, null);
+				this.game.unpause();
+			} else if (Objects.equals(event.getEventType(), StateEvent.STOP)) {
+				switchPane(this.group, this.paneMenu);
+				this.game.close();
 			}
 
-		}.start();
+			event.consume();
+		});
+
+		/*
+		 * Set window properties
+		 */
+		stage.setTitle("Rain");
+		stage.setResizable(false);
+
+		/*
+		 * Show window
+		 */
+		stage.show();
+
+		/*
+		 * Fire event to switch to Menu
+		 */
+		stage.fireEvent(new StateEvent(StateEvent.MENU));
+	}
+
+	/*
+	 * Helper function
+	 */
+	private static void switchPane(Group parent, Pane pane) {
+		parent.getChildren().clear();
+
+		if (Objects.nonNull(pane)) {
+			parent.getChildren().add(pane);
+		}
 	}
 
 }

@@ -61,53 +61,53 @@ public abstract class Entity implements Drawable {
 	 */
 	@Override
 	public void draw(GraphicsContext gc) {
-		if (Objects.nonNull(sprite)) {
-			sprite.draw(gc, x + spriteOffsetX, y + spriteOffsetY);
+		if (Objects.nonNull(this.sprite)) {
+			this.sprite.draw(gc, this.x + this.spriteOffsetX, this.y + this.spriteOffsetY);
 		}
 	}
 
 	public final boolean collidesAABB(Entity entity) {
-		final boolean a = entity.x + entity.width > x;
-		final boolean b = x + width > entity.x;
-		final boolean c = entity.y + entity.height > y;
-		final boolean d = y + height > entity.y;
+		final boolean a = entity.x + entity.width > this.x;
+		final boolean b = this.x + this.width > entity.x;
+		final boolean c = entity.y + entity.height > this.y;
+		final boolean d = this.y + this.height > entity.y;
 		return a && b && c && d;
 	}
 
-	public void kill() {
-		dead = true;
+	public final void kill() {
+		this.dead = true;
 	}
 
-	public boolean isDead() {
-		return dead;
+	public final boolean isDead() {
+		return this.dead;
 	}
 
 	/*
 	 * Getters & Setters
 	 */
 	public final double getX() {
-		return x;
+		return this.x;
 	}
 
 	public final double getY() {
-		return y;
+		return this.y;
 	}
 
 	public final double getWidth() {
-		return width;
+		return this.width;
 	}
 
 	public final double getHeight() {
-		return height;
+		return this.height;
 	}
 
 	public final Rectangle2D getBounds() {
-		return new Rectangle2D(x, y, width, height);
+		return new Rectangle2D(this.x, this.y, this.width, this.height);
 	}
 
 	public final double getDistance(double x, double y) {
-		return Math.sqrt((x - (this.x + width / 2)) * (x - (this.x + width / 2))
-				+ (y - (this.y + height / 2)) * (y - (this.y + height / 2)));
+		return Math.sqrt((x - (this.x + this.width / 2)) * (x - (this.x + this.width / 2))
+				+ (y - (this.y + this.height / 2)) * (y - (this.y + this.height / 2)));
 	}
 
 	/*

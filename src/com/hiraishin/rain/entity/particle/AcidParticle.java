@@ -45,43 +45,43 @@ public class AcidParticle extends Particle {
 	 */
 	@Override
 	public void draw(GraphicsContext gc) {
-		gc.setFill(color);
-		gc.fillRect(x, y, width, height);
+		gc.setFill(this.color);
+		gc.fillRect(this.x, this.y, this.width, this.height);
 	}
 
 	@Override
 	public void tick() {
-		this.x += dx;
-		this.y += dy;
+		this.x += this.dx;
+		this.y += this.dy;
 
-		if (dx > 0) {
-			dx = Math.max(0, dx - SPEED_X_INCREMENT);
-		} else if (dx < 0) {
-			dx = Math.min(0, dx + SPEED_X_INCREMENT);
+		if (this.dx > 0) {
+			this.dx = Math.max(0, this.dx - SPEED_X_INCREMENT);
+		} else if (this.dx < 0) {
+			this.dx = Math.min(0, this.dx + SPEED_X_INCREMENT);
 		}
 
-		if (x < Commons.ZERO) {
-			x = 0;
-			dx = 0;
-		} else if (x + width > Commons.SCENE_WIDTH) {
-			x = Commons.SCENE_WIDTH - width;
-			dx = 0;
+		if (this.x < Commons.ZERO) {
+			this.x = 0;
+			this.dx = 0;
+		} else if (this.x + this.width > Commons.SCENE_WIDTH) {
+			this.x = Commons.SCENE_WIDTH - this.width;
+			this.dx = 0;
 		}
 
-		if (y < Commons.ZERO) {
-			y = 0;
-		} else if (y + height > Commons.SCENE_GROUND) {
-			y = Commons.SCENE_GROUND - height;
-			despawnActive = true;
-			dy = 0;
+		if (this.y < Commons.ZERO) {
+			this.y = 0;
+		} else if (this.y + this.height > Commons.SCENE_GROUND) {
+			this.y = Commons.SCENE_GROUND - this.height;
+			this.despawnActive = true;
+			this.dy = 0;
 		} else {
-			dy += SPEED_Y_INCREMENT;
+			this.dy += SPEED_Y_INCREMENT;
 		}
 
-		if (despawnActive) {
-			despawnTicks--;
+		if (this.despawnActive) {
+			this.despawnTicks--;
 
-			if (despawnTicks <= 0) {
+			if (this.despawnTicks <= 0) {
 				kill();
 			}
 		}

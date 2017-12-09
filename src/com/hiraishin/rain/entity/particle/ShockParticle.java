@@ -35,19 +35,20 @@ public class ShockParticle extends Particle {
 	@Override
 	public void draw(GraphicsContext gc) {
 		gc.setStroke(Color.ALICEBLUE);
-		gc.strokeArc(x - radius, y - radius, radius * 2, radius * 2, 0, ARC_ANGLE, ArcType.OPEN);
+		gc.strokeArc(this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2, 0, ARC_ANGLE,
+				ArcType.OPEN);
 	}
 
 	@Override
 	public void tick() {
-		radius += ARC_RADIUS_INCREMENT;
-		if (radius > Commons.SCENE_WIDTH) {
+		this.radius += ARC_RADIUS_INCREMENT;
+		if (this.radius > Commons.SCENE_WIDTH) {
 			kill();
 		}
 
-		for (Entity m : level.getMobs()) {
+		for (Entity m : this.level.getMobs()) {
 			if (m instanceof Acid) {
-				if (m.getDistance(x, y) <= radius) {
+				if (m.getDistance(this.x, this.y) <= this.radius) {
 					m.kill();
 				}
 			}

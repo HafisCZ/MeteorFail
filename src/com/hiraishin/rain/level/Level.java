@@ -16,8 +16,10 @@ import com.hiraishin.rain.entity.spawner.EnergySpawner;
 import com.hiraishin.rain.entity.spawner.RainSpawner;
 import com.hiraishin.rain.entity.spawner.Spawner;
 import com.hiraishin.rain.input.Keyboard;
+import com.hiraishin.rain.level.overlay.Overlay;
+import com.hiraishin.rain.level.player.PlayerProperties;
 import com.hiraishin.rain.util.Commons;
-import com.hiraishin.rain.util.ImagePreloader;
+import com.hiraishin.rain.util.ImageLoader;
 import com.hiraishin.rain.util.RegistryManager;
 
 import javafx.application.Platform;
@@ -36,7 +38,7 @@ public class Level {
 	private PlayerProperties properties;
 	private Overlay overlay;
 
-	private final Image background = ImagePreloader.DEFAULT_LOADER.getImage("bg");
+	private final Image background = ImageLoader.DEFAULT.requestImage("background/background");
 
 	private PlayState state = PlayState.STOP;
 
@@ -60,6 +62,7 @@ public class Level {
 
 	public void tick() {
 		switch (state) {
+
 		case PLAY: {
 			for (Entity s : spawners) {
 				s.tick();
@@ -81,8 +84,12 @@ public class Level {
 			particles.removeIf(Entity::isDead);
 			break;
 		}
-		case STOP:
+
 		case PAUSE: {
+			break;
+		}
+
+		default: {
 			for (Entity s : spawners) {
 				if (s instanceof RainSpawner) {
 					s.tick();
@@ -98,6 +105,7 @@ public class Level {
 			particles.removeIf(E -> E.isDead() && (E instanceof Particle));
 			break;
 		}
+
 		}
 
 	}
@@ -105,30 +113,16 @@ public class Level {
 	public void draw(GraphicsContext gc) {
 		gc.drawImage(background, 0, 0, Commons.SCENE_WIDTH, Commons.SCENE_HEIGHT);
 
-		switch (state) {
-		case PLAY: {
-			for (Entity p : particles) {
-				p.draw(gc);
-			}
-
-			for (Entity m : mobs) {
-				m.draw(gc);
-			}
-
-			if (Objects.nonNull(overlay)) {
-				overlay.draw(gc);
-			}
-			break;
+		for (Entity p : particles) {
+			p.draw(gc);
 		}
-		case STOP:
-		case PAUSE: {
-			for (Entity p : particles) {
-				if (p instanceof RainParticle) {
-					p.draw(gc);
-				}
-			}
-			break;
+
+		for (Entity m : mobs) {
+			m.draw(gc);
 		}
+
+		if (Objects.nonNull(overlay)) {
+			overlay.draw(gc);
 		}
 	}
 
@@ -136,6 +130,8 @@ public class Level {
 		if (state == PlayState.PLAY) {
 			return;
 		}
+
+		close();
 
 		state = PlayState.PLAY;
 
@@ -159,14 +155,20 @@ public class Level {
 		});
 	}
 
+	public void exit() {
+		if (state != PlayState.EXIT) {
+			state = PlayState.EXIT;
+		}
+	}
+
 	public void pause() {
-		if (state != PlayState.PLAY) {
+		if (state == PlayState.PLAY) {
 			state = PlayState.PAUSE;
 		}
 	}
 
 	public void unpause() {
-		if (state != PlayState.PAUSE) {
+		if (state == PlayState.PAUSE) {
 			state = PlayState.PLAY;
 		}
 	}

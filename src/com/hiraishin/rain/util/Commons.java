@@ -2,23 +2,28 @@ package com.hiraishin.rain.util;
 
 import java.util.Random;
 
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 
 public class Commons {
 
+	/*
+	 * Definitions
+	 */
 	public static final Random RANDOM = new Random();
-	
-	public static final double ZERO = 0D;
-	public static final double SCENE_WIDTH = 1000D;
-	public static final double SCENE_HEIGHT = 700D;
-	
+
+	public static final double ZERO = 0;
+
+	public static final double SCENE_WIDTH = 1000;
+	public static final double SCENE_HEIGHT = 700;
 	public static final double SCENE_GROUND = SCENE_HEIGHT / 40 * 33;
 
-	public static final double OVERLAY_X = 0;
-	public static final double OVERLAY_Y = 650;
-
-	public static final Font FONT_MENUITEM = Font.font("", FontWeight.BOLD, 18);
-	public static final Font FONT_GAMELOGO = Font.font("", FontWeight.SEMI_BOLD, 50);
+	public static final LinearGradient GRADIENT = new LinearGradient(0, 0, 0.5, 1, true, CycleMethod.NO_CYCLE,
+			new Stop[] { new Stop(0, Color.DARKCYAN), new Stop(1, Color.BLUEVIOLET) });
+	
+	public static final LinearGradient GRADIENT2 = new LinearGradient(0, 0, 0.5, 1, true, CycleMethod.NO_CYCLE,
+			new Stop[] { new Stop(0, Color.WHITESMOKE), new Stop(1, Color.LIGHTGRAY) });
 
 }

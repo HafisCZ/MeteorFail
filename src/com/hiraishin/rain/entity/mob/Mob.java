@@ -11,16 +11,9 @@ public abstract class Mob extends Entity {
 	/*
 	 * Constructors
 	 */
-	protected Mob(double x, double y, double width, double height, Sprite sprite, double offsetX, double offsetY, Level level) {
+	protected Mob(double x, double y, double width, double height, Sprite sprite, double offsetX, double offsetY,
+			Level level) {
 		super(x, y, width, height, Objects.requireNonNull(sprite), offsetX, offsetY, level);
-	}
-
-	/*
-	 * Instance functions
-	 */
-	@Override
-	public void tick() {
-
 	}
 
 }

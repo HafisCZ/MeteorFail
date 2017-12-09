@@ -1,8 +1,7 @@
-package com.hiraishin.rain.level.skill;
+package com.hiraishin.rain.level.player;
 
 import com.hiraishin.rain.entity.particle.ShockParticle;
 import com.hiraishin.rain.level.Level;
-import com.hiraishin.rain.level.PlayerProperties;
 import com.hiraishin.rain.util.Commons;
 
 public enum Skill {

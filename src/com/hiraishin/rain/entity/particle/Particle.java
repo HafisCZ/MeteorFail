@@ -15,6 +15,7 @@ public abstract class Particle extends Entity {
 	/*
 	 * Abstract functions
 	 */
+	@Override
 	public abstract void tick();
 
 }

@@ -2,7 +2,7 @@ package com.hiraishin.rain.entity.item;
 
 import com.hiraishin.rain.graphics.Sprite;
 import com.hiraishin.rain.level.Level;
-import com.hiraishin.rain.util.ImagePreloader;
+import com.hiraishin.rain.util.ImageLoader;
 
 import javafx.scene.image.Image;
 
@@ -14,7 +14,7 @@ public class Shield extends Item {
 	public static final double WIDTH = 20;
 	public static final double HEIGHT = 30;
 
-	public static final Image IMAGE = ImagePreloader.DEFAULT_LOADER.getImage("armor");
+	public static final Image IMAGE = ImageLoader.DEFAULT.requestImage("entity/armor");
 	public static final int IMAGE_ROWS = 1;
 	public static final int IMAGE_COLS = 1;
 	public static final double SPRITE_X_OFFSET = 0;
@@ -30,7 +30,8 @@ public class Shield extends Item {
 	/*
 	 * Instance functions
 	 */
+	@Override
 	public void effect() {
-		level.getPlayerProperties().addShield();
+		this.level.getPlayerProperties().addShield();
 	}
 }

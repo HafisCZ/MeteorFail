@@ -18,7 +18,7 @@ public class ArmorSpawner extends Spawner {
 	 */
 	@Override
 	public void spawn() {
-		level.add(new Shield(getRandomX(), getRandomY(), level));
+		this.level.add(new Shield(getRandomX(), getRandomY(), this.level));
 	}
 
 }

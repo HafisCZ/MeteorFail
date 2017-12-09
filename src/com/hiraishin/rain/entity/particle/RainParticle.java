@@ -38,22 +38,23 @@ public class RainParticle extends Particle {
 	 */
 	@Override
 	public void draw(GraphicsContext gc) {
-		gc.setFill(color);
-		gc.fillRect(x, y, width, (y + height > Commons.SCENE_GROUND) ? y - Commons.SCENE_GROUND : height);
+		gc.setFill(this.color);
+		gc.fillRect(this.x, this.y, this.width,
+				this.y + this.height > Commons.SCENE_GROUND ? this.y - Commons.SCENE_GROUND : this.height);
 	}
 
 	@Override
 	public void tick() {
-		this.x += dx;
-		this.y += dy;
+		this.x += this.dx;
+		this.y += this.dy;
 
-		if (Objects.nonNull(level.getPlayer())) {
-			if (level.getPlayer().collidesAABB(this)) {
+		if (Objects.nonNull(this.level.getPlayer())) {
+			if (this.level.getPlayer().collidesAABB(this)) {
 				kill();
 			}
 		}
 
-		if (y > Commons.SCENE_GROUND) {
+		if (this.y > Commons.SCENE_GROUND) {
 			kill();
 		}
 	}

@@ -18,7 +18,7 @@ public class EnergySpawner extends Spawner {
 	 */
 	@Override
 	public void spawn() {
-		level.add(new Energy(getRandomX(), getRandomY(), level));
+		this.level.add(new Energy(getRandomX(), getRandomY(), this.level));
 	}
 
 }

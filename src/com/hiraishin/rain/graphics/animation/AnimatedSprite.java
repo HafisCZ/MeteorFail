@@ -6,58 +6,78 @@ import javafx.scene.image.Image;
 
 public class AnimatedSprite extends Sprite {
 
-	private final Step start;
-	private final Step steps[];
+	/*
+	 * Instance final variables
+	 */
+	private final Step beginFrame;
+	private final Step[] animatedFrames;
 
-	private int counter = 0;
-	private int selector = 0;
+	private final int frameTime;
 
-	private final int delay;
+	/*
+	 * Instance variables
+	 */
+	private int selectedFrame = 0;
+	private int currentTime = 0;
 
-	private boolean isRunning = false;
+	private boolean isPlaying = false;
 
-	public AnimatedSprite(Image image, int rows, int columns, int delay, Step... steps) {
+	/*
+	 * Constructors
+	 */
+	public AnimatedSprite(Image image, int rows, int columns, int frameTime, Step... frames) {
 		super(image, rows, columns);
 
-		this.delay = delay;
+		if (frames.length < 1) {
+			throw new IllegalArgumentException();
+		}
 
-		this.start = steps[0];
+		this.frameTime = frameTime;
+		this.beginFrame = frames[0];
+		this.animatedFrames = new Step[frames.length - 1];
 
-		this.steps = new Step[steps.length - 1];
-		for (int i = 1; i < steps.length; i++) {
-			this.steps[i - 1] = steps[i];
+		for (int i = 0; i < this.animatedFrames.length; ) {
+			this.animatedFrames[i] = frames[++i];
 		}
 	}
 
-	public void start() {
-		if (!isRunning) {
-			isRunning = true;
-			selector = 0;
-			counter = 0;
-
-			select(steps[selector].row, steps[selector].col);
+	/*
+	 * Instance functions
+	 */
+	public void play() {
+		if (this.isPlaying) {
+			return;
 		}
+
+		this.isPlaying = true;
+
+		this.selectedFrame = 0;
+		this.currentTime = 0;
+
+		select(this.animatedFrames[this.selectedFrame].row, this.animatedFrames[this.selectedFrame].col);
 	}
 
 	public void stop() {
-		if (isRunning) {
-			isRunning = false;
-			select(start.row, start.col);
+		if (!this.isPlaying) {
+			return;
 		}
+
+		this.isPlaying = false;
+		select(this.beginFrame.row, this.beginFrame.col);
 	}
 
 	public void tick() {
-		if (isRunning) {
-			counter++;
-			if (counter >= delay) {
-				if (++selector >= steps.length) {
-					selector = 0;
-				}
+		if (!this.isPlaying) {
+			return;
+		}
 
-				counter = 0;
-
-				select(steps[selector].row, steps[selector].col);
+		if (++this.currentTime >= this.frameTime) {
+			if (++this.selectedFrame >= this.animatedFrames.length) {
+				this.selectedFrame = 0;
 			}
+
+			this.currentTime = 0;
+			select(this.animatedFrames[this.selectedFrame].row, this.animatedFrames[this.selectedFrame].col);
 		}
 	}
 
