@@ -8,34 +8,65 @@ import com.hiraishin.rain.util.Commons;
 
 public abstract class Spawner extends Entity {
 
+	/*
+	 * Instance final variables
+	 */
+	protected final int rate;
+	protected final int variation;
+	protected final int count;
+
+	/*
+	 * Instance variables
+	 */
 	protected int frameCount = 0;
-	protected final int frameRate;
+	protected int frameLimit;
 
-	protected Spawner(double x, double y, double w, double h, Level level, int frameRate) {
-		super(x, y, w, h, level);
+	/*
+	 * Constructors
+	 */
+	protected Spawner(double x, double y, double width, double height, Level level, int rate, int variation,
+			int count) {
+		super(x, y, width, height, level);
 
-		this.frameRate = frameRate;
+		this.count = count;
+
+		this.variation = variation;
+		this.rate = rate;
+
+		frameLimit = rate;
 	}
 
+	/*
+	 * Instance functions
+	 */
 	@Override
 	public final void tick() {
-		if (frameCount++ >= frameRate) {
+		if (frameCount++ >= frameLimit) {
 			frameCount = 0;
+			frameLimit = rate + ((variation > 1) ? Commons.RANDOM.nextInt(variation) : 0);
 
 			if (Objects.nonNull(level)) {
-				spawn();
+				for (int i = 0; i < count; i++) {
+					spawn();
+				}
 			}
 		}
 	}
 
-	public abstract void spawn();
-
-	protected double randomX() {
+	/*
+	 * Getters & Setters
+	 */
+	protected double getRandomX() {
 		return x + ((width == 0) ? 0 : Commons.RANDOM.nextInt((int) width));
 	}
 
-	protected double randomY() {
+	protected double getRandomY() {
 		return y + ((height == 0) ? 0 : Commons.RANDOM.nextInt((int) height));
 	}
+
+	/*
+	 * Abstract functions
+	 */
+	public abstract void spawn();
 
 }

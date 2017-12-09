@@ -6,15 +6,32 @@ import com.hiraishin.rain.util.Commons;
 
 public final class RainSpawner extends Spawner {
 
-	public RainSpawner(double x, double y, double w, double h, Level level, int frameRate) {
-		super(x, y, w, h, level, frameRate);
+	/*
+	 * Definitions
+	 */
+	public static final int WIDTH = 1;
+	public static final int HEIGHT_MIN = 10;
+	public static final int HEIGHT_MAX = 40;
+
+	public static final int SPEED_X = 0;
+	public static final int SPEED_Y_MIN = 10;
+	public static final int SPEED_Y_MAX = 40;
+
+	/*
+	 * Constructors
+	 */
+	public RainSpawner(double x, double y, double width, double height, Level level, int rate, int variation,
+			int count) {
+		super(x, y, width, height, level, rate, variation, count);
 	}
 
+	/*
+	 * Instance functions
+	 */
 	@Override
-	public void spawn() {	
-		for (int i = 0; i < 5; i++) {
-			level.add(new RainParticle(randomX(), randomY(), 1, Commons.RANDOM.nextInt(30) + 10, 0,
-					Commons.RANDOM.nextInt(10) + 10, level));
-		}
+	public void spawn() {
+		level.add(new RainParticle(getRandomX(), getRandomY(), WIDTH,
+				HEIGHT_MIN + Commons.RANDOM.nextInt(HEIGHT_MAX - HEIGHT_MIN + 1), SPEED_X,
+				SPEED_Y_MIN + Commons.RANDOM.nextInt(SPEED_Y_MAX - SPEED_Y_MIN + 1), level));
 	}
 }

@@ -20,12 +20,12 @@ public enum Game {
 	private Level level;
 
 	private Game() {
-		
+
 	}
-	
+
 	public void playLevel(Keyboard keyboard) {
 		if (Objects.nonNull(level)) {
-			level.init(keyboard);
+			level.open(keyboard);
 		}
 	}
 

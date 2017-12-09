@@ -18,7 +18,8 @@ public class Application extends javafx.application.Application {
 	public void start(Stage stage) throws Exception {
 		ImagePreloader.DEFAULT_LOADER.load(false, "res/coin.png", "res/acid.png", "res/heart.png", "res/player.png",
 				"res/bg.png", "res/armor.png", "res/heart_frame.png", "res/heart_armor.png", "res/xpbar.png",
-				"res/bar_outline.png", "res/energybar.png");
+				"res/bar_outline.png", "res/energybar.png", "res/energy.png", "res/abilities.png", "res/icon_frame.png",
+				"res/heart_icon.png", "res/xp_icon.png", "res/power_icon.png");
 
 		Logger.INSTANCE.print(System.out::println);
 

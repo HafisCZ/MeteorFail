@@ -1,14 +1,14 @@
 package com.hiraishin.rain.entity.spawner;
 
-import com.hiraishin.rain.entity.mob.Acid;
+import com.hiraishin.rain.entity.item.Energy;
 import com.hiraishin.rain.level.Level;
 
-public class AcidSpawner extends Spawner {
+public class EnergySpawner extends Spawner {
 
 	/*
 	 * Constructors
 	 */
-	public AcidSpawner(double x, double y, double width, double height, Level level, int rate, int variation,
+	public EnergySpawner(double x, double y, double width, double height, Level level, int rate, int variation,
 			int count) {
 		super(x, y, width, height, level, rate, variation, count);
 	}
@@ -18,7 +18,7 @@ public class AcidSpawner extends Spawner {
 	 */
 	@Override
 	public void spawn() {
-		level.add(new Acid(getRandomX(), getRandomY(), level));
+		level.add(new Energy(getRandomX(), getRandomY(), level));
 	}
 
 }

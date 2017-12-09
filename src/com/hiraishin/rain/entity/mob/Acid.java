@@ -1,8 +1,5 @@
 package com.hiraishin.rain.entity.mob;
 
-import java.util.Objects;
-
-import com.hiraishin.rain.entity.Lifetime;
 import com.hiraishin.rain.entity.particle.AcidParticle;
 import com.hiraishin.rain.graphics.Sprite;
 import com.hiraishin.rain.level.Level;
@@ -10,14 +7,35 @@ import com.hiraishin.rain.util.Commons;
 import com.hiraishin.rain.util.ImagePreloader;
 
 import javafx.application.Platform;
+import javafx.scene.image.Image;
 
 public class Acid extends Mob {
 
-	public static final double WIDTH = 12;
+	/*
+	 * Definitions
+	 */
+	public static final double WIDTH = 10;
 	public static final double HEIGHT = 23;
+	public static final double SPEED_X_DEFAULT = 0;
+	public static final double SPEED_Y_DEFAULT = 10;
+
+	public static final Image IMAGE = ImagePreloader.DEFAULT_LOADER.getImage("acid");
+	public static final int IMAGE_ROWS = 1;
+	public static final int IMAGE_COLS = 1;
+	public static final double SPRITE_X_OFFSET = -1;
+	public static final double SPRITE_Y_OFFSET = 0;
+
+	public static final int PARTICLE_COUNT = 5;
+
+	/*
+	 * Constructors
+	 */
+	public Acid(double x, double y, Level level) {
+		this(x, y, SPEED_X_DEFAULT, SPEED_Y_DEFAULT, level);
+	}
 
 	public Acid(double x, double y, double dx, double dy, Level level) {
-		super(x, y, WIDTH, HEIGHT, new Sprite(ImagePreloader.DEFAULT_LOADER.getImage("acid")), level);
+		super(x, y, WIDTH, HEIGHT, new Sprite(IMAGE, IMAGE_ROWS, IMAGE_COLS), SPRITE_X_OFFSET, SPRITE_Y_OFFSET, level);
 
 		sprite.select(0, Commons.RANDOM.nextBoolean() ? 0 : 1);
 
@@ -25,13 +43,16 @@ public class Acid extends Mob {
 		this.dy = dy;
 	}
 
-	private void spawnParticles(double verticalSpeed) {
+	/*
+	 * Instance functions
+	 */
+	private void spawnParticles(int amount, double ySpeed) {
 		Platform.runLater(() -> {
-			for (int i = 0; i < 5; i++) {
-				final double particleSize = 1 + Commons.RANDOM.nextInt(5);
+			for (int i = 0; i < amount; i++) {
+				final double particleSize = Commons.RANDOM.nextInt(5) + 1;
 				final double particleXSpeed = Commons.RANDOM.nextInt(5) - 2.5;
 				level.add(new AcidParticle(x, y + HEIGHT - particleSize, particleSize, particleSize, particleXSpeed,
-						verticalSpeed, level));
+						ySpeed, level));
 			}
 		});
 	}
@@ -47,23 +68,21 @@ public class Acid extends Mob {
 			x = Commons.SCENE_WIDTH - width;
 		}
 
-		if (y < Commons.ZERO) {
-			y = 0;
-		} else if (y + height > Commons.SCENE_GROUND) {
-			y = Commons.SCENE_GROUND - height;
-		}
-
 		if (y + height >= Commons.SCENE_GROUND) {
-			state = Lifetime.CLOSED;
+			y = Commons.SCENE_GROUND - height;
 
-			spawnParticles(0);
+			kill();
+			spawnParticles(PARTICLE_COUNT, 0);
 		}
 
-		if (Objects.nonNull(level.getPlayer()) && level.getPlayer().collidesAABB(this)) {
-			state = Lifetime.CLOSED;
-			
-			level.getPlayerProperties().removeHealth();
-			spawnParticles(-1);
+		if (level.getPlayer().collidesAABB(this)) {
+			level.getPlayerProperties().damage();
+
+			if (level.getPlayerProperties().getHealthProperty().intValue() > 0) {
+				spawnParticles(PARTICLE_COUNT, -1);
+			}
+
+			kill();
 		}
 	}
 

@@ -7,17 +7,31 @@ import com.hiraishin.rain.util.Commons;
 
 public abstract class Item extends Entity {
 
-	protected Item(double x, double y, double width, double height, Sprite sprite, Level level) {
-		this(x, y, width, height, sprite, 0, 4, level);
+	/*
+	 * Definitions
+	 */
+	public static final double DEFAULT_SPEED_X = 0;
+	public static final double DEFUALT_SPEED_Y = 4;
+
+	/*
+	 * Contructors
+	 */
+	protected Item(double x, double y, double width, double height, Sprite sprite, double offsetX, double offsetY,
+			Level level) {
+		this(x, y, width, height, sprite, offsetX, offsetY, DEFAULT_SPEED_X, DEFUALT_SPEED_Y, level);
 	}
 
-	protected Item(double x, double y, double width, double height, Sprite sprite, double dx, double dy, Level level) {
-		super(x, y, width, height, sprite, level);
+	protected Item(double x, double y, double width, double height, Sprite sprite, double offsetX, double offsetY,
+			double dx, double dy, Level level) {
+		super(x, y, width, height, sprite, offsetX, offsetY, level);
 
 		this.dx = dx;
 		this.dy = dy;
 	}
 
+	/*
+	 * Instance functions
+	 */
 	@Override
 	public void tick() {
 		this.x += dx;
@@ -31,12 +45,22 @@ public abstract class Item extends Entity {
 			dx = 0;
 		}
 
-		if (y < Commons.ZERO) {
-			y = 0;
-		} else if (y + height > Commons.SCENE_GROUND) {
+		if (y + height > Commons.SCENE_GROUND) {
 			y = Commons.SCENE_GROUND - height;
 			dy = 0;
+
+			kill();
+		}
+
+		if (level.getPlayer().collidesAABB(this)) {
+			effect();
+			kill();
 		}
 	}
+
+	/*
+	 * Abstract functions
+	 */
+	public abstract void effect();
 
 }
