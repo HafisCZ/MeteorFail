@@ -1,32 +1,21 @@
-package com.hiraishin.rain.level.property;
+package com.hiraishin.rain.level.player;
 
 import java.util.Objects;
 
 import com.hiraishin.rain.entity.Entity;
 import com.hiraishin.rain.level.Level;
-import com.hiraishin.rain.level.player.PlayData;
-import com.hiraishin.rain.util.RegistryManager;
+import com.hiraishin.rain.level.PlayData;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-public class PlayerProperty {
+public class PlayerData {
 
 	/*
 	 * Definitions
 	 */
 	public static final int DEFAULT_EXP_RATE = 1;
 	public static final int DEFAULT_EXP_POOL = 30 * 60;
-	public static final int DEFAULT_HEALTH = 5;
-	public static final int DEFAULT_ENERGY_RATE = 1;
-
-	public static final String REG_KEY_MAXIMUM_HEALTH = "p_health";
-	public static final String REG_KEY_LEVEL = "p_level";
-	public static final String REG_KEY_LEVEL_POINTS = "p_points";
-	public static final String REG_KEY_SELECTED_SKILL = "p_selskill";
-
-	public static final String REG_KEY_UPGRADE_POWERRATE = "p_powerrate";
-	public static final String REG_KEY_UPGRADE_MANEUVER = "p_ignorefs";
 
 	/*
 	 * Instance variables
@@ -37,15 +26,10 @@ public class PlayerProperty {
 	private final IntegerProperty experienceProperty = new SimpleIntegerProperty(0);
 	private final IntegerProperty energyProperty = new SimpleIntegerProperty(0);
 
-	private final int healthMax;
 	private final int energyRate;
-
-	private final boolean upgrade_maneuver;
 
 	private int experience = 0;
 	private int experienceMultiplier = DEFAULT_EXP_RATE;
-
-	private int levelPoints = 0;
 
 	private Skill selectedSkill = null;
 
@@ -58,20 +42,15 @@ public class PlayerProperty {
 	/*
 	 * Constructors
 	 */
-	public PlayerProperty(RegistryManager rm) {
-		healthMax = rm.readInteger(REG_KEY_MAXIMUM_HEALTH, DEFAULT_HEALTH);
-		upgrade_maneuver = rm.readBoolean(REG_KEY_UPGRADE_MANEUVER, false);
+	public PlayerData() {
+		healthProperty.set(PlayData.PLAYER_HEALTH.getValue());
+		levelProperty.set(PlayData.PLAYER_LEVEL.getValue());
 
-		healthProperty.set(healthMax);
-
-		levelProperty.set(rm.readInteger(REG_KEY_LEVEL, 1));
-		levelPoints = rm.readInteger(REG_KEY_LEVEL_POINTS, 0);
-
-		int ord = rm.readInteger(REG_KEY_SELECTED_SKILL, 0);
+		int ord = PlayData.PLAYER_SELECTEDSKILL.getValue();
 		selectedSkill = (ord > 0) ? ((ord - 1 < Skill.values().length) ? Skill.values()[ord - 1] : null) : null;
 
 		energyRate = (selectedSkill == null ? 0
-				: selectedSkill.getChargeRate() * rm.readInteger(REG_KEY_UPGRADE_POWERRATE, DEFAULT_ENERGY_RATE));
+				: selectedSkill.getChargeRate() * PlayData.UPGRADE_POWERRATE.getValue());
 	}
 
 	/*
@@ -97,12 +76,8 @@ public class PlayerProperty {
 		}
 	}
 
-	public boolean hasManeuverUpgrade() {
-		return upgrade_maneuver;
-	}
-
 	public void addShield() {
-		PlayData.INSTANCE.getStatistics().get(1).setValue(PlayData.INSTANCE.getStatistics().get(1).getValue() + 1);
+		PlayData.STAT_COUNT_SHIELD.increment();
 
 		if (armorProperty.intValue() < healthProperty.intValue()) {
 			armorProperty.set(armorProperty.intValue() + 1);
@@ -115,11 +90,6 @@ public class PlayerProperty {
 		boostActive = true;
 	}
 
-	public void save(RegistryManager rm) {
-		rm.writeInteger(REG_KEY_LEVEL, levelProperty.intValue());
-		rm.writeInteger(REG_KEY_LEVEL_POINTS, levelPoints);
-	}
-
 	public void activateSkill(Entity source, Level level) {
 		if (!skillActive) {
 			if (Objects.nonNull(selectedSkill)) {
@@ -130,13 +100,15 @@ public class PlayerProperty {
 					skillBurnout = selectedSkill.getBurnoutTime();
 					selectedSkill.activate(source.getX() + source.getWidth() / 2,
 							source.getY() + source.getHeight() / 2, level, this);
+
+					PlayData.STAT_COUNT_SKILLACTIVATION.increment();
 				}
 			}
 		}
 	}
 
 	public void addEnergy() {
-		PlayData.INSTANCE.getStatistics().get(3).setValue(PlayData.INSTANCE.getStatistics().get(3).getValue() + 1);
+		PlayData.STAT_COUNT_NODES.increment();
 
 		if (!skillActive) {
 			if (Objects.nonNull(selectedSkill)) {
@@ -148,7 +120,7 @@ public class PlayerProperty {
 	}
 
 	public void damage() {
-		PlayData.INSTANCE.getStatistics().get(2).setValue(PlayData.INSTANCE.getStatistics().get(2).getValue() + 1);
+		PlayData.STAT_COUNT_DAMAGE.increment();
 
 		if (armorProperty.intValue() > 0) {
 			armorProperty.set(armorProperty.intValue() - 1);
@@ -158,8 +130,7 @@ public class PlayerProperty {
 	}
 
 	public void addExperience() {
-		PlayData.INSTANCE.getStatistics().get(0)
-				.setValue(PlayData.INSTANCE.getStatistics().get(0).getValue() + experienceMultiplier);
+		PlayData.STAT_COUNT_EXPERIENCE.incrementBy(experienceMultiplier);
 
 		experience += experienceMultiplier;
 		experienceProperty.set((int) 100 * experience / (DEFAULT_EXP_POOL * levelProperty.intValue()));
@@ -167,18 +138,13 @@ public class PlayerProperty {
 			experience = 0;
 
 			levelProperty.set(levelProperty.intValue() + 1);
-			levelPoints++;
+			PlayData.PLAYER_POINTS.increment();
 		}
 	}
 
 	/*
 	 * Getters & Setters
 	 */
-
-	public int getMaximumHealth() {
-		return healthMax;
-	}
-
 	public Skill getSelectedSkill() {
 		return selectedSkill;
 	}

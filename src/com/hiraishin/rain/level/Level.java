@@ -17,11 +17,9 @@ import com.hiraishin.rain.entity.spawner.RainSpawner;
 import com.hiraishin.rain.entity.spawner.Spawner;
 import com.hiraishin.rain.input.Keyboard;
 import com.hiraishin.rain.level.overlay.Overlay;
-import com.hiraishin.rain.level.player.PlayData;
-import com.hiraishin.rain.level.property.PlayerProperty;
+import com.hiraishin.rain.level.player.PlayerData;
 import com.hiraishin.rain.util.Commons;
 import com.hiraishin.rain.util.ImageLoader;
-import com.hiraishin.rain.util.RegistryManager;
 
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
@@ -36,12 +34,12 @@ public class Level {
 	private final List<Spawner> spawners = new ArrayList<>();
 	private final List<Entity> particles = new ArrayList<>();
 
-	private PlayerProperty properties;
+	private PlayerData properties;
 	private Overlay overlay;
 
 	private final Image background = ImageLoader.DEFAULT.requestImage("background/background");
 
-	private PlayState state = PlayState.STOP;
+	private LevelState state = LevelState.STOP;
 
 	/*
 	 * Constructors
@@ -128,15 +126,15 @@ public class Level {
 	}
 
 	public void open(Keyboard keyboard) {
-		if (state == PlayState.PLAY) {
+		if (state == LevelState.PLAY) {
 			return;
 		}
 
 		close();
 
-		state = PlayState.PLAY;
+		state = LevelState.PLAY;
 
-		properties = new PlayerProperty(RegistryManager.INSTANCE);
+		properties = new PlayerData();
 		overlay = new Overlay(0, 0, properties);
 
 		mobs.add(
@@ -149,8 +147,7 @@ public class Level {
 		properties.getHealthProperty().addListener((Observable, OldValue, NewValue) -> {
 			if (NewValue.intValue() <= 0) {
 				Platform.runLater(() -> {
-					properties.save(RegistryManager.INSTANCE);
-					PlayData.INSTANCE.save();
+					PlayData.save();
 					close();
 				});
 			}
@@ -158,29 +155,29 @@ public class Level {
 	}
 
 	public void exit() {
-		if (state != PlayState.EXIT) {
-			state = PlayState.EXIT;
+		if (state != LevelState.EXIT) {
+			state = LevelState.EXIT;
 		}
 	}
 
 	public void pause() {
-		if (state == PlayState.PLAY) {
-			state = PlayState.PAUSE;
+		if (state == LevelState.PLAY) {
+			state = LevelState.PAUSE;
 		}
 	}
 
 	public void unpause() {
-		if (state == PlayState.PAUSE) {
-			state = PlayState.PLAY;
+		if (state == LevelState.PAUSE) {
+			state = LevelState.PLAY;
 		}
 	}
 
 	public void close() {
-		if (state == PlayState.STOP) {
+		if (state == LevelState.STOP) {
 			return;
 		}
 
-		state = PlayState.STOP;
+		state = LevelState.STOP;
 
 		properties = null;
 		overlay = null;
@@ -201,7 +198,7 @@ public class Level {
 		return mobs.subList(1, mobs.size());
 	}
 
-	public PlayState getState() {
+	public LevelState getState() {
 		return state;
 	}
 
@@ -213,7 +210,7 @@ public class Level {
 		return spawners;
 	}
 
-	public PlayerProperty getPlayerProperties() {
+	public PlayerData getPlayerProperties() {
 		return properties;
 	}
 

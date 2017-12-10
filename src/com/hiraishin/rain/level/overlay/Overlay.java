@@ -4,8 +4,9 @@ import java.util.Objects;
 
 import com.hiraishin.rain.graphics.Drawable;
 import com.hiraishin.rain.graphics.Sprite;
-import com.hiraishin.rain.level.property.PlayerProperty;
-import com.hiraishin.rain.level.property.Skill;
+import com.hiraishin.rain.level.PlayData;
+import com.hiraishin.rain.level.player.PlayerData;
+import com.hiraishin.rain.level.player.Skill;
 import com.hiraishin.rain.util.ImageLoader;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -45,14 +46,14 @@ public class Overlay implements Drawable {
 	/*
 	 * Constructors
 	 */
-	public Overlay(double x, double y, PlayerProperty properties) {
+	public Overlay(double x, double y, PlayerData properties) {
 		this.x = x;
 		this.y = y;
 		this.skill = properties.getSelectedSkill();
 
 		level = properties.getLevelProperty().intValue();
 
-		HLT_BAR.stretch(1, properties.getMaximumHealth());
+		HLT_BAR.stretch(1, PlayData.PLAYER_HEALTH.getValue());
 		ARM_BAR.stretch(1, 0);
 		EXP_BAR.stretch(1, 0);
 		PWR_BAR.stretch(1, 0);

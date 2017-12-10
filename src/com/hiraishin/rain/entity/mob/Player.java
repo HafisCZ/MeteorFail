@@ -7,7 +7,8 @@ import com.hiraishin.rain.graphics.animation.AnimatedSprite;
 import com.hiraishin.rain.graphics.animation.Step;
 import com.hiraishin.rain.input.Keyboard;
 import com.hiraishin.rain.level.Level;
-import com.hiraishin.rain.level.property.PlayerProperty;
+import com.hiraishin.rain.level.PlayData;
+import com.hiraishin.rain.level.player.PlayerData;
 import com.hiraishin.rain.util.Commons;
 import com.hiraishin.rain.util.ImageLoader;
 
@@ -51,12 +52,12 @@ public class Player extends Entity {
 	/*
 	 * Constructors
 	 */
-	public Player(double x, double y, Level level, Keyboard keyboard, PlayerProperty properties) {
+	public Player(double x, double y, Level level, Keyboard keyboard, PlayerData properties) {
 		super(x, y, WIDTH, HEIGHT, new AnimatedSprite(IMAGE, IMAGE_ROWS, IMAGE_COLS, ANIMATION_DELTA, ANIMATION_STEPS),
 				SPRITE_X_OFFSET, SPRITE_Y_OFFSET, level);
 
 		this.keyboard = Objects.requireNonNull(keyboard);
-		this.speed = properties.hasManeuverUpgrade() ? SPEED_X_INCREMENT2 : SPEED_X_INCREMENT;
+		this.speed = (PlayData.UPGRADE_MOVEMENT.getValue() > 0) ? SPEED_X_INCREMENT2 : SPEED_X_INCREMENT;
 	}
 
 	/*
@@ -84,6 +85,8 @@ public class Player extends Entity {
 			if (!this.jump) {
 				this.jump = true;
 				this.dy = SPEED_Y_LIMIT;
+
+				PlayData.STAT_COUNT_JUMP.increment();
 			}
 		}
 

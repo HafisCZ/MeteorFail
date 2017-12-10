@@ -9,7 +9,7 @@ import com.hiraishin.rain.layout.pane.MenuPane;
 import com.hiraishin.rain.layout.pane.PausePane;
 import com.hiraishin.rain.layout.pane.ShopPane;
 import com.hiraishin.rain.layout.pane.StatPane;
-import com.hiraishin.rain.level.player.PlayData;
+import com.hiraishin.rain.level.PlayData;
 import com.hiraishin.rain.util.Commons;
 
 import javafx.application.Platform;
@@ -61,7 +61,7 @@ public class Application extends javafx.application.Application {
 		/*
 		 * Load play data
 		 */
-		PlayData.INSTANCE.load();
+		PlayData.load();
 
 		/*
 		 * Create keyboard

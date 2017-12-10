@@ -3,7 +3,7 @@ package com.hiraishin.rain;
 import com.hiraishin.rain.event.StateEvent;
 import com.hiraishin.rain.input.Keyboard;
 import com.hiraishin.rain.level.Level;
-import com.hiraishin.rain.level.PlayState;
+import com.hiraishin.rain.level.LevelState;
 import com.hiraishin.rain.util.Commons;
 
 import javafx.animation.AnimationTimer;
@@ -31,7 +31,7 @@ public class Game {
 				level.tick();
 				level.draw(gc);
 
-				if (level.getState() == PlayState.STOP) {
+				if (level.getState() == LevelState.STOP) {
 					canvas.fireEvent(new StateEvent(StateEvent.MENU));
 					level.exit();
 				}
