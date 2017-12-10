@@ -1,15 +1,16 @@
-package com.hiraishin.rain.level.player;
+package com.hiraishin.rain.level.property;
 
 import java.util.Objects;
 
 import com.hiraishin.rain.entity.Entity;
 import com.hiraishin.rain.level.Level;
+import com.hiraishin.rain.level.player.PlayData;
 import com.hiraishin.rain.util.RegistryManager;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-public class PlayerProperties {
+public class PlayerProperty {
 
 	/*
 	 * Definitions
@@ -38,7 +39,7 @@ public class PlayerProperties {
 
 	private final int healthMax;
 	private final int energyRate;
-	
+
 	private final boolean upgrade_maneuver;
 
 	private int experience = 0;
@@ -57,7 +58,7 @@ public class PlayerProperties {
 	/*
 	 * Constructors
 	 */
-	public PlayerProperties(RegistryManager rm) {
+	public PlayerProperty(RegistryManager rm) {
 		healthMax = rm.readInteger(REG_KEY_MAXIMUM_HEALTH, DEFAULT_HEALTH);
 		upgrade_maneuver = rm.readBoolean(REG_KEY_UPGRADE_MANEUVER, false);
 
@@ -101,6 +102,8 @@ public class PlayerProperties {
 	}
 
 	public void addShield() {
+		PlayData.INSTANCE.getStatistics().get(1).setValue(PlayData.INSTANCE.getStatistics().get(1).getValue() + 1);
+
 		if (armorProperty.intValue() < healthProperty.intValue()) {
 			armorProperty.set(armorProperty.intValue() + 1);
 		}
@@ -133,6 +136,8 @@ public class PlayerProperties {
 	}
 
 	public void addEnergy() {
+		PlayData.INSTANCE.getStatistics().get(3).setValue(PlayData.INSTANCE.getStatistics().get(3).getValue() + 1);
+
 		if (!skillActive) {
 			if (Objects.nonNull(selectedSkill)) {
 				if (energyProperty.intValue() < 100) {
@@ -143,6 +148,8 @@ public class PlayerProperties {
 	}
 
 	public void damage() {
+		PlayData.INSTANCE.getStatistics().get(2).setValue(PlayData.INSTANCE.getStatistics().get(2).getValue() + 1);
+
 		if (armorProperty.intValue() > 0) {
 			armorProperty.set(armorProperty.intValue() - 1);
 		} else if (healthProperty.intValue() > 0) {
@@ -151,6 +158,9 @@ public class PlayerProperties {
 	}
 
 	public void addExperience() {
+		PlayData.INSTANCE.getStatistics().get(0)
+				.setValue(PlayData.INSTANCE.getStatistics().get(0).getValue() + experienceMultiplier);
+
 		experience += experienceMultiplier;
 		experienceProperty.set((int) 100 * experience / (DEFAULT_EXP_POOL * levelProperty.intValue()));
 		if (experience >= DEFAULT_EXP_POOL * levelProperty.intValue()) {

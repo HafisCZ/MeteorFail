@@ -17,7 +17,8 @@ import com.hiraishin.rain.entity.spawner.RainSpawner;
 import com.hiraishin.rain.entity.spawner.Spawner;
 import com.hiraishin.rain.input.Keyboard;
 import com.hiraishin.rain.level.overlay.Overlay;
-import com.hiraishin.rain.level.player.PlayerProperties;
+import com.hiraishin.rain.level.player.PlayData;
+import com.hiraishin.rain.level.property.PlayerProperty;
 import com.hiraishin.rain.util.Commons;
 import com.hiraishin.rain.util.ImageLoader;
 import com.hiraishin.rain.util.RegistryManager;
@@ -35,7 +36,7 @@ public class Level {
 	private final List<Spawner> spawners = new ArrayList<>();
 	private final List<Entity> particles = new ArrayList<>();
 
-	private PlayerProperties properties;
+	private PlayerProperty properties;
 	private Overlay overlay;
 
 	private final Image background = ImageLoader.DEFAULT.requestImage("background/background");
@@ -135,7 +136,7 @@ public class Level {
 
 		state = PlayState.PLAY;
 
-		properties = new PlayerProperties(RegistryManager.INSTANCE);
+		properties = new PlayerProperty(RegistryManager.INSTANCE);
 		overlay = new Overlay(0, 0, properties);
 
 		mobs.add(
@@ -149,6 +150,7 @@ public class Level {
 			if (NewValue.intValue() <= 0) {
 				Platform.runLater(() -> {
 					properties.save(RegistryManager.INSTANCE);
+					PlayData.INSTANCE.save();
 					close();
 				});
 			}
@@ -211,7 +213,7 @@ public class Level {
 		return spawners;
 	}
 
-	public PlayerProperties getPlayerProperties() {
+	public PlayerProperty getPlayerProperties() {
 		return properties;
 	}
 

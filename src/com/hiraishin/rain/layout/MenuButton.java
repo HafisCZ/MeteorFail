@@ -8,12 +8,12 @@ import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
-public class BackButton extends HBox {
+public class MenuButton extends HBox {
 
 	/*
 	 * Constructors
 	 */
-	public BackButton(EventType<StateEvent> eventType) {
+	public MenuButton(EventType<StateEvent> eventType) {
 		ImageView imageView = new ImageView(ImageLoader.DEFAULT.requestImage("gui/icons/back"));
 		imageView.setOpacity(0.1);
 

@@ -1,7 +1,7 @@
 package com.hiraishin.rain.layout.pane;
 
 import com.hiraishin.rain.event.StateEvent;
-import com.hiraishin.rain.layout.LayoutItem;
+import com.hiraishin.rain.layout.MenuItem;
 import com.hiraishin.rain.util.Commons;
 
 import javafx.geometry.Insets;
@@ -33,9 +33,9 @@ public class MenuPane extends GridPane {
 		this.add(label, 0, 0);
 
 		VBox vbox = new VBox(15);
-		vbox.getChildren().addAll(new LayoutItem("PLAY", StateEvent.PLAY), new LayoutItem("UPGRADES", StateEvent.SHOP),
-				new LayoutItem("STATISTICS", StateEvent.STAT), new LayoutItem("HELP", StateEvent.HELP), new HBox(),
-				new LayoutItem("QUIT", StateEvent.QUIT));
+		vbox.getChildren().addAll(new MenuItem("PLAY", StateEvent.PLAY), new MenuItem("UPGRADES", StateEvent.SHOP),
+				new MenuItem("STATISTICS", StateEvent.STAT), new MenuItem("HELP", StateEvent.HELP), new HBox(),
+				new MenuItem("QUIT", StateEvent.QUIT));
 
 		this.add(vbox, 0, 1);
 	}

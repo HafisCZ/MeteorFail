@@ -1,7 +1,7 @@
 package com.hiraishin.rain.layout.pane;
 
 import com.hiraishin.rain.event.StateEvent;
-import com.hiraishin.rain.layout.BackButton;
+import com.hiraishin.rain.layout.MenuButton;
 import com.hiraishin.rain.util.Commons;
 
 import javafx.geometry.Insets;
@@ -21,7 +21,7 @@ public class ShopPane extends BorderPane {
 		this.setPrefSize(Commons.SCENE_WIDTH, Commons.SCENE_HEIGHT);
 		this.setPadding(new Insets(10, 10, 10, 10));
 
-		BackButton menu = new BackButton(StateEvent.MENU);
+		MenuButton menu = new MenuButton(StateEvent.MENU);
 		this.setTop(menu);
 
 		VBox vbox = new VBox(30);

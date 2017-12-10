@@ -4,8 +4,8 @@ import java.util.Objects;
 
 import com.hiraishin.rain.graphics.Drawable;
 import com.hiraishin.rain.graphics.Sprite;
-import com.hiraishin.rain.level.player.PlayerProperties;
-import com.hiraishin.rain.level.player.Skill;
+import com.hiraishin.rain.level.property.PlayerProperty;
+import com.hiraishin.rain.level.property.Skill;
 import com.hiraishin.rain.util.ImageLoader;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -45,7 +45,7 @@ public class Overlay implements Drawable {
 	/*
 	 * Constructors
 	 */
-	public Overlay(double x, double y, PlayerProperties properties) {
+	public Overlay(double x, double y, PlayerProperty properties) {
 		this.x = x;
 		this.y = y;
 		this.skill = properties.getSelectedSkill();

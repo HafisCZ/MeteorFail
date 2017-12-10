@@ -7,7 +7,7 @@ import com.hiraishin.rain.graphics.animation.AnimatedSprite;
 import com.hiraishin.rain.graphics.animation.Step;
 import com.hiraishin.rain.input.Keyboard;
 import com.hiraishin.rain.level.Level;
-import com.hiraishin.rain.level.player.PlayerProperties;
+import com.hiraishin.rain.level.property.PlayerProperty;
 import com.hiraishin.rain.util.Commons;
 import com.hiraishin.rain.util.ImageLoader;
 
@@ -51,7 +51,7 @@ public class Player extends Entity {
 	/*
 	 * Constructors
 	 */
-	public Player(double x, double y, Level level, Keyboard keyboard, PlayerProperties properties) {
+	public Player(double x, double y, Level level, Keyboard keyboard, PlayerProperty properties) {
 		super(x, y, WIDTH, HEIGHT, new AnimatedSprite(IMAGE, IMAGE_ROWS, IMAGE_COLS, ANIMATION_DELTA, ANIMATION_STEPS),
 				SPRITE_X_OFFSET, SPRITE_Y_OFFSET, level);
 

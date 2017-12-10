@@ -1,4 +1,4 @@
-package com.hiraishin.rain.level.player;
+package com.hiraishin.rain.level.property;
 
 import com.hiraishin.rain.entity.particle.ShockParticle;
 import com.hiraishin.rain.level.Level;
@@ -16,14 +16,14 @@ public enum Skill {
 	/*
 	 * Instance variables
 	 */
-	private final QuadConsumer<Double, Double, Level, PlayerProperties> consumer;
+	private final QuadConsumer<Double, Double, Level, PlayerProperty> consumer;
 	private final int burnout;
 	private final int rate;
 
 	/*
 	 * Constructors
 	 */
-	private Skill(QuadConsumer<Double, Double, Level, PlayerProperties> consumer, int burnout, int rate) {
+	private Skill(QuadConsumer<Double, Double, Level, PlayerProperty> consumer, int burnout, int rate) {
 		this.consumer = consumer;
 		this.burnout = burnout;
 		this.rate = rate;
@@ -32,7 +32,7 @@ public enum Skill {
 	/*
 	 * Instance functions
 	 */
-	public void activate(double x, double y, Level level, PlayerProperties properties) {
+	public void activate(double x, double y, Level level, PlayerProperty properties) {
 		consumer.accept(x, y, level, properties);
 	}
 

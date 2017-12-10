@@ -10,7 +10,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-public class LayoutItem extends HBox {
+public class MenuItem extends HBox {
 
 	/*
 	 * Definitions
@@ -20,7 +20,7 @@ public class LayoutItem extends HBox {
 	/*
 	 * Constructors
 	 */
-	public LayoutItem(String label, EventType<StateEvent> eventType) {
+	public MenuItem(String label, EventType<StateEvent> eventType) {
 		Text labelText = new Text(label);
 		labelText.setFont(FONT_LAYOUT_ITEM);
 		labelText.setFill(Color.GRAY);

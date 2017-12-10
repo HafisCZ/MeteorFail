@@ -9,6 +9,7 @@ import com.hiraishin.rain.layout.pane.MenuPane;
 import com.hiraishin.rain.layout.pane.PausePane;
 import com.hiraishin.rain.layout.pane.ShopPane;
 import com.hiraishin.rain.layout.pane.StatPane;
+import com.hiraishin.rain.level.player.PlayData;
 import com.hiraishin.rain.util.Commons;
 
 import javafx.application.Platform;
@@ -58,10 +59,14 @@ public class Application extends javafx.application.Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		/*
+		 * Load play data
+		 */
+		PlayData.INSTANCE.load();
+
+		/*
 		 * Create keyboard
 		 */
 		this.keyboard = new Keyboard(stage);
-
 		/*
 		 * Create game
 		 */
@@ -96,6 +101,7 @@ public class Application extends javafx.application.Application {
 			} else if (Objects.equals(event.getEventType(), StateEvent.SHOP)) {
 				switchPane(this.group, this.paneShop);
 			} else if (Objects.equals(event.getEventType(), StateEvent.STAT)) {
+				((StatPane) this.paneStat).refresh();
 				switchPane(this.group, this.paneStat);
 			} else if (Objects.equals(event.getEventType(), StateEvent.QUIT)) {
 				Platform.exit();
