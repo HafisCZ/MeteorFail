@@ -49,7 +49,7 @@ public class RainParticle extends Particle {
 		this.y += this.dy;
 
 		if (Objects.nonNull(this.level.getPlayer())) {
-			if (this.level.getPlayer().collidesAABB(this)) {
+			if (this.level.getPlayer().isCollidingAABB(this)) {
 				kill();
 			}
 		}

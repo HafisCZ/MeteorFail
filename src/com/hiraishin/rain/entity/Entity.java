@@ -66,7 +66,7 @@ public abstract class Entity implements Drawable {
 		}
 	}
 
-	public final boolean collidesAABB(Entity entity) {
+	public final boolean isCollidingAABB(Entity entity) {
 		final boolean a = entity.x + entity.width > this.x;
 		final boolean b = this.x + this.width > entity.x;
 		final boolean c = entity.y + entity.height > this.y;
@@ -101,13 +101,20 @@ public abstract class Entity implements Drawable {
 		return this.height;
 	}
 
+	public final double getCenterX() {
+		return this.x + this.width / 2;
+	}
+
+	public final double getCenterY() {
+		return this.y + this.height / 2;
+	}
+
 	public final Rectangle2D getBounds() {
 		return new Rectangle2D(this.x, this.y, this.width, this.height);
 	}
 
 	public final double getDistance(double x, double y) {
-		return Math.sqrt((x - (this.x + this.width / 2)) * (x - (this.x + this.width / 2))
-				+ (y - (this.y + this.height / 2)) * (y - (this.y + this.height / 2)));
+		return Math.sqrt(Math.pow(x - getCenterX(), 2) + Math.pow(y - getCenterY(), 2));
 	}
 
 	/*

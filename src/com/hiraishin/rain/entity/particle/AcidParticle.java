@@ -62,10 +62,10 @@ public class AcidParticle extends Particle {
 
 		if (this.x < Commons.ZERO) {
 			this.x = 0;
-			this.dx = 0;
+			this.dx *= -1;
 		} else if (this.x + this.width > Commons.SCENE_WIDTH) {
 			this.x = Commons.SCENE_WIDTH - this.width;
-			this.dx = 0;
+			this.dx *= -1;
 		}
 
 		if (this.y < Commons.ZERO) {

@@ -37,22 +37,11 @@ public abstract class Item extends Entity {
 		this.x += this.dx;
 		this.y += this.dy;
 
-		if (this.x < Commons.ZERO) {
-			this.x = 0;
-			this.dx = 0;
-		} else if (this.x + width > Commons.SCENE_WIDTH) {
-			this.x = Commons.SCENE_WIDTH - this.width;
-			this.dx = 0;
-		}
-
 		if (this.y + this.height > Commons.SCENE_GROUND) {
-			this.y = Commons.SCENE_GROUND - this.height;
-			this.dy = 0;
-
 			kill();
 		}
 
-		if (this.level.getPlayer().collidesAABB(this)) {
+		if (this.level.isCollidingPlayerAABB(this)) {
 			effect();
 			kill();
 		}

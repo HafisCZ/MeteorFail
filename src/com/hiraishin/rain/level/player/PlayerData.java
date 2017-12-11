@@ -49,7 +49,7 @@ public class PlayerData {
 		int ord = PlayData.PLAYER_SELECTEDSKILL.getValue();
 		selectedSkill = (ord > 0) ? ((ord - 1 < Skill.values().length) ? Skill.values()[ord - 1] : null) : null;
 
-		energyRate = (selectedSkill == null ? 0
+		energyRate = (Objects.isNull(selectedSkill) ? 0
 				: selectedSkill.getChargeRate() * PlayData.UPGRADE_POWERRATE.getValue());
 	}
 
@@ -139,6 +139,7 @@ public class PlayerData {
 
 			levelProperty.set(levelProperty.intValue() + 1);
 			PlayData.PLAYER_POINTS.increment();
+			PlayData.PLAYER_LEVEL.setValue(levelProperty.intValue());
 		}
 	}
 
@@ -171,6 +172,10 @@ public class PlayerData {
 
 	public IntegerProperty getEnergyProperty() {
 		return energyProperty;
+	}
+
+	public int getHealth() {
+		return this.healthProperty.intValue();
 	}
 
 }

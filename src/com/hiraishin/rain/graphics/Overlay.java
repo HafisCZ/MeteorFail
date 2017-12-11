@@ -1,9 +1,7 @@
-package com.hiraishin.rain.level.overlay;
+package com.hiraishin.rain.graphics;
 
 import java.util.Objects;
 
-import com.hiraishin.rain.graphics.Drawable;
-import com.hiraishin.rain.graphics.Sprite;
 import com.hiraishin.rain.level.PlayData;
 import com.hiraishin.rain.level.player.PlayerData;
 import com.hiraishin.rain.level.player.Skill;
@@ -105,13 +103,14 @@ public class Overlay implements Drawable {
 	private void drawStatic(GraphicsContext gc) {
 		HLC_ICO.draw(gc, x + 2, y + 10);
 		EXP_ICO.draw(gc, x + 2, y + 30);
-		PWR_ICO.draw(gc, x + 2, y + 50);
 
 		RC_FRAME.draw(gc, x + 20, y + 10);
 		RC_FRAME.draw(gc, x + 20, y + 30);
-		RC_FRAME.draw(gc, x + 20, y + 50);
-
+		
 		if (Objects.nonNull(skill)) {
+			PWR_ICO.draw(gc, x + 2, y + 50);
+			RC_FRAME.draw(gc, x + 20, y + 50);
+			
 			SQ_FRAME.draw(gc, x + 20, y + 70);
 			ABL_ICO.draw(gc, x + 22, y + 72);
 		}

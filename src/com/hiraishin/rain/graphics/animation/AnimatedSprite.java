@@ -36,7 +36,7 @@ public class AnimatedSprite extends Sprite {
 		this.beginFrame = frames[0];
 		this.animatedFrames = new Step[frames.length - 1];
 
-		for (int i = 0; i < this.animatedFrames.length; ) {
+		for (int i = 0; i < this.animatedFrames.length;) {
 			this.animatedFrames[i] = frames[++i];
 		}
 	}

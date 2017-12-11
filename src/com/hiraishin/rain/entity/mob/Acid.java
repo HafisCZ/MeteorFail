@@ -46,7 +46,7 @@ public class Acid extends Mob {
 	/*
 	 * Instance functions
 	 */
-	private void spawnParticles(int amount, double ySpeed) {
+	protected void spawnParticles(int amount, double ySpeed) {
 		Platform.runLater(() -> {
 			for (int i = 0; i < amount; i++) {
 				final double particleSize = Commons.RANDOM.nextInt(5) + 1;
@@ -58,15 +58,9 @@ public class Acid extends Mob {
 	}
 
 	@Override
-	public void tick() {
+	public final void tick() {
 		this.x += this.dx;
 		this.y += this.dy;
-
-		if (this.x < Commons.ZERO) {
-			this.x = 0;
-		} else if (this.x + this.width > Commons.SCENE_WIDTH) {
-			this.x = Commons.SCENE_WIDTH - this.width;
-		}
 
 		if (this.y + this.height >= Commons.SCENE_GROUND) {
 			this.y = Commons.SCENE_GROUND - this.height;
@@ -74,11 +68,11 @@ public class Acid extends Mob {
 			kill();
 			spawnParticles(PARTICLE_COUNT, 0);
 		}
-
-		if (this.level.getPlayer().collidesAABB(this)) {
+		
+		if (this.level.isCollidingPlayerAABB(this)) {
 			this.level.getPlayerProperties().damage();
 
-			if (this.level.getPlayerProperties().getHealthProperty().intValue() > 0) {
+			if (this.level.getPlayerProperties().getHealth() > 0) {
 				spawnParticles(PARTICLE_COUNT, -1);
 			}
 

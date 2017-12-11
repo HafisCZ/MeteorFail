@@ -3,12 +3,12 @@ package com.hiraishin.rain;
 import java.util.Objects;
 
 import com.hiraishin.rain.event.StateEvent;
+import com.hiraishin.rain.experimental.HelpPane;
+import com.hiraishin.rain.experimental.MenuPane;
+import com.hiraishin.rain.experimental.PausePane;
+import com.hiraishin.rain.experimental.ShopPane;
+import com.hiraishin.rain.experimental.StatPane;
 import com.hiraishin.rain.input.Keyboard;
-import com.hiraishin.rain.layout.pane.HelpPane;
-import com.hiraishin.rain.layout.pane.MenuPane;
-import com.hiraishin.rain.layout.pane.PausePane;
-import com.hiraishin.rain.layout.pane.ShopPane;
-import com.hiraishin.rain.layout.pane.StatPane;
 import com.hiraishin.rain.level.PlayData;
 import com.hiraishin.rain.util.Commons;
 
@@ -99,6 +99,7 @@ public class Application extends javafx.application.Application {
 				switchPane(this.group, null);
 				this.game.play();
 			} else if (Objects.equals(event.getEventType(), StateEvent.SHOP)) {
+				((ShopPane) this.paneShop).refresh();
 				switchPane(this.group, this.paneShop);
 			} else if (Objects.equals(event.getEventType(), StateEvent.STAT)) {
 				((StatPane) this.paneStat).refresh();

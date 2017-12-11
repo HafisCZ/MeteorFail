@@ -15,8 +15,8 @@ import com.hiraishin.rain.entity.spawner.ArmorSpawner;
 import com.hiraishin.rain.entity.spawner.EnergySpawner;
 import com.hiraishin.rain.entity.spawner.RainSpawner;
 import com.hiraishin.rain.entity.spawner.Spawner;
+import com.hiraishin.rain.graphics.Overlay;
 import com.hiraishin.rain.input.Keyboard;
-import com.hiraishin.rain.level.overlay.Overlay;
 import com.hiraishin.rain.level.player.PlayerData;
 import com.hiraishin.rain.util.Commons;
 import com.hiraishin.rain.util.ImageLoader;
@@ -185,6 +185,10 @@ public class Level {
 		mobs.clear();
 		spawners.subList(1, spawners.size()).clear();
 		particles.removeIf(E -> !(E instanceof RainParticle));
+	}
+
+	public boolean isCollidingPlayerAABB(Entity entity) {
+		return Objects.nonNull(getPlayer()) ? getPlayer().isCollidingAABB(entity) : false;
 	}
 
 	/*

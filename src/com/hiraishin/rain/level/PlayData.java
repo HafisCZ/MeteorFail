@@ -13,33 +13,43 @@ public enum PlayData {
 	/*
 	 * Definitions
 	 */
-	STAT_COUNT_EXPERIENCE(0), STAT_COUNT_DAMAGE(0), STAT_COUNT_SHIELD(0), STAT_COUNT_NODES(0), STAT_COUNT_JUMP(
-			0), STAT_COUNT_SKILLACTIVATION(0),
+	STAT_COUNT_EXPERIENCE(0, Integer.MAX_VALUE), STAT_COUNT_DAMAGE(0, Integer.MAX_VALUE), STAT_COUNT_SHIELD(0,
+			Integer.MAX_VALUE), STAT_COUNT_NODES(0, Integer.MAX_VALUE), STAT_COUNT_JUMP(0,
+					Integer.MAX_VALUE), STAT_COUNT_SKILLACTIVATION(0, Integer.MAX_VALUE),
 
-	PLAYER_LEVEL(1), PLAYER_POINTS(0), PLAYER_SELECTEDSKILL(0), PLAYER_HEALTH(5), PLAYER_SHIELD(0),
+	PLAYER_LEVEL(1, Integer.MAX_VALUE), PLAYER_POINTS(0, Integer.MAX_VALUE), PLAYER_SELECTEDSKILL(0,
+			3), PLAYER_HEALTH(3, 10),
 
-	UPGRADE_MOVEMENT(0), UPGRADE_POWERRATE(0), UPGRADE_SHOCKWAVE(0), UPGRADE_DOUBLEXP(0), UPGRADE_SHIELDSPAWN(0);
+	UPGRADE_MOVEMENT(0, 1), UPGRADE_POWERRATE(1, 2), UPGRADE_SHOCKWAVE(0, 1), UPGRADE_DOUBLEXP(0,
+			1), UPGRADE_SHIELDSPAWN(0, 1);
 
 	private static final String SER_FILE = "playdata.ser";
 
 	/*
 	 * Instace variables
 	 */
-	private int value;
+	private int value, max;
 
 	/*
 	 * Constructors
 	 */
-	private PlayData(int defaultValue) {
+	private PlayData(int defaultValue, int max) {
 		this.value = defaultValue;
+		this.max = max;
 	}
 
 	public void increment() {
-		this.value++;
+		if (this.value < this.max) {
+			this.value++;
+		}
 	}
 
 	public void incrementBy(int value) {
-		this.value += value;
+		if (this.value + value > this.max) {
+			this.value = this.max;
+		} else {
+			this.value += value;
+		}
 	}
 
 	public int getValue() {
@@ -47,7 +57,15 @@ public enum PlayData {
 	}
 
 	public void setValue(int value) {
-		this.value = value;
+		if (value > this.max) {
+			this.value = this.max;
+		} else {
+			this.value = value;
+		}
+	}
+
+	public int getMax() {
+		return this.max;
 	}
 
 	public static void load() {
@@ -76,7 +94,6 @@ public enum PlayData {
 	private static void read(String file) throws FileNotFoundException, ClassNotFoundException, IOException {
 		FileInputStream fiStream = new FileInputStream(new File(file));
 		ObjectInputStream oiStream = new ObjectInputStream(fiStream);
-		oiStream.reset();
 
 		for (int i = 0; i < PlayData.values().length; i++) {
 			PlayData.values()[i].value = oiStream.readInt();
@@ -87,7 +104,7 @@ public enum PlayData {
 	}
 
 	private static void write(String file) throws FileNotFoundException, IOException {
-		FileOutputStream foStream = new FileOutputStream(new File(file));
+		FileOutputStream foStream = new FileOutputStream(new File(file), false);
 		ObjectOutputStream ooStream = new ObjectOutputStream(foStream);
 		ooStream.reset();
 

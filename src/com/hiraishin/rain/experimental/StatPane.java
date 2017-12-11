@@ -1,7 +1,6 @@
-package com.hiraishin.rain.layout.pane;
+package com.hiraishin.rain.experimental;
 
 import com.hiraishin.rain.event.StateEvent;
-import com.hiraishin.rain.layout.MenuButton;
 import com.hiraishin.rain.level.PlayData;
 import com.hiraishin.rain.util.Commons;
 
@@ -50,8 +49,6 @@ public class StatPane extends BorderPane {
 
 		hbox.getChildren().addAll(vbox1, vbox2);
 		vbox.getChildren().addAll(label, hbox);
-
-		refresh();
 	}
 
 	/*
