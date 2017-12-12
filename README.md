@@ -1,2 +1,0 @@
-# Undefined
-JavaFX game
