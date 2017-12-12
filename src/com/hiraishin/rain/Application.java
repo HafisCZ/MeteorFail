@@ -13,6 +13,8 @@ import com.hiraishin.rain.level.PlayData;
 import com.hiraishin.rain.util.Commons;
 
 import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -20,134 +22,83 @@ import javafx.stage.Stage;
 
 public class Application extends javafx.application.Application {
 
-	/*
-	 * Screen nodes
-	 */
-	private Scene scene;
-	private Group root;
-	private Group group;
+    private Scene scene;
+    private Group root;
+    private Group group;
 
-	/*
-	 * Keyboard listener
-	 */
-	private Keyboard keyboard;
+    private Keyboard keyboard;
 
-	/*
-	 * Game
-	 */
-	private Game game;
+    private Game game;
 
-	/*
-	 * Menu panes
-	 */
-	private Pane paneMenu = new MenuPane();
-	private Pane paneShop = new ShopPane();
-	private Pane paneStat = new StatPane();
-	private Pane paneHelp = new HelpPane();
-	private Pane panePause = new PausePane();
+    private Pane paneMenu = new MenuPane();
+    private Pane paneShop = new ShopPane();
+    private Pane paneStat = new StatPane();
+    private Pane paneHelp = new HelpPane();
+    private Pane panePause = new PausePane();
 
-	/*
-	 * Main function
-	 */
-	public static void main(String... args) {
-		launch(args);
-	}
+    public static void main(String... args) {
+        launch(args);
+    }
 
-	/*
-	 * Start function
-	 */
-	@Override
-	public void start(Stage stage) throws Exception {
-		/*
-		 * Load play data
-		 */
-		PlayData.load();
+    private static void switchPane(Group parent, Pane pane) {
+        parent.getChildren().clear();
 
-		/*
-		 * Create keyboard
-		 */
-		this.keyboard = new Keyboard(stage);
-		/*
-		 * Create game
-		 */
-		this.game = new Game(this.keyboard);
+        if (Objects.nonNull(pane)) {
+            parent.getChildren().add(pane);
+        }
+    }
 
-		/*
-		 * Create groups
-		 */
-		this.group = new Group();
-		this.root = new Group(this.game.getCanvas(), this.group);
+    @Override
+    public void start(Stage stage) throws Exception {
+        PlayData.load();
 
-		/*
-		 * Create scene
-		 */
-		this.scene = new Scene(this.root, Commons.SCENE_WIDTH, Commons.SCENE_HEIGHT);
+        this.keyboard = new Keyboard(stage);
 
-		/*
-		 * Size window to scene
-		 */
-		stage.setScene(this.scene);
-		stage.sizeToScene();
+        this.game = new Game(this.keyboard);
 
-		/*
-		 * Add State event listener
-		 */
-		stage.addEventHandler(StateEvent.STATE, event -> {
-			if (Objects.equals(event.getEventType(), StateEvent.MENU)) {
-				switchPane(this.group, this.paneMenu);
-			} else if (Objects.equals(event.getEventType(), StateEvent.PLAY)) {
-				switchPane(this.group, null);
-				this.game.play();
-			} else if (Objects.equals(event.getEventType(), StateEvent.SHOP)) {
-				((ShopPane) this.paneShop).refresh();
-				switchPane(this.group, this.paneShop);
-			} else if (Objects.equals(event.getEventType(), StateEvent.STAT)) {
-				((StatPane) this.paneStat).refresh();
-				switchPane(this.group, this.paneStat);
-			} else if (Objects.equals(event.getEventType(), StateEvent.QUIT)) {
-				Platform.exit();
-			} else if (Objects.equals(event.getEventType(), StateEvent.HELP)) {
-				switchPane(this.group, this.paneHelp);
-			} else if (Objects.equals(event.getEventType(), StateEvent.PAUSE)) {
-				switchPane(this.group, this.panePause);
-				this.game.pause();
-			} else if (Objects.equals(event.getEventType(), StateEvent.UNPAUSE)) {
-				switchPane(this.group, null);
-				this.game.unpause();
-			} else if (Objects.equals(event.getEventType(), StateEvent.STOP)) {
-				switchPane(this.group, this.paneMenu);
-				this.game.close();
-			}
+        this.group = new Group();
+        this.root = new Group(this.game.getCanvas(), this.group);
 
-			event.consume();
-		});
+        this.scene = new Scene(this.root, Commons.SCENE_WIDTH, Commons.SCENE_HEIGHT);
+        stage.setScene(this.scene);
+        stage.sizeToScene();
 
-		/*
-		 * Set window properties
-		 */
-		stage.setTitle("Rain");
-		stage.setResizable(false);
+        stage.addEventHandler(StateEvent.STATE, event -> {
+            final EventType<? extends Event> eventType = event.getEventType();
 
-		/*
-		 * Show window
-		 */
-		stage.show();
+            if (eventType == StateEvent.MENU) {
+                switchPane(this.group, this.paneMenu);
+            } else if (eventType == StateEvent.PLAY) {
+                switchPane(this.group, null);
+                this.game.play();
+            } else if (eventType == StateEvent.SHOP) {
+                ((ShopPane) this.paneShop).refresh();
+                switchPane(this.group, this.paneShop);
+            } else if (eventType == StateEvent.STAT) {
+                ((StatPane) this.paneStat).refresh();
+                switchPane(this.group, this.paneStat);
+            } else if (eventType == StateEvent.QUIT) {
+                Platform.exit();
+            } else if (eventType == StateEvent.HELP) {
+                switchPane(this.group, this.paneHelp);
+            } else if (eventType == StateEvent.PAUSE) {
+                switchPane(this.group, this.panePause);
+                this.game.pause();
+            } else if (eventType == StateEvent.UNPAUSE) {
+                switchPane(this.group, null);
+                this.game.unpause();
+            } else if (eventType == StateEvent.STOP) {
+                switchPane(this.group, this.paneMenu);
+                this.game.close();
+            }
 
-		/*
-		 * Fire event to switch to Menu
-		 */
-		stage.fireEvent(new StateEvent(StateEvent.MENU));
-	}
+            event.consume();
+        });
 
-	/*
-	 * Helper function
-	 */
-	private static void switchPane(Group parent, Pane pane) {
-		parent.getChildren().clear();
-
-		if (Objects.nonNull(pane)) {
-			parent.getChildren().add(pane);
-		}
-	}
+        stage.setTitle("Rain");
+        stage.setResizable(false);
+        stage.show();
+        stage.fireEvent(new StateEvent(StateEvent.MENU));
+    }
 
 }

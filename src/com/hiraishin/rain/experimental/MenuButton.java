@@ -10,26 +10,26 @@ import javafx.scene.layout.HBox;
 
 public class MenuButton extends HBox {
 
-	/*
-	 * Constructors
-	 */
-	public MenuButton(EventType<StateEvent> eventType) {
-		ImageView imageView = new ImageView(ImageLoader.DEFAULT.requestImage("gui/icons/back"));
-		imageView.setOpacity(0.1);
+    /*
+     * Constructors
+     */
+    public MenuButton(EventType<StateEvent> eventType) {
+        ImageView imageView = new ImageView(ImageLoader.DEFAULT.requestImage("gui/icons/back"));
+        imageView.setOpacity(0.1);
 
-		this.setOnMouseClicked(event -> {
-			fireEvent(new StateEvent(eventType));
-		});
+        this.setOnMouseClicked(event -> {
+            fireEvent(new StateEvent(eventType));
+        });
 
-		this.setOnMouseEntered(event -> {
-			imageView.setOpacity(0.8);
-		});
+        this.setOnMouseEntered(event -> {
+            imageView.setOpacity(0.8);
+        });
 
-		this.setOnMouseExited(event -> {
-			imageView.setOpacity(0.3);
-		});
+        this.setOnMouseExited(event -> {
+            imageView.setOpacity(0.3);
+        });
 
-		this.getChildren().add(imageView);
-		this.setAlignment(Pos.TOP_LEFT);
-	}
+        this.getChildren().add(imageView);
+        this.setAlignment(Pos.TOP_LEFT);
+    }
 }

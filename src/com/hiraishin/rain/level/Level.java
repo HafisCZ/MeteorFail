@@ -1,3 +1,7 @@
+/*
+ * /* Copyright (c) 2017 - 2018 Hiraishin Software. All Rights Reserved.
+ */
+
 package com.hiraishin.rain.level;
 
 import java.util.ArrayList;
@@ -27,195 +31,221 @@ import javafx.scene.image.Image;
 
 public class Level {
 
-	/*
-	 * Instance variables
-	 */
-	private final List<Entity> mobs = new ArrayList<>();
-	private final List<Spawner> spawners = new ArrayList<>();
-	private final List<Entity> particles = new ArrayList<>();
+    /*
+     * Instance final variables
+     */
+    private final List<Entity> mobs = new ArrayList<>();
+    private final List<Spawner> spawners = new ArrayList<>();
 
-	private PlayerData properties;
-	private Overlay overlay;
+    private final List<Entity> particles = new ArrayList<>();
+    private final Image background = ImageLoader.DEFAULT.requestImage("background/background");
+    private final Keyboard keyboard;
 
-	private final Image background = ImageLoader.DEFAULT.requestImage("background/background");
+    private final LevelController levelController = new LevelController(this);
 
-	private LevelState state = LevelState.STOP;
+    /*
+     * Instance variables
+     */
+    private PlayerData properties;
+    private Overlay overlay;
 
-	/*
-	 * Constructors
-	 */
-	public Level() {
-		spawners.add(new RainSpawner(0, -20, Commons.SCENE_WIDTH, 0, this, 0, 0, 5));
-	}
+    private boolean paused = false;
+    private boolean played = false;
 
-	/*
-	 * Instance functions
-	 */
-	public void add(Entity e) {
-		if (e instanceof Mob || e instanceof Item) {
-			mobs.add(e);
-		} else if (e instanceof Particle) {
-			particles.add(e);
-		}
-	}
+    /*
+     * Controller class
+     */
+    public class LevelController {
 
-	public void tick() {
-		switch (state) {
+        /*
+         * Instance final variables
+         */
+        private final Level level;
 
-		case PLAY: {
-			for (Entity s : spawners) {
-				s.tick();
-			}
+        /*
+         * Instance variables
+         */
+        private boolean inScope = false;
+        private boolean hasClosedFlag = false;
 
-			for (Entity m : mobs) {
-				m.tick();
-			}
+        /*
+         * Contructors
+         */
+        private LevelController(Level level) {
+            this.level = level;
+        }
 
-			for (Entity p : particles) {
-				p.tick();
-			}
+        public void endGame() {
+            if (this.inScope) {
+                this.inScope = false;
+                this.level.stop();
+            }
+        }
 
-			if (Objects.nonNull(properties)) {
-				properties.tick();
-			}
+        public boolean inScope() {
+            return this.inScope;
+        }
 
-			mobs.removeIf(Entity::isDead);
-			particles.removeIf(Entity::isDead);
-			break;
-		}
+        /*
+         * Instance functions
+         */
+        public boolean isClosed() {
+            if (this.hasClosedFlag) {
+                this.inScope = false;
+                this.hasClosedFlag = false;
+                return true;
+            } else {
+                return false;
+            }
+        }
 
-		case PAUSE: {
-			break;
-		}
+        public boolean isPaused() {
+            return this.inScope ? this.level.paused : false;
+        }
 
-		default: {
-			for (Entity s : spawners) {
-				if (s instanceof RainSpawner) {
-					s.tick();
-				}
-			}
+        public boolean isRunning() {
+            return this.inScope ? this.level.played : false;
+        }
 
-			for (Entity p : particles) {
-				if (p instanceof RainParticle) {
-					p.tick();
-				}
-			}
+        public void pauseGame() {
+            if (this.inScope) {
+                this.level.paused = true;
+            }
+        }
 
-			particles.removeIf(E -> E.isDead() && (E instanceof Particle));
-			break;
-		}
+        public void startGame() {
+            if (!this.inScope) {
+                this.inScope = true;
+                this.level.start();
+            }
+        }
 
-		}
+        public void unpauseGame() {
+            if (this.inScope) {
+                this.level.paused = false;
+            }
+        }
 
-	}
+    }
 
-	public void draw(GraphicsContext gc) {
-		gc.drawImage(background, 0, 0, Commons.SCENE_WIDTH, Commons.SCENE_HEIGHT);
+    /*
+     * Constructors
+     */
+    public Level(Keyboard keyboard) {
+        this.keyboard = keyboard;
 
-		for (Entity p : particles) {
-			p.draw(gc);
-		}
+        spawners.add(new RainSpawner(0, -20, Commons.SCENE_WIDTH, 0, this, 0, 0, 5));
+    }
 
-		for (Entity m : mobs) {
-			m.draw(gc);
-		}
+    public void add(Entity e) {
+        if (e instanceof Mob || e instanceof Item) {
+            mobs.add(e);
+        } else if (e instanceof Particle) {
+            particles.add(e);
+        }
+    }
 
-		if (Objects.nonNull(overlay)) {
-			overlay.draw(gc);
-		}
-	}
+    public void draw(GraphicsContext gc) {
+        gc.drawImage(background, 0, 0, Commons.SCENE_WIDTH, Commons.SCENE_HEIGHT);
 
-	public void open(Keyboard keyboard) {
-		if (state == LevelState.PLAY) {
-			return;
-		}
+        for (Entity p : particles) {
+            p.draw(gc);
+        }
 
-		close();
+        for (Entity m : mobs) {
+            m.draw(gc);
+        }
 
-		state = LevelState.PLAY;
+        if (Objects.nonNull(overlay)) {
+            overlay.draw(gc);
+        }
+    }
 
-		properties = new PlayerData();
-		overlay = new Overlay(0, 0, properties);
+    /*
+     * Instance functions
+     */
+    public LevelController getLevelController() {
+        return this.levelController;
+    }
 
-		mobs.add(
-				new Player((Commons.SCENE_WIDTH - Player.WIDTH) / 2, Commons.SCENE_GROUND, this, keyboard, properties));
+    public List<Entity> getMobs() {
+        return mobs.subList(1, mobs.size());
+    }
 
-		spawners.add(new AcidSpawner(0, -50, Commons.SCENE_WIDTH, 0, this, 10, 5, 2));
-		spawners.add(new ArmorSpawner(0, -50, Commons.SCENE_WIDTH, 0, this, 60 * 60, 30 * 60, 1));
-		spawners.add(new EnergySpawner(0, -50, Commons.SCENE_WIDTH, 0, this, 60, 60, 1));
+    /*
+     * Getters & Setters
+     */
+    public Player getPlayer() {
+        return (mobs.size() > 0) ? (Player) mobs.get(0) : null;
+    }
 
-		properties.getHealthProperty().addListener((Observable, OldValue, NewValue) -> {
-			if (NewValue.intValue() <= 0) {
-				Platform.runLater(() -> {
-					PlayData.save();
-					close();
-				});
-			}
-		});
-	}
+    public PlayerData getPlayerProperties() {
+        return properties;
+    }
 
-	public void exit() {
-		if (state != LevelState.EXIT) {
-			state = LevelState.EXIT;
-		}
-	}
+    public boolean isCollidingPlayerAABB(Entity entity) {
+        return Objects.nonNull(getPlayer()) ? getPlayer().isCollidingAABB(entity) : false;
+    }
 
-	public void pause() {
-		if (state == LevelState.PLAY) {
-			state = LevelState.PAUSE;
-		}
-	}
+    public void tick() {
+        if (!this.paused) {
+            for (Spawner s : spawners) {
+                s.tick();
+            }
 
-	public void unpause() {
-		if (state == LevelState.PAUSE) {
-			state = LevelState.PLAY;
-		}
-	}
+            for (Entity m : mobs) {
+                m.tick();
+            }
 
-	public void close() {
-		if (state == LevelState.STOP) {
-			return;
-		}
+            for (Entity p : particles) {
+                p.tick();
+            }
 
-		state = LevelState.STOP;
+            if (Objects.nonNull(this.properties)) {
+                this.properties.tick();
+            }
 
-		properties = null;
-		overlay = null;
+            this.mobs.removeIf(Entity::isDead);
+            this.particles.removeIf(Entity::isDead);
+        }
+    }
 
-		mobs.clear();
-		spawners.subList(1, spawners.size()).clear();
-		particles.removeIf(E -> !(E instanceof RainParticle));
-	}
+    private void start() {
+        this.paused = false;
+        this.played = true;
 
-	public boolean isCollidingPlayerAABB(Entity entity) {
-		return Objects.nonNull(getPlayer()) ? getPlayer().isCollidingAABB(entity) : false;
-	}
+        this.properties = new PlayerData();
+        this.overlay = new Overlay(0, 0, this.properties);
 
-	/*
-	 * Getters & Setters
-	 */
-	public Player getPlayer() {
-		return (mobs.size() > 0) ? (Player) mobs.get(0) : null;
-	}
+        this.mobs.add(new Player((Commons.SCENE_WIDTH - Player.WIDTH) / 2, Commons.SCENE_GROUND,
+                                 this, this.keyboard, properties));
 
-	public List<Entity> getMobs() {
-		return mobs.subList(1, mobs.size());
-	}
+        this.spawners.add(new AcidSpawner(0, -50, Commons.SCENE_WIDTH, 0, this, 10, 5, 2));
+        this.spawners
+                .add(new ArmorSpawner(0, -50, Commons.SCENE_WIDTH, 0, this, 60 * 60, 30 * 60, 1));
+        this.spawners.add(new EnergySpawner(0, -50, Commons.SCENE_WIDTH, 0, this, 60, 60, 1));
 
-	public LevelState getState() {
-		return state;
-	}
+        this.properties.getHealthProperty().addListener((Observable, OldValue, NewValue) -> {
+            if (NewValue.intValue() <= 0) {
+                Platform.runLater(() -> {
+                    PlayData.save();
+                    stop();
+                });
+            }
+        });
+    }
 
-	public List<Entity> getParticles() {
-		return particles;
-	}
+    private void stop() {
+        this.paused = false;
+        this.played = false;
 
-	public List<Spawner> getSpawners() {
-		return spawners;
-	}
+        this.levelController.hasClosedFlag = true;
 
-	public PlayerData getPlayerProperties() {
-		return properties;
-	}
+        this.properties = null;
+        this.overlay = null;
 
+        this.mobs.clear();
+        this.spawners.subList(1, spawners.size()).clear();
+        this.particles.removeIf(E -> !(E instanceof RainParticle));
+    }
 }

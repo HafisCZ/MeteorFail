@@ -3,7 +3,7 @@ package com.hiraishin.rain;
 import com.hiraishin.rain.event.StateEvent;
 import com.hiraishin.rain.input.Keyboard;
 import com.hiraishin.rain.level.Level;
-import com.hiraishin.rain.level.LevelState;
+import com.hiraishin.rain.level.Level.LevelController;
 import com.hiraishin.rain.util.Commons;
 
 import javafx.animation.AnimationTimer;
@@ -13,64 +13,59 @@ import javafx.scene.input.KeyCode;
 
 public class Game {
 
-	private final Canvas canvas = new Canvas(Commons.SCENE_WIDTH, Commons.SCENE_HEIGHT);
-	private final GraphicsContext gc = canvas.getGraphicsContext2D();
+    private final Canvas canvas = new Canvas(Commons.SCENE_WIDTH, Commons.SCENE_HEIGHT);
+    private final GraphicsContext gc = canvas.getGraphicsContext2D();
 
-	private final Level level;
-	private final Keyboard keyboard;
+    private final Level level;
+    private final LevelController levelController;
 
-	public Game(Keyboard keyboard) {
-		this.keyboard = keyboard;
+    public Game(Keyboard keyboard) {
+        this.level = new Level(keyboard);
+        this.levelController = level.getLevelController();
 
-		this.level = new Level();
+        new AnimationTimer() {
 
-		new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                level.tick();
+                level.draw(gc);
 
-			@Override
-			public void handle(long now) {
-				level.tick();
-				level.draw(gc);
+                if (levelController.isClosed()) {
+                    canvas.fireEvent(new StateEvent(StateEvent.MENU));
+                }
 
-				if (level.getState() == LevelState.STOP) {
-					canvas.fireEvent(new StateEvent(StateEvent.MENU));
-					level.exit();
-				}
+                if (keyboard.isPressed(KeyCode.ESCAPE)) {
+                    if (levelController.isRunning()) {
+                        if (levelController.isPaused()) {
+                            canvas.fireEvent(new StateEvent(StateEvent.UNPAUSE));
+                        } else {
+                            canvas.fireEvent(new StateEvent(StateEvent.PAUSE));
+                        }
+                    }
+                }
 
-				if (keyboard.isPressed(KeyCode.ESCAPE)) {
-					switch (level.getState()) {
-					case PLAY:
-						canvas.fireEvent(new StateEvent(StateEvent.PAUSE));
-						break;
-					case PAUSE:
-						canvas.fireEvent(new StateEvent(StateEvent.UNPAUSE));
-						break;
-					default:
-						break;
-					}
-				}
+                keyboard.update();
+            }
+        }.start();
+    }
 
-				keyboard.update();
-			}
-		}.start();
-	}
+    public void close() {
+        this.levelController.endGame();
+    }
 
-	public void play() {
-		this.level.open(keyboard);
-	}
+    public Canvas getCanvas() {
+        return canvas;
+    }
 
-	public void pause() {
-		this.level.pause();
-	}
+    public void pause() {
+        this.levelController.pauseGame();
+    }
 
-	public void unpause() {
-		this.level.unpause();
-	}
+    public void play() {
+        this.levelController.startGame();
+    }
 
-	public void close() {
-		this.level.close();
-	}
-
-	public Canvas getCanvas() {
-		return canvas;
-	}
+    public void unpause() {
+        this.levelController.unpauseGame();
+    }
 }
