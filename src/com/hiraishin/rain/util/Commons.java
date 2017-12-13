@@ -9,9 +9,6 @@ import javafx.scene.paint.Stop;
 
 public class Commons {
 
-    /*
-     * Definitions
-     */
     public static final Random RANDOM = new Random();
 
     public static final double ZERO = 0;

@@ -21,9 +21,6 @@ import javafx.scene.input.KeyCode;
 
 public class Player extends Entity {
 
-    /*
-     * Definitions
-     */
     public static final double WIDTH = 47;
     public static final double HEIGHT = 65;
     public static final double SPEED_X_LIMIT = 10;
@@ -31,31 +28,20 @@ public class Player extends Entity {
     public static final double SPEED_X_INCREMENT = 0.5;
     public static final double SPEED_X_INCREMENT2 = 0.6;
     public static final double SPEED_Y_INCREMENT = 0.5;
-
-    public static final Image IMAGE = ImageLoader.DEFAULT.requestImage("entity/player");
+    public static final Image IMAGE = ImageLoader.DEFAULT.getImage("entity/player");
     public static final int IMAGE_ROWS = 2;
     public static final int IMAGE_COLS = 4;
     public static final double SPRITE_X_OFFSET = -4;
     public static final double SPRITE_Y_OFFSET = -1;
-
     public static final int ANIMATION_DELTA = 8;
     public static final Step ANIMATION_STEPS[] = { new Step(0, 0), new Step(1, 0), new Step(1, 1),
             new Step(1, 2), new Step(1, 3) };
 
-    /*
-     * Instance final variables
-     */
     private final Keyboard keyboard;
     private final double speed;
 
-    /*
-     * Instance variables
-     */
     private boolean jump = true;
 
-    /*
-     * Constructors
-     */
     public Player(double x, double y, Level level, Keyboard keyboard, PlayerData properties) {
         super(x, y, WIDTH, HEIGHT,
                 new AnimatedSprite(IMAGE, IMAGE_ROWS, IMAGE_COLS, ANIMATION_DELTA, ANIMATION_STEPS),
@@ -66,9 +52,6 @@ public class Player extends Entity {
                 SPEED_X_INCREMENT;
     }
 
-    /*
-     * Instance functions
-     */
     @Override
     public void tick() {
         if (this.keyboard.isHeld(KeyCode.D) && !this.keyboard.isHeld(KeyCode.A)) {
@@ -126,7 +109,7 @@ public class Player extends Entity {
         }
 
         if (this.dx != 0) {
-            this.sprite.flip(this.dx > 0 ? false : true, false);
+            this.sprite.setFlipAxis(this.dx > 0 ? false : true, false);
             ((AnimatedSprite) this.sprite).play();
         } else {
             ((AnimatedSprite) this.sprite).stop();

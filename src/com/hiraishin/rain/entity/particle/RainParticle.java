@@ -14,20 +14,11 @@ import javafx.scene.paint.Color;
 
 public class RainParticle extends Particle {
 
-    /*
-     * Definitions
-     */
     private static final Color COLOR_1 = Color.rgb(100, 149, 237, 0.2);
     private static final Color COLOR_2 = Color.rgb(173, 216, 230, 0.2);
 
-    /*
-     * Instance final variables
-     */
     private final Color color;
 
-    /*
-     * Constructors
-     */
     public RainParticle(double x, double y, double width, double height, double dx, double dy,
                         Level level) {
         super(x, y, width, height, level);
@@ -38,9 +29,6 @@ public class RainParticle extends Particle {
         this.color = Commons.RANDOM.nextBoolean() ? COLOR_1 : COLOR_2;
     }
 
-    /*
-     * Instance functions
-     */
     @Override
     public void draw(GraphicsContext gc) {
         gc.setFill(this.color);

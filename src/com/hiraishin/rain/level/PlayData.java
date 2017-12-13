@@ -13,9 +13,6 @@ import java.io.ObjectOutputStream;
 
 public enum PlayData {
 
-    /*
-     * Definitions
-     */
     STAT_COUNT_EXPERIENCE(0, Integer.MAX_VALUE),
     STAT_COUNT_DAMAGE(0, Integer.MAX_VALUE),
     STAT_COUNT_SHIELD(0, Integer.MAX_VALUE),
@@ -36,14 +33,8 @@ public enum PlayData {
 
     private static final String SER_FILE = "playdata.ser";
 
-    /*
-     * Instance final variables
-     */
     private final int min, max;
 
-    /*
-     * Instace variables
-     */
     private int value;
 
     public static void load() {
@@ -66,9 +57,6 @@ public enum PlayData {
         }
     }
 
-    /*
-     * Static functions
-     */
     private static void read(String file) throws ClassNotFoundException, IOException {
         FileInputStream fiStream = new FileInputStream(new File(file));
         ObjectInputStream oiStream = new ObjectInputStream(fiStream);
@@ -94,9 +82,6 @@ public enum PlayData {
         foStream.close();
     }
 
-    /*
-     * Constructors
-     */
     private PlayData(int defaultValue, int max) {
         this.value = defaultValue;
         this.max = max;

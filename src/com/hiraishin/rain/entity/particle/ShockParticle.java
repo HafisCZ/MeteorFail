@@ -15,27 +15,15 @@ import javafx.scene.shape.ArcType;
 
 public class ShockParticle extends Particle {
 
-    /*
-     * Definitions
-     */
     public static final double ARC_RADIUS_INCREMENT = 8;
     public static final double ARC_ANGLE = 180;
 
-    /*
-     * Instance variables
-     */
     private double radius = 0;
 
-    /*
-     * Constructors
-     */
     public ShockParticle(double x, double y, double width, double height, Level level) {
         super(x, y, width, height, level);
     }
 
-    /*
-     * Instance functions
-     */
     @Override
     public void draw(GraphicsContext gc) {
         gc.setStroke(Color.ALICEBLUE);

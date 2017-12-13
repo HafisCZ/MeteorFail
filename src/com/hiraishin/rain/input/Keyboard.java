@@ -15,15 +15,9 @@ import javafx.stage.Stage;
 
 public class Keyboard implements EventHandler<KeyEvent> {
 
-    /*
-     * Instance final variables
-     */
     private final Map<KeyCode, Boolean> currentMap = new HashMap<>();
     private final Map<KeyCode, Boolean> previousMap = new HashMap<>();
 
-    /*
-     * Constructors
-     */
     public Keyboard(Stage stage) {
         synchronized (stage) {
             stage.addEventHandler(KeyEvent.KEY_PRESSED, this);
@@ -45,9 +39,6 @@ public class Keyboard implements EventHandler<KeyEvent> {
         keyEvent.consume();
     }
 
-    /*
-     * Getters & Setters
-     */
     public boolean isHeld(KeyCode keyCode) {
         return currentMap.getOrDefault(keyCode, false);
     }
@@ -56,9 +47,6 @@ public class Keyboard implements EventHandler<KeyEvent> {
         return isHeld(keyCode) && !wasHeld(keyCode);
     }
 
-    /*
-     * Instance functions
-     */
     public void update() {
         previousMap.putAll(currentMap);
     }

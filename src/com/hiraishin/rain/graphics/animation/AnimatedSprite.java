@@ -10,25 +10,15 @@ import javafx.scene.image.Image;
 
 public class AnimatedSprite extends Sprite {
 
-    /*
-     * Instance final variables
-     */
     private final Step beginFrame;
     private final Step animatedFrames[];
-
     private final int frameTime;
 
-    /*
-     * Instance variables
-     */
     private int selectedFrame = 0;
     private int currentTime = 0;
 
     private boolean isPlaying = false;
 
-    /*
-     * Constructors
-     */
     public AnimatedSprite(Image image, int rows, int columns, int frameTime, Step... frames) {
         super(image, rows, columns);
 
@@ -45,9 +35,6 @@ public class AnimatedSprite extends Sprite {
         }
     }
 
-    /*
-     * Instance functions
-     */
     public void play() {
         if (this.isPlaying) {
             return;

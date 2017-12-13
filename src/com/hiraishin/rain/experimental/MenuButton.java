@@ -1,3 +1,10 @@
+/*
+ * DISCLAIMER:
+ * 
+ * Content of this class is purely experimental and should not be used as a measurement of quality
+ * of this project. It is distributed AS-IS without any guarantees or rights reserved.
+ */
+
 package com.hiraishin.rain.experimental;
 
 import com.hiraishin.rain.event.StateEvent;
@@ -14,7 +21,7 @@ public class MenuButton extends HBox {
      * Constructors
      */
     public MenuButton(EventType<StateEvent> eventType) {
-        ImageView imageView = new ImageView(ImageLoader.DEFAULT.requestImage("gui/icons/back"));
+        ImageView imageView = new ImageView(ImageLoader.DEFAULT.getImage("gui/icons/back"));
         imageView.setOpacity(0.1);
 
         this.setOnMouseClicked(event -> {

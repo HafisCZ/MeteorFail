@@ -9,35 +9,23 @@ import javafx.scene.image.Image;
 
 public class Sprite {
 
-    /*
-     * Instance final variables
-     */
-    private final Image image;
-
     private final int rows;
     private final int cols;
-
     private final double width;
     private final double height;
+    private final Image image;
 
-    /*
-     * Instance variables
-     */
     private int selRow = 0;
     private int selCol = 0;
-
     private int strRow = 1;
     private int strCol = 1;
-
     private boolean flipX = false;
     private boolean flipY = false;
 
-    /*
-     * Constructors
-     */
     public Sprite(Image image, int rows, int columns) {
         if (rows < 1 || columns < 1) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Sprite has to have at least 1 row and 1 column.\nYou specified " +
+                    rows + " rows and " + columns + " columns!");
         }
 
         this.image = image;
@@ -59,10 +47,7 @@ public class Sprite {
         }
     }
 
-    /*
-     * Instance functions
-     */
-    public void flip(boolean flipX, boolean flipY) {
+    public void setFlipAxis(boolean flipX, boolean flipY) {
         this.flipX = flipX;
         this.flipY = flipY;
     }
@@ -71,9 +56,6 @@ public class Sprite {
         return this.height;
     }
 
-    /*
-     * Getters & Setters
-     */
     public double getWidth() {
         return this.width;
     }

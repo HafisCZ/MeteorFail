@@ -15,41 +15,25 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public class PlayerData {
 
-    /*
-     * Definitions
-     */
     public static final int EXP_RATE = 1;
     public static final int EXP_POOL = 40 * 60;
     public static final double EXP_POOL_MOD = 1.2;
 
-    /*
-     * Instance final variables
-     */
     private final IntegerProperty healthProperty = new SimpleIntegerProperty(0);
     private final IntegerProperty armorProperty = new SimpleIntegerProperty(0);
     private final IntegerProperty levelProperty = new SimpleIntegerProperty(0);
     private final IntegerProperty experienceProperty = new SimpleIntegerProperty(0);
     private final IntegerProperty energyProperty = new SimpleIntegerProperty(0);
-
     private final int energyRate;
 
-    /*
-     * Instance variables
-     */
+    private boolean skillActive = false;
+    private boolean boostActive = false;
+    private int skillBurnout = 0;
+    private int boostBurnout = 0;
     private int experience = 0;
     private int experienceMultiplier = EXP_RATE;
-
     private Skill selectedSkill = null;
 
-    private int skillBurnout = 0;
-    private boolean skillActive = false;
-
-    private int boostBurnout = 0;
-    private boolean boostActive = false;
-
-    /*
-     * Constructors
-     */
     public PlayerData() {
         healthProperty.set(PlayData.PLAYER_HEALTH.getValue());
         levelProperty.set(PlayData.PLAYER_LEVEL.getValue());
@@ -63,10 +47,6 @@ public class PlayerData {
                 selectedSkill.getPowerGain() * PlayData.UPGRADE_POWERRATE.getValue());
     }
 
-    /*
-     * Instance functions
-     */
-
     public void activateSkill(Entity source, Level level) {
         if (!skillActive) {
             if (Objects.nonNull(selectedSkill)) {
@@ -75,7 +55,7 @@ public class PlayerData {
 
                     skillActive = true;
                     skillBurnout = selectedSkill.getBurnoutTime();
-                    selectedSkill.activate(source.getX() + source.getWidth() / 2, source.getY() +
+                    selectedSkill.applyEffect(source.getX() + source.getWidth() / 2, source.getY() +
                             source.getHeight() / 2, level, this);
 
                     PlayData.STAT_COUNT_SKILLACTIVATION.increment();
@@ -153,9 +133,6 @@ public class PlayerData {
         return levelProperty;
     }
 
-    /*
-     * Getters & Setters
-     */
     public Skill getSelectedSkill() {
         return selectedSkill;
     }
@@ -181,7 +158,7 @@ public class PlayerData {
         }
 
         if (skillActive) {
-            energyProperty.set((int) 100 * skillBurnout / selectedSkill.getBurnoutTime());
+            energyProperty.set(100 * skillBurnout / selectedSkill.getBurnoutTime());
             if (--skillBurnout < 0) {
                 energyProperty.set(0);
                 skillActive = false;

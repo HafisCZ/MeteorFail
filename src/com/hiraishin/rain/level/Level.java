@@ -31,46 +31,25 @@ import javafx.scene.image.Image;
 
 public class Level {
 
-    /*
-     * Instance final variables
-     */
     private final List<Entity> mobs = new ArrayList<>();
     private final List<Spawner> spawners = new ArrayList<>();
-
     private final List<Entity> particles = new ArrayList<>();
-    private final Image background = ImageLoader.DEFAULT.requestImage("background/background");
+    private final Image background = ImageLoader.DEFAULT.getImage("background/background");
     private final Keyboard keyboard;
-
     private final LevelController levelController = new LevelController(this);
 
-    /*
-     * Instance variables
-     */
     private PlayerData properties;
     private Overlay overlay;
-
     private boolean paused = false;
     private boolean played = false;
 
-    /*
-     * Controller class
-     */
     public class LevelController {
 
-        /*
-         * Instance final variables
-         */
         private final Level level;
 
-        /*
-         * Instance variables
-         */
         private boolean inScope = false;
         private boolean hasClosedFlag = false;
 
-        /*
-         * Contructors
-         */
         private LevelController(Level level) {
             this.level = level;
         }
@@ -86,9 +65,6 @@ public class Level {
             return this.inScope;
         }
 
-        /*
-         * Instance functions
-         */
         public boolean isClosed() {
             if (this.hasClosedFlag) {
                 this.inScope = false;
@@ -128,9 +104,6 @@ public class Level {
 
     }
 
-    /*
-     * Constructors
-     */
     public Level(Keyboard keyboard) {
         this.keyboard = keyboard;
 
@@ -161,9 +134,6 @@ public class Level {
         }
     }
 
-    /*
-     * Instance functions
-     */
     public LevelController getLevelController() {
         return this.levelController;
     }
@@ -172,9 +142,6 @@ public class Level {
         return mobs.subList(1, mobs.size());
     }
 
-    /*
-     * Getters & Setters
-     */
     public Player getPlayer() {
         return (mobs.size() > 0) ? (Player) mobs.get(0) : null;
     }

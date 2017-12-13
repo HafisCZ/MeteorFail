@@ -14,9 +14,6 @@ public class StateEvent extends Event {
      */
     private static final long serialVersionUID = 4606669955706420844L;
 
-    /*
-     * Definitions
-     */
     public static final EventType<StateEvent> STATE = new EventType<>(ANY, "STATE");
 
     public static final EventType<StateEvent> MENU = new EventType<>(STATE, "MENU");
@@ -32,9 +29,6 @@ public class StateEvent extends Event {
     public static final EventType<StateEvent> UNPAUSE = new EventType<>(GAME, "UNPAUSE");
     public static final EventType<StateEvent> STOP = new EventType<>(GAME, "STOP");
 
-    /*
-     * Constructors
-     */
     public StateEvent(EventType<? extends Event> eventType) {
         super(eventType);
     }

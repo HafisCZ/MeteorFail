@@ -16,48 +16,35 @@ import javafx.scene.paint.Color;
 
 public class Overlay implements Drawable {
 
-    /*
-     * Definitions
-     */
     private static final Sprite HLT_BAR = new Sprite(ImageLoader.DEFAULT
-            .requestImage("gui/bars/health"), 1, 10);
-    private static final Sprite ARM_BAR = new Sprite(ImageLoader.DEFAULT
-            .requestImage("gui/bars/armor"), 1, 10);
+            .getImage("gui/bars/health"), 1, 10);
+    private static final Sprite ARM_BAR = new Sprite(ImageLoader.DEFAULT.getImage("gui/bars/armor"),
+                                                     1, 10);
     private static final Sprite EXP_BAR = new Sprite(ImageLoader.DEFAULT
-            .requestImage("gui/bars/experience"), 1, 100);
+            .getImage("gui/bars/experience"), 1, 100);
     private static final Sprite PWR_BAR = new Sprite(ImageLoader.DEFAULT
-            .requestImage("gui/bars/energy"), 2, 100);
+            .getImage("gui/bars/energy"), 2, 100);
 
     private static final Sprite ABL_ICO = new Sprite(ImageLoader.DEFAULT
-            .requestImage("gui/icons/ability"), 1, 4);
+            .getImage("gui/icons/ability"), 1, 4);
     private static final Sprite HLC_ICO = new Sprite(ImageLoader.DEFAULT
-            .requestImage("gui/icons/health"), 1, 1);
+            .getImage("gui/icons/health"), 1, 1);
     private static final Sprite EXP_ICO = new Sprite(ImageLoader.DEFAULT
-            .requestImage("gui/icons/experience"), 1, 1);
+            .getImage("gui/icons/experience"), 1, 1);
     private static final Sprite PWR_ICO = new Sprite(ImageLoader.DEFAULT
-            .requestImage("gui/icons/energy"), 1, 1);
+            .getImage("gui/icons/energy"), 1, 1);
 
     private static final Sprite SQ_FRAME = new Sprite(ImageLoader.DEFAULT
-            .requestImage("gui/icons/frame"), 1, 1);
+            .getImage("gui/icons/frame"), 1, 1);
     private static final Sprite RC_FRAME = new Sprite(ImageLoader.DEFAULT
-            .requestImage("gui/bars/frame"), 1, 1);
+            .getImage("gui/bars/frame"), 1, 1);
 
-    /*
-     * Instance final variables
-     */
     private final double x;
     private final double y;
 
-    /*
-     * Instance variables
-     */
     private Skill skill;
-
     private int level;
 
-    /*
-     * Constructors
-     */
     public Overlay(double x, double y, PlayerData properties) {
         this.x = x;
         this.y = y;
@@ -124,9 +111,6 @@ public class Overlay implements Drawable {
         gc.fillText("" + level, x + 230, y + 42);
     }
 
-    /*
-     * Instance functions
-     */
     private void drawStatic(GraphicsContext gc) {
         HLC_ICO.draw(gc, x + 2, y + 10);
         EXP_ICO.draw(gc, x + 2, y + 30);

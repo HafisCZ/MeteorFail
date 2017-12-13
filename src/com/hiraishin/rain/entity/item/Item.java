@@ -11,9 +11,6 @@ import com.hiraishin.rain.util.Commons;
 
 public abstract class Item extends Entity {
 
-    /*
-     * Definitions
-     */
     public static final double DEFAULT_SPEED_X = 0;
     public static final double DEFAULT_SPEED_Y = 4;
 
@@ -25,23 +22,12 @@ public abstract class Item extends Entity {
         this.dy = dy;
     }
 
-    /*
-     * Contructors
-     */
     protected Item(double x, double y, double width, double height, Sprite sprite, double offsetX,
                    double offsetY, Level level) {
         this(x, y, width, height, sprite, offsetX, offsetY, DEFAULT_SPEED_X, DEFAULT_SPEED_Y,
                 level);
     }
 
-    /*
-     * Abstract functions
-     */
-    public abstract void applyEffect();
-
-    /*
-     * Instance functions
-     */
     @Override
     public final void tick() {
         this.x += this.dx;
@@ -56,5 +42,7 @@ public abstract class Item extends Entity {
             kill();
         }
     }
+
+    public abstract void applyEffect();
 
 }

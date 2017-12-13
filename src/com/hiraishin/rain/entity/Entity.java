@@ -14,32 +14,19 @@ import javafx.scene.canvas.GraphicsContext;
 
 public abstract class Entity implements Drawable {
 
-    /*
-     * Instance final variables
-     */
     protected final Level level;
-
+    protected final Sprite sprite;
     protected final double width;
     protected final double height;
+    protected final double spriteXOffset;
+    protected final double spriteYOffset;
 
-    protected final Sprite sprite;
-    protected final double spriteOffsetX;
-    protected final double spriteOffsetY;
-
-    /*
-     * Instance variables
-     */
     protected double x;
     protected double y;
+    protected double dx;
+    protected double dy;
+    protected boolean dead;
 
-    protected double dx = 0;
-    protected double dy = 0;
-
-    protected boolean dead = false;
-
-    /*
-     * Constructors
-     */
     protected Entity(double x, double y, double width, double height, Level level) {
         this(x, y, width, height, null, 0, 0, level);
     }
@@ -53,19 +40,16 @@ public abstract class Entity implements Drawable {
         this.height = height;
 
         this.sprite = sprite;
-        this.spriteOffsetX = offsetX;
-        this.spriteOffsetY = offsetY;
+        this.spriteXOffset = offsetX;
+        this.spriteYOffset = offsetY;
 
         this.level = level;
     }
 
-    /*
-     * Instance Functions
-     */
     @Override
     public void draw(GraphicsContext gc) {
         if (Objects.nonNull(this.sprite)) {
-            this.sprite.draw(gc, this.x + this.spriteOffsetX, this.y + this.spriteOffsetY);
+            this.sprite.draw(gc, this.x + this.spriteXOffset, this.y + this.spriteYOffset);
         }
     }
 
@@ -89,9 +73,6 @@ public abstract class Entity implements Drawable {
         return this.width;
     }
 
-    /*
-     * Getters & Setters
-     */
     public final double getX() {
         return this.x;
     }
@@ -116,9 +97,6 @@ public abstract class Entity implements Drawable {
         this.dead = true;
     }
 
-    /*
-     * Abstract functions
-     */
     public abstract void tick();
 
 }

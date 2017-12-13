@@ -12,30 +12,17 @@ import javafx.scene.paint.Color;
 
 public class AcidParticle extends Particle {
 
-    /*
-     * Definitions
-     */
     public static final double SPEED_X_INCREMENT = 0.2;
     public static final double SPEED_Y_INCREMENT = 0.5;
-
     public static final int TICKS_DESPAWN_MIN = 10;
     public static final int TICKS_DESPAWN_MAX = 30;
 
-    /*
-     * Instance final variables
-     */
     private final Color color;
 
-    /*
-     * Instance variables
-     */
     private int despawnTicks = TICKS_DESPAWN_MIN +
             Commons.RANDOM.nextInt(TICKS_DESPAWN_MAX - TICKS_DESPAWN_MIN + 1);
     private boolean despawnActive = false;
 
-    /*
-     * Constructors
-     */
     public AcidParticle(double x, double y, double width, double height, double dx, double dy,
                         Level level) {
         super(x, y, width, height, level);
@@ -46,9 +33,6 @@ public class AcidParticle extends Particle {
         this.color = Commons.RANDOM.nextBoolean() ? Color.GREENYELLOW : Color.LAWNGREEN;
     }
 
-    /*
-     * Instance functions
-     */
     @Override
     public void draw(GraphicsContext gc) {
         gc.setFill(this.color);

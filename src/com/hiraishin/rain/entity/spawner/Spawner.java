@@ -12,22 +12,13 @@ import com.hiraishin.rain.util.Commons;
 
 public abstract class Spawner extends Entity {
 
-    /*
-     * Instance final variables
-     */
     protected final int rate;
     protected final int variation;
     protected final int count;
 
-    /*
-     * Instance variables
-     */
     protected int frameCount = 0;
     protected int frameLimit;
 
-    /*
-     * Constructors
-     */
     protected Spawner(double x, double y, double width, double height, Level level, int rate,
                       int variation, int count) {
         super(x, y, width, height, level);
@@ -40,14 +31,6 @@ public abstract class Spawner extends Entity {
         this.frameLimit = rate;
     }
 
-    /*
-     * Abstract functions
-     */
-    public abstract void spawn();
-
-    /*
-     * Instance functions
-     */
     @Override
     public final void tick() {
         if (this.frameCount++ >= this.frameLimit) {
@@ -63,9 +46,6 @@ public abstract class Spawner extends Entity {
         }
     }
 
-    /*
-     * Getters & Setters
-     */
     protected double getRandomX() {
         return this.x + (this.width == 0 ? 0 : Commons.RANDOM.nextInt((int) this.width));
     }
@@ -73,5 +53,7 @@ public abstract class Spawner extends Entity {
     protected double getRandomY() {
         return this.y + (this.height == 0 ? 0 : Commons.RANDOM.nextInt((int) this.height));
     }
+
+    public abstract void spawn();
 
 }
