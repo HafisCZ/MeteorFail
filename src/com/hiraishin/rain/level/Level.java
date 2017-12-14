@@ -1,5 +1,5 @@
 /*
- * /* Copyright (c) 2017 - 2018 Hiraishin Software. All Rights Reserved.
+ * Copyright (c) 2017 - 2018 Hiraishin Software. All Rights Reserved.
  */
 
 package com.hiraishin.rain.level;
@@ -19,6 +19,7 @@ import com.hiraishin.rain.entity.spawner.ArmorSpawner;
 import com.hiraishin.rain.entity.spawner.EnergySpawner;
 import com.hiraishin.rain.entity.spawner.RainSpawner;
 import com.hiraishin.rain.entity.spawner.Spawner;
+import com.hiraishin.rain.entity.spawner.StarSpawner;
 import com.hiraishin.rain.graphics.Overlay;
 import com.hiraishin.rain.input.Keyboard;
 import com.hiraishin.rain.level.player.PlayerData;
@@ -34,7 +35,7 @@ public class Level {
     private final List<Entity> mobs = new ArrayList<>();
     private final List<Spawner> spawners = new ArrayList<>();
     private final List<Entity> particles = new ArrayList<>();
-    private final Image background = ImageLoader.DEFAULT.getImage("background/background");
+    private final Image background = ImageLoader.INTERNAL.getImage("background/background");
     private final Keyboard keyboard;
     private final LevelController levelController = new LevelController(this);
 
@@ -107,30 +108,32 @@ public class Level {
     public Level(Keyboard keyboard) {
         this.keyboard = keyboard;
 
-        spawners.add(new RainSpawner(0, -20, Commons.SCENE_WIDTH, 0, this, 0, 0, 5));
+        this.spawners.add(new RainSpawner(0, -20, Commons.SCENE_WIDTH, 0, this, 0, 0, 5));
     }
 
     public void add(Entity e) {
         if (e instanceof Mob || e instanceof Item) {
-            mobs.add(e);
+            this.mobs.add(e);
         } else if (e instanceof Particle) {
-            particles.add(e);
+            this.particles.add(e);
+        } else if (e instanceof Spawner) {
+            this.spawners.add((Spawner) e);
         }
     }
 
     public void draw(GraphicsContext gc) {
-        gc.drawImage(background, 0, 0, Commons.SCENE_WIDTH, Commons.SCENE_HEIGHT);
+        gc.drawImage(this.background, 0, 0, Commons.SCENE_WIDTH, Commons.SCENE_HEIGHT);
 
-        for (Entity p : particles) {
+        for (Entity p : this.particles) {
             p.draw(gc);
         }
 
-        for (Entity m : mobs) {
+        for (Entity m : this.mobs) {
             m.draw(gc);
         }
 
-        if (Objects.nonNull(overlay)) {
-            overlay.draw(gc);
+        if (Objects.nonNull(this.overlay)) {
+            this.overlay.draw(gc);
         }
     }
 
@@ -143,11 +146,11 @@ public class Level {
     }
 
     public Player getPlayer() {
-        return (mobs.size() > 0) ? (Player) mobs.get(0) : null;
+        return (this.mobs.size() > 0) ? (Player) this.mobs.get(0) : null;
     }
 
     public PlayerData getPlayerProperties() {
-        return properties;
+        return this.properties;
     }
 
     public boolean isCollidingPlayerAABB(Entity entity) {
@@ -156,15 +159,15 @@ public class Level {
 
     public void tick() {
         if (!this.paused) {
-            for (Spawner s : spawners) {
+            for (Spawner s : this.spawners) {
                 s.tick();
             }
 
-            for (Entity m : mobs) {
+            for (Entity m : this.mobs) {
                 m.tick();
             }
 
-            for (Entity p : particles) {
+            for (Entity p : this.particles) {
                 p.tick();
             }
 
@@ -185,12 +188,17 @@ public class Level {
         this.overlay = new Overlay(0, 0, this.properties);
 
         this.mobs.add(new Player((Commons.SCENE_WIDTH - Player.WIDTH) / 2, Commons.SCENE_GROUND,
-                                 this, this.keyboard, properties));
+                                 this, this.keyboard, this.properties));
 
         this.spawners.add(new AcidSpawner(0, -50, Commons.SCENE_WIDTH, 0, this, 10, 5, 2));
+        this.spawners.add(new ArmorSpawner(0, -50, Commons.SCENE_WIDTH, 0, this,
+                                           Timescale.TICKS_PER_MINUTE >> 1,
+                                           10 * Timescale.TICKS_PER_SECOND, 1));
         this.spawners
-                .add(new ArmorSpawner(0, -50, Commons.SCENE_WIDTH, 0, this, 60 * 60, 30 * 60, 1));
-        this.spawners.add(new EnergySpawner(0, -50, Commons.SCENE_WIDTH, 0, this, 60, 60, 1));
+                .add(new EnergySpawner(0, -50, Commons.SCENE_WIDTH, 0, this,
+                                       Timescale.TICKS_PER_SECOND, Timescale.TICKS_PER_SECOND, 1));
+        this.spawners.add(new StarSpawner(0, -50, Commons.SCENE_WIDTH, 0, this,
+                                          20 * Timescale.TICKS_PER_SECOND, 0, 1));
 
         this.properties.getHealthProperty().addListener((Observable, OldValue, NewValue) -> {
             if (NewValue.intValue() <= 0) {

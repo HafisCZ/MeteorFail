@@ -16,27 +16,27 @@ import javafx.scene.paint.Color;
 
 public class Overlay implements Drawable {
 
-    private static final Sprite HLT_BAR = new Sprite(ImageLoader.DEFAULT
+    private static final Sprite HLT_BAR = new Sprite(ImageLoader.INTERNAL
             .getImage("gui/bars/health"), 1, 10);
-    private static final Sprite ARM_BAR = new Sprite(ImageLoader.DEFAULT.getImage("gui/bars/armor"),
-                                                     1, 10);
-    private static final Sprite EXP_BAR = new Sprite(ImageLoader.DEFAULT
+    private static final Sprite ARM_BAR = new Sprite(ImageLoader.INTERNAL
+            .getImage("gui/bars/armor"), 1, 10);
+    private static final Sprite EXP_BAR = new Sprite(ImageLoader.INTERNAL
             .getImage("gui/bars/experience"), 1, 100);
-    private static final Sprite PWR_BAR = new Sprite(ImageLoader.DEFAULT
+    private static final Sprite PWR_BAR = new Sprite(ImageLoader.INTERNAL
             .getImage("gui/bars/energy"), 2, 100);
 
-    private static final Sprite ABL_ICO = new Sprite(ImageLoader.DEFAULT
+    private static final Sprite ABL_ICO = new Sprite(ImageLoader.INTERNAL
             .getImage("gui/icons/ability"), 1, 4);
-    private static final Sprite HLC_ICO = new Sprite(ImageLoader.DEFAULT
+    private static final Sprite HLC_ICO = new Sprite(ImageLoader.INTERNAL
             .getImage("gui/icons/health"), 1, 1);
-    private static final Sprite EXP_ICO = new Sprite(ImageLoader.DEFAULT
+    private static final Sprite EXP_ICO = new Sprite(ImageLoader.INTERNAL
             .getImage("gui/icons/experience"), 1, 1);
-    private static final Sprite PWR_ICO = new Sprite(ImageLoader.DEFAULT
+    private static final Sprite PWR_ICO = new Sprite(ImageLoader.INTERNAL
             .getImage("gui/icons/energy"), 1, 1);
 
-    private static final Sprite SQ_FRAME = new Sprite(ImageLoader.DEFAULT
+    private static final Sprite SQ_FRAME = new Sprite(ImageLoader.INTERNAL
             .getImage("gui/icons/frame"), 1, 1);
-    private static final Sprite RC_FRAME = new Sprite(ImageLoader.DEFAULT
+    private static final Sprite RC_FRAME = new Sprite(ImageLoader.INTERNAL
             .getImage("gui/bars/frame"), 1, 1);
 
     private final double x;

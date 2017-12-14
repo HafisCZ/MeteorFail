@@ -23,7 +23,7 @@ public class AnimatedSprite extends Sprite {
         super(image, rows, columns);
 
         if (frames.length < 1) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Animated Sprite must contain at least one frame!");
         }
 
         this.frameTime = frameTime;

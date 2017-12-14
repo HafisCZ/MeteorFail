@@ -4,6 +4,9 @@
 
 package com.hiraishin.rain.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -13,8 +16,16 @@ import javafx.scene.image.Image;
 
 public enum ImageLoader {
 
-    DEFAULT("/res/", ".png", S -> {
+    INTERNAL("/res/", ".png", S -> {
         return new Image(ClassLoader.class.getResourceAsStream(S));
+    }), EXTERNAL("/res/", ".png", S -> {
+        try (FileInputStream fiStream = new FileInputStream(new File(S))) {
+            return new Image(fiStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     });
 
     private final Map<String, Image> loadedImages = new HashMap<>();
@@ -31,6 +42,10 @@ public enum ImageLoader {
         for (String token : tokens) {
             this.loadedImages.put(token, loader.apply(this.prefix + token + this.suffix));
         }
+    }
+
+    public void loadImage(String token) {
+        this.loadedImages.put(token, this.loader.apply(this.prefix + token + this.suffix));
     }
 
     public Image getImage(String token) {

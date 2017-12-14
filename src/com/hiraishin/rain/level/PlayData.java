@@ -37,6 +37,20 @@ public enum PlayData {
 
     private int value;
 
+    public static PlayData[] getStatistics() {
+        return new PlayData[] { STAT_COUNT_EXPERIENCE, STAT_COUNT_DAMAGE, STAT_COUNT_SHIELD,
+                STAT_COUNT_NODES, STAT_COUNT_JUMP, STAT_COUNT_SKILLACTIVATION };
+    }
+
+    public static PlayData[] getPlayerProperties() {
+        return new PlayData[] { PLAYER_LEVEL, PLAYER_POINTS, PLAYER_SELECTEDSKILL, PLAYER_HEALTH };
+    }
+
+    public static PlayData[] getUpgrades() {
+        return new PlayData[] { UPGRADE_MOVEMENT, UPGRADE_POWERRATE, UPGRADE_SHOCKWAVE,
+                UPGRADE_DOUBLEXP, UPGRADE_SHIELDSPAWN };
+    }
+
     public static void load() {
         try {
             read(SER_FILE);

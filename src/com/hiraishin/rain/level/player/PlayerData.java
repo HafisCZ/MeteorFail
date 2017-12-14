@@ -64,22 +64,22 @@ public class PlayerData {
         }
     }
 
-    public void addEnergy() {
+    public void addEnergy(int multiplier) {
         PlayData.STAT_COUNT_NODES.increment();
 
         if (!skillActive) {
             if (Objects.nonNull(selectedSkill)) {
                 if (energyProperty.intValue() < 100) {
-                    energyProperty.set(energyProperty.intValue() + energyRate);
+                    energyProperty.set(energyProperty.intValue() + energyRate * multiplier);
                 }
             }
         }
     }
 
-    public void addExperience() {
-        PlayData.STAT_COUNT_EXPERIENCE.incrementBy(experienceMultiplier);
+    public void addExperience(int multiplier) {
+        PlayData.STAT_COUNT_EXPERIENCE.incrementBy(experienceMultiplier * multiplier);
 
-        experience += experienceMultiplier;
+        experience += experienceMultiplier * multiplier;
         experienceProperty.set((int) (100 * experience /
                 (EXP_POOL * Math.pow(EXP_POOL_MOD, levelProperty.intValue()))));
         if (experience >= EXP_POOL * Math.pow(EXP_POOL_MOD, levelProperty.intValue())) {
@@ -89,6 +89,10 @@ public class PlayerData {
             PlayData.PLAYER_POINTS.increment();
             PlayData.PLAYER_LEVEL.setValue(levelProperty.intValue());
         }
+    }
+
+    public void addExperience() {
+        addExperience(1);
     }
 
     public void addShield() {

@@ -17,14 +17,14 @@ import javafx.scene.image.Image;
 public class Acid extends Mob {
 
     public static final double WIDTH = 10;
-    public static final double HEIGHT = 23;
+    public static final double HEIGHT = 10;
     public static final double SPEED_X_DEFAULT = 0;
     public static final double SPEED_Y_DEFAULT = 10;
-    public static final Image IMAGE = ImageLoader.DEFAULT.getImage("entity/acid");
+    public static final Image IMAGE = ImageLoader.INTERNAL.getImage("entity/acid");
     public static final int IMAGE_ROWS = 1;
     public static final int IMAGE_COLS = 4;
     public static final double SPRITE_X_OFFSET = -1;
-    public static final double SPRITE_Y_OFFSET = 0;
+    public static final double SPRITE_Y_OFFSET = -14;
     public static final int ANIMATION_DELTA = 10;
     public static final Step ANIMATION_STEPS[] = { new Step(0, 0), new Step(0, 1), new Step(0, 2),
             new Step(0, 3), new Step(0, 0) };
@@ -59,6 +59,8 @@ public class Acid extends Mob {
         if (this.level.isCollidingPlayerAABB(this)) {
             this.level.getPlayerProperties().damage();
 
+            this.y -= this.height;
+
             if (this.level.getPlayerProperties().getHealth() > 0) {
                 spawnParticles(PARTICLE_COUNT, -1);
             }
@@ -74,9 +76,9 @@ public class Acid extends Mob {
             for (int i = 0; i < amount; i++) {
                 double particleSize = Commons.RANDOM.nextInt(5) + 1;
                 double particleXSpeed = Commons.RANDOM.nextInt(5) - 2.5;
-                this.level
-                        .add(new AcidParticle(this.x, this.y + HEIGHT - particleSize, particleSize,
-                                              particleSize, particleXSpeed, ySpeed, this.level));
+                this.level.add(new AcidParticle(this.x, this.y + this.height - particleSize,
+                                                particleSize, particleSize, particleXSpeed, ySpeed,
+                                                this.level));
             }
         });
     }

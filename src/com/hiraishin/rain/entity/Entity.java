@@ -9,8 +9,10 @@ import java.util.Objects;
 import com.hiraishin.rain.graphics.Drawable;
 import com.hiraishin.rain.graphics.Sprite;
 import com.hiraishin.rain.level.Level;
+import com.hiraishin.rain.util.Commons;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public abstract class Entity implements Drawable {
 
@@ -50,6 +52,11 @@ public abstract class Entity implements Drawable {
     public void draw(GraphicsContext gc) {
         if (Objects.nonNull(this.sprite)) {
             this.sprite.draw(gc, this.x + this.spriteXOffset, this.y + this.spriteYOffset);
+        }
+
+        if (Commons.SHOW_BOUNDING_BOXES) {
+            gc.setStroke(Color.WHITE);
+            gc.strokeRect(this.x, this.y, this.width, this.height);
         }
     }
 

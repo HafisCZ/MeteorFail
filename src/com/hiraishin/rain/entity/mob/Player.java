@@ -6,7 +6,6 @@ package com.hiraishin.rain.entity.mob;
 
 import java.util.Objects;
 
-import com.hiraishin.rain.entity.Entity;
 import com.hiraishin.rain.graphics.animation.AnimatedSprite;
 import com.hiraishin.rain.graphics.animation.Step;
 import com.hiraishin.rain.input.Keyboard;
@@ -19,7 +18,7 @@ import com.hiraishin.rain.util.ImageLoader;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
-public class Player extends Entity {
+public class Player extends Mob {
 
     public static final double WIDTH = 47;
     public static final double HEIGHT = 65;
@@ -28,7 +27,7 @@ public class Player extends Entity {
     public static final double SPEED_X_INCREMENT = 0.5;
     public static final double SPEED_X_INCREMENT2 = 0.6;
     public static final double SPEED_Y_INCREMENT = 0.5;
-    public static final Image IMAGE = ImageLoader.DEFAULT.getImage("entity/player");
+    public static final Image IMAGE = ImageLoader.INTERNAL.getImage("entity/player");
     public static final int IMAGE_ROWS = 2;
     public static final int IMAGE_COLS = 4;
     public static final double SPRITE_X_OFFSET = -4;
@@ -90,7 +89,7 @@ public class Player extends Entity {
             this.dy += SPEED_Y_INCREMENT;
         }
 
-        if (this.x < Commons.ZERO) {
+        if (this.x < 0) {
             this.x = 0;
             this.dx = 0;
         } else if (this.x + this.width > Commons.SCENE_WIDTH) {
@@ -98,7 +97,7 @@ public class Player extends Entity {
             this.dx = 0;
         }
 
-        if (this.y < Commons.ZERO) {
+        if (this.y < 0) {
             this.y = 0;
             this.dy = 0;
         } else if (this.y + this.height > Commons.SCENE_GROUND) {

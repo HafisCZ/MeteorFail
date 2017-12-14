@@ -98,6 +98,7 @@ public class Application extends javafx.application.Application {
         stage.setTitle("Rain");
         stage.setResizable(false);
         stage.show();
+
         stage.fireEvent(new StateEvent(StateEvent.MENU));
     }
 

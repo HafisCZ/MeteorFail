@@ -19,6 +19,8 @@ public class Sprite {
     private int selCol = 0;
     private int strRow = 1;
     private int strCol = 1;
+    private double scaleX = 1;
+    private double scaleY = 1;
     private boolean flipX = false;
     private boolean flipY = false;
 
@@ -38,13 +40,23 @@ public class Sprite {
 
     public void draw(GraphicsContext gc, double x, double y) {
         if (this.strRow > 0 && this.strCol > 0) {
-            gc.drawImage(this.image, this.selCol * this.width, this.selRow *
-                    this.height, this.strCol * this.width, this.strRow * this.height, x +
-                            (this.flipX ? this.width * this.strCol : 0), y +
-                                    (this.flipY ? this.height * this.strRow : 0), (this.flipX ? -1 :
-                                            1) * this.width * this.strCol, (this.flipY ? -1 : 1) *
-                                                    this.height * this.strRow);
+            final double sx = this.selCol * this.width;
+            final double sy = this.selRow * this.height;
+            final double sw = this.strCol * this.width;
+            final double sh = this.strRow * this.height;
+
+            final double dx = x + (this.flipX ? this.width * this.strCol : 0);
+            final double dy = y + (this.flipY ? this.height * this.strRow : 0);
+            final double dw = this.strCol * this.scaleX * (this.flipX ? -1 : 1) * this.width;
+            final double dh = this.strRow * this.scaleY * (this.flipY ? -1 : 1) * this.height;
+
+            gc.drawImage(this.image, sx, sy, sw, sh, dx, dy, dw, dh);
         }
+    }
+
+    public void setScale(double sx, double sy) {
+        this.scaleX = sx;
+        this.scaleY = sy;
     }
 
     public void setFlipAxis(boolean flipX, boolean flipY) {

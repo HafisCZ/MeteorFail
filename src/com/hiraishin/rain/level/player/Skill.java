@@ -7,6 +7,7 @@ package com.hiraishin.rain.level.player;
 import com.hiraishin.rain.entity.particle.ShockParticle;
 import com.hiraishin.rain.level.Level;
 import com.hiraishin.rain.util.Commons;
+import com.hiraishin.rain.util.QuadConsumer;
 
 public enum Skill {
 
@@ -14,12 +15,6 @@ public enum Skill {
             60, 5),
     SHIELD_SPAWN((X, Y, L, PP) -> PP.addShield(), 30, 3),
     EXPERIENCE_BOOST((X, Y, L, PP) -> PP.setTemporaryExperienceBoost(2, 60 * 60), 60 * 60, 1);
-
-    private interface QuadConsumer<T, U, V, W> {
-
-        public void accept(T t, U u, V v, W w);
-
-    }
 
     private final QuadConsumer<Double, Double, Level, PlayerData> effect;
     private final int burnoutTicks;

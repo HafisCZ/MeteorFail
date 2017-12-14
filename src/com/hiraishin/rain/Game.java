@@ -41,6 +41,8 @@ public class Game {
                         } else {
                             canvas.fireEvent(new StateEvent(StateEvent.PAUSE));
                         }
+                    } else {
+                        canvas.fireEvent(new StateEvent(StateEvent.MENU));
                     }
                 }
 

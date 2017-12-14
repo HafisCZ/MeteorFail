@@ -85,7 +85,7 @@ public class StatPane extends BorderPane {
         addEntry(vbox1, vbox2, "Experience gained:", PlayData.STAT_COUNT_EXPERIENCE);
         addEntry(vbox1, vbox2, "Times jumped:", PlayData.STAT_COUNT_JUMP);
         addEntry(vbox1, vbox2, "Nodes collected:", PlayData.STAT_COUNT_NODES);
-        addEntry(vbox1, vbox2, "Shield collected:", PlayData.STAT_COUNT_SHIELD);
+        addEntry(vbox1, vbox2, "Shields collected:", PlayData.STAT_COUNT_SHIELD);
         addEntry(vbox1, vbox2, "Skills activated:", PlayData.STAT_COUNT_SKILLACTIVATION);
     }
 
