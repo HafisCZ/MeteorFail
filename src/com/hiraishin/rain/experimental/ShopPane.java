@@ -66,8 +66,8 @@ public class ShopPane extends BorderPane {
     /*
      * Static functions
      */
-    private static void addEntry(ShopPane p, VBox v1, VBox v2, VBox v3, String name, GameData pd) {
-        Text t1 = new Text(name);
+    private static void addEntry(ShopPane p, VBox v1, VBox v2, VBox v3, GameData pd) {
+        Text t1 = new Text(pd.getName() + ":");
         t1.setOpacity(0.5);
 
         if (pd.getValue() < pd.getMax()) {
@@ -168,12 +168,12 @@ public class ShopPane extends BorderPane {
         vbox3.getChildren().clear();
 
         text.setText("Upgrade points: " + GameData.PLAYER_POINTS.getValue());
-        addEntry(this, vbox1, vbox2, vbox3, "Health", GameData.PLAYER_HEALTH);
-        addEntry(this, vbox1, vbox2, vbox3, "Power rate", GameData.UPGRADE_POWERRATE);
-        addEntry(this, vbox1, vbox2, vbox3, "Movement upgrade", GameData.UPGRADE_MOVEMENT);
-        addEntry(this, vbox1, vbox2, vbox3, "Double XP skill", GameData.UPGRADE_DOUBLEXP);
-        addEntry(this, vbox1, vbox2, vbox3, "Shield spawn skill", GameData.UPGRADE_SHIELDSPAWN);
-        addEntry(this, vbox1, vbox2, vbox3, "Shockwave skill", GameData.UPGRADE_SHOCKWAVE);
+        addEntry(this, vbox1, vbox2, vbox3, GameData.PLAYER_HEALTH);
+        addEntry(this, vbox1, vbox2, vbox3, GameData.UPGRADE_POWERRATE);
+        addEntry(this, vbox1, vbox2, vbox3, GameData.UPGRADE_MOVEMENT);
+        addEntry(this, vbox1, vbox2, vbox3, GameData.UPGRADE_DOUBLEXP);
+        addEntry(this, vbox1, vbox2, vbox3, GameData.UPGRADE_SHIELDSPAWN);
+        addEntry(this, vbox1, vbox2, vbox3, GameData.UPGRADE_SHOCKWAVE);
 
         if (vbox4.getChildren().size() > 1) {
             vbox4.getChildren().subList(1, vbox4.getChildren().size()).clear();

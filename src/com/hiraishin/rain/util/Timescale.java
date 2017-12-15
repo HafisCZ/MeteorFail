@@ -1,4 +1,8 @@
-package com.hiraishin.rain.level;
+/*
+ * Copyright (c) 2017 - 2018 Hiraishin Software. All Rights Reserved.
+ */
+
+package com.hiraishin.rain.util;
 
 public class Timescale {
 

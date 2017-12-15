@@ -6,7 +6,6 @@ package com.hiraishin.rain.entity.spawner;
 
 import com.hiraishin.rain.entity.particle.RainParticle;
 import com.hiraishin.rain.level.Level;
-import com.hiraishin.rain.util.Commons;
 
 public final class RainSpawner extends Spawner {
 
@@ -24,13 +23,10 @@ public final class RainSpawner extends Spawner {
 
     @Override
     public void spawn() {
-        this.level
-                .add(new RainParticle(getRandomX(), getRandomY(), WIDTH,
-                                      HEIGHT_MIN +
-                                              Commons.RANDOM.nextInt(HEIGHT_MAX - HEIGHT_MIN + 1),
-                                      SPEED_X,
-                                      SPEED_Y_MIN +
-                                              Commons.RANDOM.nextInt(SPEED_Y_MAX - SPEED_Y_MIN + 1),
-                                      this.level));
+        this.level.add(new RainParticle(getRandomX(), getRandomY(), WIDTH,
+                                        HEIGHT_MIN + RANDOM.nextInt(HEIGHT_MAX - HEIGHT_MIN + 1),
+                                        SPEED_X,
+                                        SPEED_Y_MIN + RANDOM.nextInt(SPEED_Y_MAX - SPEED_Y_MIN + 1),
+                                        this.level));
     }
 }

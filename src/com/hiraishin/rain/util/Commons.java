@@ -1,17 +1,11 @@
 package com.hiraishin.rain.util;
 
-import java.util.Random;
-
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 
 public class Commons {
-
-    public static final Random RANDOM = new Random();
-
-    public static boolean DEBUG = false;
 
     public static final double SCENE_WIDTH = 1000;
     public static final double SCENE_HEIGHT = 700;

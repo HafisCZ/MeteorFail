@@ -24,6 +24,8 @@ import javafx.stage.Stage;
 
 public class Application extends javafx.application.Application {
 
+    public static boolean DEBUG_MODE = false;
+
     private Scene scene;
     private Group root;
     private Group group;
@@ -39,6 +41,12 @@ public class Application extends javafx.application.Application {
     private Pane panePause;
 
     public static void main(String... args) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-debug")) {
+                DEBUG_MODE = true;
+            }
+        }
+
         LauncherImpl.launchApplication(Application.class, args);
     }
 
@@ -114,7 +122,7 @@ public class Application extends javafx.application.Application {
             event.consume();
         });
 
-        stage.setTitle("Rain");
+        stage.setTitle("Rain - Hiraishin Software (c) 2017");
         stage.setResizable(false);
         stage.show();
 

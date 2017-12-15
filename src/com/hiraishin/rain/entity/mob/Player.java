@@ -108,7 +108,7 @@ public class Player extends Mob {
         }
 
         if (this.dx != 0) {
-            this.sprite.setFlipAxis(this.dx > 0 ? false : true, false);
+            this.sprite.setScale((this.dx > 0 ? 1 : -1), 1);
             ((AnimatedSprite) this.sprite).play();
         } else {
             ((AnimatedSprite) this.sprite).stop();

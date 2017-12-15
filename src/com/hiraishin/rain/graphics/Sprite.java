@@ -9,80 +9,75 @@ import javafx.scene.image.Image;
 
 public class Sprite {
 
-    private final int rows;
-    private final int cols;
-    private final double width;
-    private final double height;
+    private final int rowCount;
+    private final int colCount;
+    private final double tileWidth;
+    private final double tileHeight;
     private final Image image;
 
-    private int selRow = 0;
-    private int selCol = 0;
-    private int strRow = 1;
-    private int strCol = 1;
-    private double scaleX = 1;
-    private double scaleY = 1;
-    private boolean flipX = false;
-    private boolean flipY = false;
+    private int selectedRow = 0;
+    private int selectedCol = 0;
 
-    public Sprite(Image image, int rows, int columns) {
-        if (rows < 1 || columns < 1) {
-            throw new IllegalArgumentException("Sprite has to have at least 1 row and 1 column.\nYou specified " +
-                    rows + " rows and " + columns + " columns!");
+    private int rowSize = 1;
+    private int colSize = 1;
+
+    private double xScale = 1;
+    private double yScale = 1;
+
+    public Sprite(Image image, int rowCount, int colCount) {
+        if (rowCount < 1 || colCount < 1) {
+            throw new IllegalArgumentException("Sprite has to have at least 1 row and 1 column!");
         }
 
         this.image = image;
-        this.rows = rows;
-        this.cols = columns;
+        this.rowCount = rowCount;
+        this.colCount = colCount;
 
-        this.width = image.getWidth() / columns;
-        this.height = image.getHeight() / rows;
+        this.tileWidth = image.getWidth() / colCount;
+        this.tileHeight = image.getHeight() / rowCount;
+
     }
 
     public void draw(GraphicsContext gc, double x, double y) {
-        if (this.strRow > 0 && this.strCol > 0) {
-            final double sx = this.selCol * this.width;
-            final double sy = this.selRow * this.height;
-            final double sw = this.strCol * this.width;
-            final double sh = this.strRow * this.height;
+        if (this.rowSize > 0 && this.colSize > 0) {
+            final double sx = this.selectedCol * this.tileWidth;
+            final double sy = this.selectedRow * this.tileHeight;
+            final double sw = this.colSize * this.tileWidth;
+            final double sh = this.rowSize * this.tileHeight;
 
-            final double dx = x + (this.flipX ? this.width * this.strCol : 0);
-            final double dy = y + (this.flipY ? this.height * this.strRow : 0);
-            final double dw = this.strCol * this.scaleX * (this.flipX ? -1 : 1) * this.width;
-            final double dh = this.strRow * this.scaleY * (this.flipY ? -1 : 1) * this.height;
+            final double dx = x + (this.xScale < 0 ? sw : 0);
+            final double dy = y + (this.yScale < 0 ? sh : 0);
+            final double dw = sw * this.xScale;
+            final double dh = sh * this.yScale;
 
             gc.drawImage(this.image, sx, sy, sw, sh, dx, dy, dw, dh);
         }
     }
 
-    public void setScale(double sx, double sy) {
-        this.scaleX = sx;
-        this.scaleY = sy;
-    }
-
-    public void setFlipAxis(boolean flipX, boolean flipY) {
-        this.flipX = flipX;
-        this.flipY = flipY;
-    }
-
-    public double getHeight() {
-        return this.height;
-    }
-
-    public double getWidth() {
-        return this.width;
-    }
-
-    public void select(int row, int col) {
-        if (row < this.rows && col < this.cols) {
-            this.selRow = row;
-            this.selCol = col;
+    public void setScale(double xScale, double yScale) {
+        if (xScale != 0 && yScale != 0) {
+            this.xScale = xScale;
+            this.yScale = yScale;
         }
     }
 
-    public void stretch(int rows, int cols) {
-        if (rows >= 0 && rows <= this.rows && cols >= 0 && cols <= this.cols) {
-            this.strRow = rows;
-            this.strCol = cols;
+    public double getTileWidth() {
+        return this.tileWidth;
+    }
+
+    public double getTileHeight() {
+        return this.tileHeight;
+    }
+
+    public void selectTile(int row, int col) {
+        if (row >= 0 && row < this.rowCount && col >= 0 && col < this.colCount) {
+            this.selectedRow = row;
+            this.selectedCol = col;
         }
+    }
+
+    public void setTileSpan(int rows, int cols) {
+        this.rowSize = rows;
+        this.colSize = cols;
     }
 }

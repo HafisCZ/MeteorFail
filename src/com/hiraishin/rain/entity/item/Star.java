@@ -6,7 +6,6 @@ package com.hiraishin.rain.entity.item;
 
 import com.hiraishin.rain.graphics.Sprite;
 import com.hiraishin.rain.level.Level;
-import com.hiraishin.rain.util.Commons;
 import com.hiraishin.rain.util.ImageLoader;
 
 import javafx.scene.image.Image;
@@ -28,7 +27,7 @@ public class Star extends Item {
 
     @Override
     public void applyEffect() {
-        int selector = Commons.RANDOM.nextInt(3);
+        int selector = RANDOM.nextInt(3);
 
         switch (selector) {
             case 0:

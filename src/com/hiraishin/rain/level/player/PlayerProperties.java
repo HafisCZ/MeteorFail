@@ -44,7 +44,7 @@ public class PlayerProperties {
                 null;
 
         energyRate = (Objects.isNull(selectedSkill) ? 0 :
-                selectedSkill.getPowerGain() * GameData.UPGRADE_POWERRATE.getValue());
+                selectedSkill.getRateMultiplier() * GameData.UPGRADE_POWERRATE.getValue());
     }
 
     public void activateSkill(Entity source, Level level) {
@@ -54,7 +54,7 @@ public class PlayerProperties {
                     energyProperty.set(100);
 
                     skillActive = true;
-                    skillBurnout = selectedSkill.getBurnoutTime();
+                    skillBurnout = selectedSkill.getDuration();
                     selectedSkill.applyEffect(source.getX() + source.getWidth() / 2,
                                               source.getY() + source.getHeight() / 2, level, this);
 
@@ -165,7 +165,7 @@ public class PlayerProperties {
         }
 
         if (skillActive) {
-            energyProperty.set(100 * skillBurnout / selectedSkill.getBurnoutTime());
+            energyProperty.set(100 * skillBurnout / selectedSkill.getDuration());
             if (--skillBurnout < 0) {
                 energyProperty.set(0);
                 skillActive = false;

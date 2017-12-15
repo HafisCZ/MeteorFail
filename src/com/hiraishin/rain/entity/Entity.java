@@ -5,16 +5,19 @@
 package com.hiraishin.rain.entity;
 
 import java.util.Objects;
+import java.util.Random;
 
+import com.hiraishin.rain.Application;
 import com.hiraishin.rain.graphics.Drawable;
 import com.hiraishin.rain.graphics.Sprite;
 import com.hiraishin.rain.level.Level;
-import com.hiraishin.rain.util.Commons;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public abstract class Entity implements Drawable {
+
+    protected static final Random RANDOM = new Random();
 
     protected final Level level;
     protected final Sprite sprite;
@@ -54,7 +57,7 @@ public abstract class Entity implements Drawable {
             this.sprite.draw(gc, this.x + this.spriteXOffset, this.y + this.spriteYOffset);
         }
 
-        if (Commons.DEBUG) {
+        if (Application.DEBUG_MODE) {
             gc.setStroke(Color.WHITE);
             gc.strokeRect(this.x, this.y, this.width, this.height);
 

@@ -8,7 +8,6 @@ import java.util.Objects;
 
 import com.hiraishin.rain.entity.Entity;
 import com.hiraishin.rain.level.Level;
-import com.hiraishin.rain.util.Commons;
 
 public abstract class Spawner extends Entity {
 
@@ -35,8 +34,7 @@ public abstract class Spawner extends Entity {
     public final void tick() {
         if (this.frameCount++ >= this.frameLimit) {
             this.frameCount = 0;
-            this.frameLimit = this.rate +
-                    (this.variation > 1 ? Commons.RANDOM.nextInt(this.variation) : 0);
+            this.frameLimit = this.rate + (this.variation > 1 ? RANDOM.nextInt(this.variation) : 0);
 
             if (Objects.nonNull(this.level)) {
                 for (int i = 0; i < this.count; i++) {
@@ -47,11 +45,11 @@ public abstract class Spawner extends Entity {
     }
 
     protected double getRandomX() {
-        return this.x + (this.width == 0 ? 0 : Commons.RANDOM.nextInt((int) this.width));
+        return this.x + (this.width == 0 ? 0 : RANDOM.nextInt((int) this.width));
     }
 
     protected double getRandomY() {
-        return this.y + (this.height == 0 ? 0 : Commons.RANDOM.nextInt((int) this.height));
+        return this.y + (this.height == 0 ? 0 : RANDOM.nextInt((int) this.height));
     }
 
     public abstract void spawn();

@@ -20,7 +20,7 @@ public class AcidParticle extends Particle {
     private final Color color;
 
     private int despawnTicks = TICKS_DESPAWN_MIN +
-            Commons.RANDOM.nextInt(TICKS_DESPAWN_MAX - TICKS_DESPAWN_MIN + 1);
+            RANDOM.nextInt(TICKS_DESPAWN_MAX - TICKS_DESPAWN_MIN + 1);
     private boolean despawnActive = false;
 
     public AcidParticle(double x, double y, double width, double height, double dx, double dy,
@@ -30,7 +30,7 @@ public class AcidParticle extends Particle {
         this.dx = dx;
         this.dy = dy;
 
-        this.color = Commons.RANDOM.nextBoolean() ? Color.GREENYELLOW : Color.LAWNGREEN;
+        this.color = RANDOM.nextBoolean() ? Color.GREENYELLOW : Color.LAWNGREEN;
     }
 
     @Override

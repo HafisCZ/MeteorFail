@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.hiraishin.rain.Application;
 import com.hiraishin.rain.entity.Entity;
 import com.hiraishin.rain.entity.item.Item;
 import com.hiraishin.rain.entity.mob.Mob;
@@ -25,6 +26,7 @@ import com.hiraishin.rain.input.Keyboard;
 import com.hiraishin.rain.level.player.PlayerProperties;
 import com.hiraishin.rain.util.Commons;
 import com.hiraishin.rain.util.ImageLoader;
+import com.hiraishin.rain.util.Timescale;
 
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
@@ -104,6 +106,11 @@ public class Level {
             }
         }
 
+        public void update(GraphicsContext gc) {
+            this.level.tick();
+            this.level.draw(gc);
+        }
+
     }
 
     public Level(Keyboard keyboard) {
@@ -122,7 +129,7 @@ public class Level {
         }
     }
 
-    public void draw(GraphicsContext gc) {
+    private void draw(GraphicsContext gc) {
         gc.drawImage(this.background, 0, 0, Commons.SCENE_WIDTH, Commons.SCENE_HEIGHT);
 
         for (Entity p : this.particles) {
@@ -137,7 +144,7 @@ public class Level {
             this.overlay.draw(gc);
         }
 
-        if (Commons.DEBUG) {
+        if (Application.DEBUG_MODE) {
             gc.setFill(Color.WHITE);
             gc.fillText("Spawners\t\t: " + this.spawners.size(), 20, 150);
             gc.fillText("Mobs\t\t: " + this.mobs.size(), 20, 165);
@@ -180,7 +187,7 @@ public class Level {
         return Objects.nonNull(getPlayer()) ? getPlayer().isCollidingAABB(entity) : false;
     }
 
-    public void tick() {
+    private void tick() {
         if (!this.paused) {
             for (Spawner s : this.spawners) {
                 s.tick();
@@ -200,6 +207,7 @@ public class Level {
 
             this.mobs.removeIf(Entity::isDead);
             this.particles.removeIf(Entity::isDead);
+            this.spawners.removeIf(Entity::isDead);
         }
     }
 

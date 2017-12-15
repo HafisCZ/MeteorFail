@@ -45,32 +45,28 @@ public class AnimatedSprite extends Sprite {
         this.selectedFrame = 0;
         this.currentTime = 0;
 
-        select(this.animatedFrames[this.selectedFrame].row,
-               this.animatedFrames[this.selectedFrame].col);
+        selectTile(this.animatedFrames[this.selectedFrame].row,
+                   this.animatedFrames[this.selectedFrame].col);
     }
 
     public void stop() {
-        if (!this.isPlaying) {
-            return;
+        if (this.isPlaying) {
+            this.isPlaying = false;
+            selectTile(this.beginFrame.row, this.beginFrame.col);
         }
-
-        this.isPlaying = false;
-        select(this.beginFrame.row, this.beginFrame.col);
     }
 
     public void tick() {
-        if (!this.isPlaying) {
-            return;
-        }
+        if (this.isPlaying) {
+            if (++this.currentTime >= this.frameTime) {
+                if (++this.selectedFrame >= this.animatedFrames.length) {
+                    this.selectedFrame = 0;
+                }
 
-        if (++this.currentTime >= this.frameTime) {
-            if (++this.selectedFrame >= this.animatedFrames.length) {
-                this.selectedFrame = 0;
+                this.currentTime = 0;
+                selectTile(this.animatedFrames[this.selectedFrame].row,
+                           this.animatedFrames[this.selectedFrame].col);
             }
-
-            this.currentTime = 0;
-            select(this.animatedFrames[this.selectedFrame].row,
-                   this.animatedFrames[this.selectedFrame].col);
         }
     }
 

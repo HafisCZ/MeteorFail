@@ -13,27 +13,29 @@ import java.io.ObjectOutputStream;
 
 public enum GameData {
 
-    STAT_COUNT_EXPERIENCE(0, Integer.MAX_VALUE),
-    STAT_COUNT_DAMAGE(0, Integer.MAX_VALUE),
-    STAT_COUNT_SHIELD(0, Integer.MAX_VALUE),
-    STAT_COUNT_NODES(0, Integer.MAX_VALUE),
-    STAT_COUNT_JUMP(0, Integer.MAX_VALUE),
-    STAT_COUNT_SKILLACTIVATION(0, Integer.MAX_VALUE),
+    STAT_COUNT_EXPERIENCE(0, Integer.MAX_VALUE, "Experience gained"),
+    STAT_COUNT_DAMAGE(0, Integer.MAX_VALUE, "Damage taken"),
+    STAT_COUNT_SHIELD(0, Integer.MAX_VALUE, "Shields collected"),
+    STAT_COUNT_NODES(0, Integer.MAX_VALUE, "Nodes collected"),
+    STAT_COUNT_JUMP(0, Integer.MAX_VALUE, "Times jumped"),
+    STAT_COUNT_SKILLACTIVATION(0, Integer.MAX_VALUE, "Skills activated"),
 
-    PLAYER_LEVEL(1, Integer.MAX_VALUE),
-    PLAYER_POINTS(0, Integer.MAX_VALUE),
-    PLAYER_SELECTEDSKILL(0, 3),
-    PLAYER_HEALTH(3, 10),
+    PLAYER_LEVEL(1, Integer.MAX_VALUE, "Levels"),
+    PLAYER_POINTS(0, Integer.MAX_VALUE, "Upgrade points"),
+    PLAYER_SELECTEDSKILL(0, 3, "Selected Skill"),
+    PLAYER_HEALTH(3, 10, "Health"),
 
-    UPGRADE_MOVEMENT(0, 1),
-    UPGRADE_POWERRATE(1, 2),
-    UPGRADE_SHOCKWAVE(0, 1),
-    UPGRADE_DOUBLEXP(0, 1),
-    UPGRADE_SHIELDSPAWN(0, 1);
+    UPGRADE_MOVEMENT(0, 1, "Movement upgrade"),
+    UPGRADE_POWERRATE(1, 2, "Power rate"),
+    UPGRADE_SHOCKWAVE(0, 1, "Shockwave Skill"),
+    UPGRADE_DOUBLEXP(0, 1, "Double XP Skill"),
+    UPGRADE_SHIELDSPAWN(0, 1, "Shield spawn Skill");
 
     private static final String SER_FILE = "playdata.ser";
 
-    private final int min, max;
+    private final int min;
+    private final int max;
+    private final String name;
 
     private int value;
 
@@ -103,10 +105,15 @@ public enum GameData {
         foStream.close();
     }
 
-    private GameData(int defaultValue, int max) {
+    private GameData(int defaultValue, int max, String name) {
         this.value = defaultValue;
         this.max = max;
         this.min = defaultValue;
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public int getMax() {

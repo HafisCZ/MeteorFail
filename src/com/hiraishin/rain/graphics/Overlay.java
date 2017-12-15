@@ -52,21 +52,21 @@ public class Overlay implements Drawable {
 
         level = properties.getLevelProperty().intValue();
 
-        HLT_BAR.stretch(1, GameData.PLAYER_HEALTH.getValue());
-        ARM_BAR.stretch(1, 0);
-        EXP_BAR.stretch(1, 0);
-        PWR_BAR.stretch(1, 0);
+        HLT_BAR.setTileSpan(1, GameData.PLAYER_HEALTH.getValue());
+        ARM_BAR.setTileSpan(1, 0);
+        EXP_BAR.setTileSpan(1, 0);
+        PWR_BAR.setTileSpan(1, 0);
 
         if (Objects.nonNull(skill)) {
             switch (skill) {
                 case SHOCKWAVE:
-                    ABL_ICO.select(0, 0);
+                    ABL_ICO.selectTile(0, 0);
                     break;
                 case SHIELD_SPAWN:
-                    ABL_ICO.select(0, 1);
+                    ABL_ICO.selectTile(0, 1);
                     break;
                 case EXPERIENCE_BOOST:
-                    ABL_ICO.select(0, 2);
+                    ABL_ICO.selectTile(0, 2);
                     break;
             }
         }
@@ -76,24 +76,24 @@ public class Overlay implements Drawable {
         });
 
         properties.getHealthProperty().addListener((Observable, OldValue, NewValue) -> {
-            HLT_BAR.stretch(1, NewValue.intValue());
+            HLT_BAR.setTileSpan(1, NewValue.intValue());
         });
 
         properties.getArmorProperty().addListener((Observable, OldValue, NewValue) -> {
-            ARM_BAR.stretch(1, NewValue.intValue());
+            ARM_BAR.setTileSpan(1, NewValue.intValue());
         });
 
         properties.getExperienceProperty().addListener((Observable, OldValue, NewValue) -> {
-            EXP_BAR.stretch(1, NewValue.intValue());
+            EXP_BAR.setTileSpan(1, NewValue.intValue());
         });
 
         properties.getEnergyProperty().addListener((Observable, OldValue, NewValue) -> {
-            PWR_BAR.stretch(1, NewValue.intValue());
+            PWR_BAR.setTileSpan(1, NewValue.intValue());
 
             if (properties.isSkillActive() || NewValue.intValue() >= 100) {
-                PWR_BAR.select(1, 0);
+                PWR_BAR.selectTile(1, 0);
             } else {
-                PWR_BAR.select(0, 0);
+                PWR_BAR.selectTile(0, 0);
             }
         });
     }

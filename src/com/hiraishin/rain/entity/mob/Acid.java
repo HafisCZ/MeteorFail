@@ -74,8 +74,8 @@ public class Acid extends Mob {
     protected void spawnParticles(int amount, double ySpeed) {
         Platform.runLater(() -> {
             for (int i = 0; i < amount; i++) {
-                double particleSize = Commons.RANDOM.nextInt(5) + 1;
-                double particleXSpeed = Commons.RANDOM.nextInt(5) - 2.5;
+                double particleSize = RANDOM.nextInt(5) + 1;
+                double particleXSpeed = RANDOM.nextInt(5) - 2.5;
                 this.level.add(new AcidParticle(this.x, this.y + this.height - particleSize,
                                                 particleSize, particleSize, particleXSpeed, ySpeed,
                                                 this.level));

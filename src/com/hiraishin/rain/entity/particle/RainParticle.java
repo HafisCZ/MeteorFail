@@ -26,7 +26,7 @@ public class RainParticle extends Particle {
         this.dx = dx;
         this.dy = dy;
 
-        this.color = Commons.RANDOM.nextBoolean() ? COLOR_1 : COLOR_2;
+        this.color = RANDOM.nextBoolean() ? COLOR_1 : COLOR_2;
     }
 
     @Override

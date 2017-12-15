@@ -5,30 +5,31 @@ import com.hiraishin.rain.input.Keyboard;
 import com.hiraishin.rain.level.Level;
 import com.hiraishin.rain.level.Level.LevelController;
 import com.hiraishin.rain.util.Commons;
+import com.hiraishin.rain.util.FrameCounter;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 
 public class Game {
 
     private final Canvas canvas = new Canvas(Commons.SCENE_WIDTH, Commons.SCENE_HEIGHT);
     private final GraphicsContext gc = canvas.getGraphicsContext2D();
 
-    private final Level level;
+    private final FrameCounter frameCounter = new FrameCounter();
+
     private final LevelController levelController;
 
     public Game(Keyboard keyboard) {
-        this.level = new Level(keyboard);
-        this.levelController = level.getLevelController();
+        this.levelController = new Level(keyboard).getLevelController();
 
         new AnimationTimer() {
 
             @Override
             public void handle(long now) {
-                level.tick();
-                level.draw(gc);
+                levelController.update(gc);
 
                 if (levelController.isClosed()) {
                     canvas.fireEvent(new StateEvent(StateEvent.MENU));
@@ -46,21 +47,23 @@ public class Game {
                     }
                 }
 
-                if (keyboard.isPressed(KeyCode.SEMICOLON)) {
-                    Commons.DEBUG = !Commons.DEBUG;
-                }
-
                 keyboard.update();
+
+                frameCounter.sample(now);
+                if (Application.DEBUG_MODE) {
+                    gc.setFill(Color.WHITE);
+                    gc.fillText("" + frameCounter.getAverageFPS(), 20, 680);
+                }
             }
         }.start();
     }
 
-    public void close() {
-        this.levelController.endGame();
-    }
-
     public Canvas getCanvas() {
         return canvas;
+    }
+
+    public void close() {
+        this.levelController.endGame();
     }
 
     public void pause() {
