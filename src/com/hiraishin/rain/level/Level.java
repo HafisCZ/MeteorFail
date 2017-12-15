@@ -22,24 +22,25 @@ import com.hiraishin.rain.entity.spawner.Spawner;
 import com.hiraishin.rain.entity.spawner.StarSpawner;
 import com.hiraishin.rain.graphics.Overlay;
 import com.hiraishin.rain.input.Keyboard;
-import com.hiraishin.rain.level.player.PlayerData;
+import com.hiraishin.rain.level.player.PlayerProperties;
 import com.hiraishin.rain.util.Commons;
 import com.hiraishin.rain.util.ImageLoader;
 
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 public class Level {
 
     private final List<Entity> mobs = new ArrayList<>();
-    private final List<Spawner> spawners = new ArrayList<>();
     private final List<Entity> particles = new ArrayList<>();
-    private final Image background = ImageLoader.INTERNAL.getImage("background/background");
+    private final List<Spawner> spawners = new ArrayList<>();
+    private final Image background = ImageLoader.getLoader().getImage("background/background");
     private final Keyboard keyboard;
     private final LevelController levelController = new LevelController(this);
 
-    private PlayerData properties;
+    private PlayerProperties properties;
     private Overlay overlay;
     private boolean paused = false;
     private boolean played = false;
@@ -135,6 +136,28 @@ public class Level {
         if (Objects.nonNull(this.overlay)) {
             this.overlay.draw(gc);
         }
+
+        if (Commons.DEBUG) {
+            gc.setFill(Color.WHITE);
+            gc.fillText("Spawners\t\t: " + this.spawners.size(), 20, 150);
+            gc.fillText("Mobs\t\t: " + this.mobs.size(), 20, 165);
+            gc.fillText("Particles\t\t: " + this.particles.size(), 20, 180);
+
+            gc.fillText("isPlayed\t\t: " + this.played, 20, 210);
+            gc.fillText("isPaused\t\t: " + this.paused, 20, 225);
+
+            gc.fillText("isPlayer\t\t: " + Objects.nonNull(getPlayer()), 20, 255);
+            if (Objects.nonNull(this.properties)) {
+                gc.fillText("Health\t\t: " + this.properties.getHealth(), 20, 270);
+                gc.fillText("Shield\t\t: " + this.properties.getArmorProperty().intValue(), 20,
+                            285);
+                gc.fillText("Energy\t\t: " + this.properties.getEnergyProperty().intValue(), 20,
+                            300);
+                gc.fillText("Level\t\t: " + this.properties.getLevelProperty().intValue(), 20, 315);
+                gc.fillText("Experience\t: " + this.properties.getExperienceProperty().intValue(),
+                            20, 330);
+            }
+        }
     }
 
     public LevelController getLevelController() {
@@ -149,7 +172,7 @@ public class Level {
         return (this.mobs.size() > 0) ? (Player) this.mobs.get(0) : null;
     }
 
-    public PlayerData getPlayerProperties() {
+    public PlayerProperties getPlayerProperties() {
         return this.properties;
     }
 
@@ -184,7 +207,7 @@ public class Level {
         this.paused = false;
         this.played = true;
 
-        this.properties = new PlayerData();
+        this.properties = new PlayerProperties();
         this.overlay = new Overlay(0, 0, this.properties);
 
         this.mobs.add(new Player((Commons.SCENE_WIDTH - Player.WIDTH) / 2, Commons.SCENE_GROUND,
@@ -203,7 +226,7 @@ public class Level {
         this.properties.getHealthProperty().addListener((Observable, OldValue, NewValue) -> {
             if (NewValue.intValue() <= 0) {
                 Platform.runLater(() -> {
-                    PlayData.save();
+                    GameData.save();
                     stop();
                 });
             }

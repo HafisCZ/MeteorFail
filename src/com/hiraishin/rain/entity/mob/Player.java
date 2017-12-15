@@ -9,9 +9,9 @@ import java.util.Objects;
 import com.hiraishin.rain.graphics.animation.AnimatedSprite;
 import com.hiraishin.rain.graphics.animation.Step;
 import com.hiraishin.rain.input.Keyboard;
+import com.hiraishin.rain.level.GameData;
 import com.hiraishin.rain.level.Level;
-import com.hiraishin.rain.level.PlayData;
-import com.hiraishin.rain.level.player.PlayerData;
+import com.hiraishin.rain.level.player.PlayerProperties;
 import com.hiraishin.rain.util.Commons;
 import com.hiraishin.rain.util.ImageLoader;
 
@@ -27,7 +27,7 @@ public class Player extends Mob {
     public static final double SPEED_X_INCREMENT = 0.5;
     public static final double SPEED_X_INCREMENT2 = 0.6;
     public static final double SPEED_Y_INCREMENT = 0.5;
-    public static final Image IMAGE = ImageLoader.INTERNAL.getImage("entity/player");
+    public static final Image IMAGE = ImageLoader.getLoader().getImage("entity/player");
     public static final int IMAGE_ROWS = 2;
     public static final int IMAGE_COLS = 4;
     public static final double SPRITE_X_OFFSET = -4;
@@ -41,13 +41,13 @@ public class Player extends Mob {
 
     private boolean jump = true;
 
-    public Player(double x, double y, Level level, Keyboard keyboard, PlayerData properties) {
+    public Player(double x, double y, Level level, Keyboard keyboard, PlayerProperties properties) {
         super(x, y, WIDTH, HEIGHT,
                 new AnimatedSprite(IMAGE, IMAGE_ROWS, IMAGE_COLS, ANIMATION_DELTA, ANIMATION_STEPS),
                 SPRITE_X_OFFSET, SPRITE_Y_OFFSET, level);
 
         this.keyboard = Objects.requireNonNull(keyboard);
-        this.speed = (PlayData.UPGRADE_MOVEMENT.getValue() > 0) ? SPEED_X_INCREMENT2 :
+        this.speed = (GameData.UPGRADE_MOVEMENT.getValue() > 0) ? SPEED_X_INCREMENT2 :
                 SPEED_X_INCREMENT;
     }
 
@@ -74,7 +74,7 @@ public class Player extends Mob {
                 this.jump = true;
                 this.dy = SPEED_Y_LIMIT;
 
-                PlayData.STAT_COUNT_JUMP.increment();
+                GameData.STAT_COUNT_JUMP.increment();
             }
         }
 

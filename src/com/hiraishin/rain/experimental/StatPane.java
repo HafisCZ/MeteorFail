@@ -8,7 +8,7 @@
 package com.hiraishin.rain.experimental;
 
 import com.hiraishin.rain.event.StateEvent;
-import com.hiraishin.rain.level.PlayData;
+import com.hiraishin.rain.level.GameData;
 import com.hiraishin.rain.util.Commons;
 
 import javafx.geometry.Insets;
@@ -28,7 +28,7 @@ public class StatPane extends BorderPane {
     /*
      * Static functions
      */
-    private static void addEntry(VBox v1, VBox v2, String name, PlayData pd) {
+    private static void addEntry(VBox v1, VBox v2, String name, GameData pd) {
         Text t1 = new Text(name);
         t1.setFill(Color.LIGHTSLATEGRAY);
         t1.setFont(Font.font("", FontWeight.BOLD, 20));
@@ -81,12 +81,12 @@ public class StatPane extends BorderPane {
         vbox1.getChildren().clear();
         vbox2.getChildren().clear();
 
-        addEntry(vbox1, vbox2, "Damage taken:", PlayData.STAT_COUNT_DAMAGE);
-        addEntry(vbox1, vbox2, "Experience gained:", PlayData.STAT_COUNT_EXPERIENCE);
-        addEntry(vbox1, vbox2, "Times jumped:", PlayData.STAT_COUNT_JUMP);
-        addEntry(vbox1, vbox2, "Nodes collected:", PlayData.STAT_COUNT_NODES);
-        addEntry(vbox1, vbox2, "Shields collected:", PlayData.STAT_COUNT_SHIELD);
-        addEntry(vbox1, vbox2, "Skills activated:", PlayData.STAT_COUNT_SKILLACTIVATION);
+        addEntry(vbox1, vbox2, "Damage taken:", GameData.STAT_COUNT_DAMAGE);
+        addEntry(vbox1, vbox2, "Experience gained:", GameData.STAT_COUNT_EXPERIENCE);
+        addEntry(vbox1, vbox2, "Times jumped:", GameData.STAT_COUNT_JUMP);
+        addEntry(vbox1, vbox2, "Nodes collected:", GameData.STAT_COUNT_NODES);
+        addEntry(vbox1, vbox2, "Shields collected:", GameData.STAT_COUNT_SHIELD);
+        addEntry(vbox1, vbox2, "Skills activated:", GameData.STAT_COUNT_SKILLACTIVATION);
     }
 
 }

@@ -8,7 +8,7 @@
 package com.hiraishin.rain.experimental;
 
 import com.hiraishin.rain.event.StateEvent;
-import com.hiraishin.rain.level.PlayData;
+import com.hiraishin.rain.level.GameData;
 import com.hiraishin.rain.util.Commons;
 
 import javafx.geometry.Insets;
@@ -26,11 +26,11 @@ public class ShopPane extends BorderPane {
     private VBox vbox1, vbox2, vbox3, vbox4;
     private Text text = new Text();
 
-    private static void addEntry(ShopPane p, VBox v, String name, PlayData d, int id) {
+    private static void addEntry(ShopPane p, VBox v, String name, GameData d, int id) {
         Text t1 = new Text(name);
 
         if (d.getValue() == d.getMax()) {
-            if (PlayData.PLAYER_SELECTEDSKILL.getValue() == id) {
+            if (GameData.PLAYER_SELECTEDSKILL.getValue() == id) {
                 t1.setFill(Color.LAWNGREEN);
             } else {
                 t1.setFill(Color.AQUAMARINE);
@@ -42,10 +42,10 @@ public class ShopPane extends BorderPane {
         t1.setFont(Font.font("", FontWeight.BOLD, 20));
         t1.setOnMouseClicked(event -> {
             if (d.getValue() == d.getMax()) {
-                if (PlayData.PLAYER_SELECTEDSKILL.getValue() == id) {
-                    PlayData.PLAYER_SELECTEDSKILL.setValue(0);
+                if (GameData.PLAYER_SELECTEDSKILL.getValue() == id) {
+                    GameData.PLAYER_SELECTEDSKILL.setValue(0);
                 } else {
-                    PlayData.PLAYER_SELECTEDSKILL.setValue(id);
+                    GameData.PLAYER_SELECTEDSKILL.setValue(id);
                 }
 
                 p.refresh();
@@ -66,12 +66,12 @@ public class ShopPane extends BorderPane {
     /*
      * Static functions
      */
-    private static void addEntry(ShopPane p, VBox v1, VBox v2, VBox v3, String name, PlayData pd) {
+    private static void addEntry(ShopPane p, VBox v1, VBox v2, VBox v3, String name, GameData pd) {
         Text t1 = new Text(name);
         t1.setOpacity(0.5);
 
         if (pd.getValue() < pd.getMax()) {
-            if (PlayData.PLAYER_POINTS.getValue() > 0) {
+            if (GameData.PLAYER_POINTS.getValue() > 0) {
                 t1.setFill(Color.PALEGREEN);
             } else {
                 t1.setFill(Color.GRAY);
@@ -82,11 +82,11 @@ public class ShopPane extends BorderPane {
 
         t1.setFont(Font.font("", FontWeight.BOLD, 20));
         t1.setOnMouseClicked(event -> {
-            if (PlayData.PLAYER_POINTS.getValue() > 0) {
+            if (GameData.PLAYER_POINTS.getValue() > 0) {
                 if (pd.getValue() < pd.getMax()) {
                     pd.increment();
-                    PlayData.PLAYER_POINTS.incrementBy(-1);
-                    PlayData.save();
+                    GameData.PLAYER_POINTS.incrementBy(-1);
+                    GameData.save();
                     p.refresh();
                 }
             }
@@ -167,19 +167,19 @@ public class ShopPane extends BorderPane {
         vbox2.getChildren().clear();
         vbox3.getChildren().clear();
 
-        text.setText("Upgrade points: " + PlayData.PLAYER_POINTS.getValue());
-        addEntry(this, vbox1, vbox2, vbox3, "Health", PlayData.PLAYER_HEALTH);
-        addEntry(this, vbox1, vbox2, vbox3, "Power rate", PlayData.UPGRADE_POWERRATE);
-        addEntry(this, vbox1, vbox2, vbox3, "Movement upgrade", PlayData.UPGRADE_MOVEMENT);
-        addEntry(this, vbox1, vbox2, vbox3, "Double XP skill", PlayData.UPGRADE_DOUBLEXP);
-        addEntry(this, vbox1, vbox2, vbox3, "Shield spawn skill", PlayData.UPGRADE_SHIELDSPAWN);
-        addEntry(this, vbox1, vbox2, vbox3, "Shockwave skill", PlayData.UPGRADE_SHOCKWAVE);
+        text.setText("Upgrade points: " + GameData.PLAYER_POINTS.getValue());
+        addEntry(this, vbox1, vbox2, vbox3, "Health", GameData.PLAYER_HEALTH);
+        addEntry(this, vbox1, vbox2, vbox3, "Power rate", GameData.UPGRADE_POWERRATE);
+        addEntry(this, vbox1, vbox2, vbox3, "Movement upgrade", GameData.UPGRADE_MOVEMENT);
+        addEntry(this, vbox1, vbox2, vbox3, "Double XP skill", GameData.UPGRADE_DOUBLEXP);
+        addEntry(this, vbox1, vbox2, vbox3, "Shield spawn skill", GameData.UPGRADE_SHIELDSPAWN);
+        addEntry(this, vbox1, vbox2, vbox3, "Shockwave skill", GameData.UPGRADE_SHOCKWAVE);
 
         if (vbox4.getChildren().size() > 1) {
             vbox4.getChildren().subList(1, vbox4.getChildren().size()).clear();
         }
-        addEntry(this, vbox4, "Shockwave", PlayData.UPGRADE_SHOCKWAVE, 1);
-        addEntry(this, vbox4, "Shield Spawn", PlayData.UPGRADE_SHIELDSPAWN, 2);
-        addEntry(this, vbox4, "Double XP", PlayData.UPGRADE_DOUBLEXP, 3);
+        addEntry(this, vbox4, "Shockwave", GameData.UPGRADE_SHOCKWAVE, 1);
+        addEntry(this, vbox4, "Shield Spawn", GameData.UPGRADE_SHIELDSPAWN, 2);
+        addEntry(this, vbox4, "Double XP", GameData.UPGRADE_DOUBLEXP, 3);
     }
 }

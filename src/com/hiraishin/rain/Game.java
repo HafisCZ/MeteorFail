@@ -46,6 +46,10 @@ public class Game {
                     }
                 }
 
+                if (keyboard.isPressed(KeyCode.SEMICOLON)) {
+                    Commons.DEBUG = !Commons.DEBUG;
+                }
+
                 keyboard.update();
             }
         }.start();

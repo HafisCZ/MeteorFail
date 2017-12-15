@@ -39,13 +39,11 @@ public class MenuPane extends GridPane {
         this.add(label, 0, 0);
 
         VBox vbox = new VBox(15);
-        vbox.getChildren()
-                .addAll(new MenuItem("PLAY",
-                                     StateEvent.PLAY), new MenuItem("UPGRADES",
-                                                                    StateEvent.SHOP), new MenuItem("STATISTICS",
-                                                                                                   StateEvent.STAT), new MenuItem("HELP",
-                                                                                                                                  StateEvent.HELP), new HBox(), new MenuItem("QUIT",
-                                                                                                                                                                             StateEvent.QUIT));
+        vbox.getChildren().addAll(new MenuItem("PLAY", StateEvent.PLAY),
+                                  new MenuItem("UPGRADES", StateEvent.SHOP),
+                                  new MenuItem("STATISTICS", StateEvent.STAT),
+                                  new MenuItem("HELP", StateEvent.HELP), new HBox(),
+                                  new MenuItem("QUIT", StateEvent.QUIT));
 
         this.add(vbox, 0, 1);
     }

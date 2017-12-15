@@ -7,13 +7,13 @@ package com.hiraishin.rain.level.player;
 import java.util.Objects;
 
 import com.hiraishin.rain.entity.Entity;
+import com.hiraishin.rain.level.GameData;
 import com.hiraishin.rain.level.Level;
-import com.hiraishin.rain.level.PlayData;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-public class PlayerData {
+public class PlayerProperties {
 
     public static final int EXP_RATE = 1;
     public static final int EXP_POOL = 40 * 60;
@@ -34,17 +34,17 @@ public class PlayerData {
     private int experienceMultiplier = EXP_RATE;
     private Skill selectedSkill = null;
 
-    public PlayerData() {
-        healthProperty.set(PlayData.PLAYER_HEALTH.getValue());
-        levelProperty.set(PlayData.PLAYER_LEVEL.getValue());
+    public PlayerProperties() {
+        healthProperty.set(GameData.PLAYER_HEALTH.getValue());
+        levelProperty.set(GameData.PLAYER_LEVEL.getValue());
 
-        int ord = PlayData.PLAYER_SELECTEDSKILL.getValue();
+        int ord = GameData.PLAYER_SELECTEDSKILL.getValue();
         selectedSkill = (ord > 0) ?
                 ((ord - 1 < Skill.values().length) ? Skill.values()[ord - 1] : null) :
                 null;
 
         energyRate = (Objects.isNull(selectedSkill) ? 0 :
-                selectedSkill.getPowerGain() * PlayData.UPGRADE_POWERRATE.getValue());
+                selectedSkill.getPowerGain() * GameData.UPGRADE_POWERRATE.getValue());
     }
 
     public void activateSkill(Entity source, Level level) {
@@ -55,29 +55,32 @@ public class PlayerData {
 
                     skillActive = true;
                     skillBurnout = selectedSkill.getBurnoutTime();
-                    selectedSkill.applyEffect(source.getX() + source.getWidth() / 2, source.getY() +
-                            source.getHeight() / 2, level, this);
+                    selectedSkill.applyEffect(source.getX() + source.getWidth() / 2,
+                                              source.getY() + source.getHeight() / 2, level, this);
 
-                    PlayData.STAT_COUNT_SKILLACTIVATION.increment();
+                    GameData.STAT_COUNT_SKILLACTIVATION.increment();
                 }
             }
         }
     }
 
     public void addEnergy(int multiplier) {
-        PlayData.STAT_COUNT_NODES.increment();
+        GameData.STAT_COUNT_NODES.increment();
 
         if (!skillActive) {
             if (Objects.nonNull(selectedSkill)) {
                 if (energyProperty.intValue() < 100) {
                     energyProperty.set(energyProperty.intValue() + energyRate * multiplier);
+                    if (energyProperty.intValue() > 100) {
+                        energyProperty.setValue(100);
+                    }
                 }
             }
         }
     }
 
     public void addExperience(int multiplier) {
-        PlayData.STAT_COUNT_EXPERIENCE.incrementBy(experienceMultiplier * multiplier);
+        GameData.STAT_COUNT_EXPERIENCE.incrementBy(experienceMultiplier * multiplier);
 
         experience += experienceMultiplier * multiplier;
         experienceProperty.set((int) (100 * experience /
@@ -86,8 +89,8 @@ public class PlayerData {
             experience = 0;
 
             levelProperty.set(levelProperty.intValue() + 1);
-            PlayData.PLAYER_POINTS.increment();
-            PlayData.PLAYER_LEVEL.setValue(levelProperty.intValue());
+            GameData.PLAYER_POINTS.increment();
+            GameData.PLAYER_LEVEL.setValue(levelProperty.intValue());
         }
     }
 
@@ -96,7 +99,7 @@ public class PlayerData {
     }
 
     public void addShield() {
-        PlayData.STAT_COUNT_SHIELD.increment();
+        GameData.STAT_COUNT_SHIELD.increment();
 
         if (armorProperty.intValue() < healthProperty.intValue()) {
             armorProperty.set(armorProperty.intValue() + 1);
@@ -104,7 +107,7 @@ public class PlayerData {
     }
 
     public void damage() {
-        PlayData.STAT_COUNT_DAMAGE.increment();
+        GameData.STAT_COUNT_DAMAGE.increment();
 
         if (armorProperty.intValue() > 0) {
             armorProperty.set(armorProperty.intValue() - 1);

@@ -27,8 +27,8 @@ public class ShockParticle extends Particle {
     @Override
     public void draw(GraphicsContext gc) {
         gc.setStroke(Color.ALICEBLUE);
-        gc.strokeArc(this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius *
-                2, 0, ARC_ANGLE, ArcType.OPEN);
+        gc.strokeArc(this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2,
+                     0, ARC_ANGLE, ArcType.OPEN);
     }
 
     @Override

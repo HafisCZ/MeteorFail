@@ -45,7 +45,8 @@ public class AnimatedSprite extends Sprite {
         this.selectedFrame = 0;
         this.currentTime = 0;
 
-        select(this.animatedFrames[this.selectedFrame].row, this.animatedFrames[this.selectedFrame].col);
+        select(this.animatedFrames[this.selectedFrame].row,
+               this.animatedFrames[this.selectedFrame].col);
     }
 
     public void stop() {
@@ -68,7 +69,8 @@ public class AnimatedSprite extends Sprite {
             }
 
             this.currentTime = 0;
-            select(this.animatedFrames[this.selectedFrame].row, this.animatedFrames[this.selectedFrame].col);
+            select(this.animatedFrames[this.selectedFrame].row,
+                   this.animatedFrames[this.selectedFrame].col);
         }
     }
 

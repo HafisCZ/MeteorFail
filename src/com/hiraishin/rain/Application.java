@@ -9,8 +9,10 @@ import com.hiraishin.rain.experimental.PausePane;
 import com.hiraishin.rain.experimental.ShopPane;
 import com.hiraishin.rain.experimental.StatPane;
 import com.hiraishin.rain.input.Keyboard;
-import com.hiraishin.rain.level.PlayData;
+import com.hiraishin.rain.level.GameData;
 import com.hiraishin.rain.util.Commons;
+import com.hiraishin.rain.util.ImageLoader;
+import com.sun.javafx.application.LauncherImpl;
 
 import javafx.application.Platform;
 import javafx.event.Event;
@@ -30,14 +32,14 @@ public class Application extends javafx.application.Application {
 
     private Game game;
 
-    private Pane paneMenu = new MenuPane();
-    private Pane paneShop = new ShopPane();
-    private Pane paneStat = new StatPane();
-    private Pane paneHelp = new HelpPane();
-    private Pane panePause = new PausePane();
+    private Pane paneMenu;
+    private Pane paneShop;
+    private Pane paneStat;
+    private Pane paneHelp;
+    private Pane panePause;
 
     public static void main(String... args) {
-        launch(args);
+        LauncherImpl.launchApplication(Application.class, args);
     }
 
     private static void switchPane(Group parent, Pane pane) {
@@ -49,15 +51,32 @@ public class Application extends javafx.application.Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
-        PlayData.load();
+    public void init() {
+        GameData.load();
 
-        this.keyboard = new Keyboard(stage);
+        ImageLoader.INTERNAL.loadAll("background/background", "entity/acid", "entity/armor",
+                                     "entity/energy", "entity/player", "entity/star",
+                                     "gui/bars/armor", "gui/bars/energy", "gui/bars/experience",
+                                     "gui/bars/frame", "gui/bars/health", "gui/icons/ability",
+                                     "gui/icons/back", "gui/icons/energy", "gui/icons/experience",
+                                     "gui/icons/frame", "gui/icons/health");
 
+        this.paneMenu = new MenuPane();
+        this.paneShop = new ShopPane();
+        this.paneStat = new StatPane();
+        this.paneHelp = new HelpPane();
+        this.panePause = new PausePane();
+
+        this.keyboard = new Keyboard();
         this.game = new Game(this.keyboard);
 
         this.group = new Group();
         this.root = new Group(this.game.getCanvas(), this.group);
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        this.keyboard.addEventSource(stage);
 
         this.scene = new Scene(this.root, Commons.SCENE_WIDTH, Commons.SCENE_HEIGHT);
         stage.setScene(this.scene);

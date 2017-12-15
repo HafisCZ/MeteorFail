@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public enum PlayData {
+public enum GameData {
 
     STAT_COUNT_EXPERIENCE(0, Integer.MAX_VALUE),
     STAT_COUNT_DAMAGE(0, Integer.MAX_VALUE),
@@ -37,17 +37,17 @@ public enum PlayData {
 
     private int value;
 
-    public static PlayData[] getStatistics() {
-        return new PlayData[] { STAT_COUNT_EXPERIENCE, STAT_COUNT_DAMAGE, STAT_COUNT_SHIELD,
+    public static GameData[] getStatistics() {
+        return new GameData[] { STAT_COUNT_EXPERIENCE, STAT_COUNT_DAMAGE, STAT_COUNT_SHIELD,
                 STAT_COUNT_NODES, STAT_COUNT_JUMP, STAT_COUNT_SKILLACTIVATION };
     }
 
-    public static PlayData[] getPlayerProperties() {
-        return new PlayData[] { PLAYER_LEVEL, PLAYER_POINTS, PLAYER_SELECTEDSKILL, PLAYER_HEALTH };
+    public static GameData[] getPlayerProperties() {
+        return new GameData[] { PLAYER_LEVEL, PLAYER_POINTS, PLAYER_SELECTEDSKILL, PLAYER_HEALTH };
     }
 
-    public static PlayData[] getUpgrades() {
-        return new PlayData[] { UPGRADE_MOVEMENT, UPGRADE_POWERRATE, UPGRADE_SHOCKWAVE,
+    public static GameData[] getUpgrades() {
+        return new GameData[] { UPGRADE_MOVEMENT, UPGRADE_POWERRATE, UPGRADE_SHOCKWAVE,
                 UPGRADE_DOUBLEXP, UPGRADE_SHIELDSPAWN };
     }
 
@@ -75,8 +75,15 @@ public enum PlayData {
         FileInputStream fiStream = new FileInputStream(new File(file));
         ObjectInputStream oiStream = new ObjectInputStream(fiStream);
 
-        for (int i = 0; i < PlayData.values().length; i++) {
-            PlayData.values()[i].value = oiStream.readInt();
+        for (int i = 0; i < GameData.values().length; i++) {
+            int reading = oiStream.readInt();
+            if (reading < GameData.values()[i].min) {
+                reading = GameData.values()[i].min;
+            } else if (reading > GameData.values()[i].max) {
+                reading = GameData.values()[i].max;
+            }
+
+            GameData.values()[i].value = reading;
         }
 
         oiStream.close();
@@ -88,15 +95,15 @@ public enum PlayData {
         ObjectOutputStream ooStream = new ObjectOutputStream(foStream);
         ooStream.reset();
 
-        for (int i = 0; i < PlayData.values().length; i++) {
-            ooStream.writeInt(PlayData.values()[i].value);
+        for (int i = 0; i < GameData.values().length; i++) {
+            ooStream.writeInt(GameData.values()[i].value);
         }
 
         ooStream.close();
         foStream.close();
     }
 
-    private PlayData(int defaultValue, int max) {
+    private GameData(int defaultValue, int max) {
         this.value = defaultValue;
         this.max = max;
         this.min = defaultValue;

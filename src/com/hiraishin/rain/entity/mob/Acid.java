@@ -20,7 +20,7 @@ public class Acid extends Mob {
     public static final double HEIGHT = 10;
     public static final double SPEED_X_DEFAULT = 0;
     public static final double SPEED_Y_DEFAULT = 10;
-    public static final Image IMAGE = ImageLoader.INTERNAL.getImage("entity/acid");
+    public static final Image IMAGE = ImageLoader.getLoader().getImage("entity/acid");
     public static final int IMAGE_ROWS = 1;
     public static final int IMAGE_COLS = 4;
     public static final double SPRITE_X_OFFSET = -1;

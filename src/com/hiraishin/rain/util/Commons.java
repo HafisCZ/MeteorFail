@@ -11,7 +11,7 @@ public class Commons {
 
     public static final Random RANDOM = new Random();
 
-    public static final boolean SHOW_BOUNDING_BOXES = false;
+    public static boolean DEBUG = false;
 
     public static final double SCENE_WIDTH = 1000;
     public static final double SCENE_HEIGHT = 700;

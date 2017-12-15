@@ -6,8 +6,8 @@ package com.hiraishin.rain.graphics;
 
 import java.util.Objects;
 
-import com.hiraishin.rain.level.PlayData;
-import com.hiraishin.rain.level.player.PlayerData;
+import com.hiraishin.rain.level.GameData;
+import com.hiraishin.rain.level.player.PlayerProperties;
 import com.hiraishin.rain.level.player.Skill;
 import com.hiraishin.rain.util.ImageLoader;
 
@@ -16,27 +16,27 @@ import javafx.scene.paint.Color;
 
 public class Overlay implements Drawable {
 
-    private static final Sprite HLT_BAR = new Sprite(ImageLoader.INTERNAL
+    private static final Sprite HLT_BAR = new Sprite(ImageLoader.getLoader()
             .getImage("gui/bars/health"), 1, 10);
-    private static final Sprite ARM_BAR = new Sprite(ImageLoader.INTERNAL
+    private static final Sprite ARM_BAR = new Sprite(ImageLoader.getLoader()
             .getImage("gui/bars/armor"), 1, 10);
-    private static final Sprite EXP_BAR = new Sprite(ImageLoader.INTERNAL
+    private static final Sprite EXP_BAR = new Sprite(ImageLoader.getLoader()
             .getImage("gui/bars/experience"), 1, 100);
-    private static final Sprite PWR_BAR = new Sprite(ImageLoader.INTERNAL
+    private static final Sprite PWR_BAR = new Sprite(ImageLoader.getLoader()
             .getImage("gui/bars/energy"), 2, 100);
 
-    private static final Sprite ABL_ICO = new Sprite(ImageLoader.INTERNAL
+    private static final Sprite ABL_ICO = new Sprite(ImageLoader.getLoader()
             .getImage("gui/icons/ability"), 1, 4);
-    private static final Sprite HLC_ICO = new Sprite(ImageLoader.INTERNAL
+    private static final Sprite HLC_ICO = new Sprite(ImageLoader.getLoader()
             .getImage("gui/icons/health"), 1, 1);
-    private static final Sprite EXP_ICO = new Sprite(ImageLoader.INTERNAL
+    private static final Sprite EXP_ICO = new Sprite(ImageLoader.getLoader()
             .getImage("gui/icons/experience"), 1, 1);
-    private static final Sprite PWR_ICO = new Sprite(ImageLoader.INTERNAL
+    private static final Sprite PWR_ICO = new Sprite(ImageLoader.getLoader()
             .getImage("gui/icons/energy"), 1, 1);
 
-    private static final Sprite SQ_FRAME = new Sprite(ImageLoader.INTERNAL
+    private static final Sprite SQ_FRAME = new Sprite(ImageLoader.getLoader()
             .getImage("gui/icons/frame"), 1, 1);
-    private static final Sprite RC_FRAME = new Sprite(ImageLoader.INTERNAL
+    private static final Sprite RC_FRAME = new Sprite(ImageLoader.getLoader()
             .getImage("gui/bars/frame"), 1, 1);
 
     private final double x;
@@ -45,14 +45,14 @@ public class Overlay implements Drawable {
     private Skill skill;
     private int level;
 
-    public Overlay(double x, double y, PlayerData properties) {
+    public Overlay(double x, double y, PlayerProperties properties) {
         this.x = x;
         this.y = y;
         this.skill = properties.getSelectedSkill();
 
         level = properties.getLevelProperty().intValue();
 
-        HLT_BAR.stretch(1, PlayData.PLAYER_HEALTH.getValue());
+        HLT_BAR.stretch(1, GameData.PLAYER_HEALTH.getValue());
         ARM_BAR.stretch(1, 0);
         EXP_BAR.stretch(1, 0);
         PWR_BAR.stretch(1, 0);

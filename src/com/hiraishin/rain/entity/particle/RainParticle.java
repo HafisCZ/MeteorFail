@@ -32,9 +32,9 @@ public class RainParticle extends Particle {
     @Override
     public void draw(GraphicsContext gc) {
         gc.setFill(this.color);
-        gc.fillRect(this.x, this.y, this.width, this.y + this.height > Commons.SCENE_GROUND ?
-                this.y - Commons.SCENE_GROUND :
-                this.height);
+        gc.fillRect(this.x, this.y, this.width,
+                    this.y + this.height > Commons.SCENE_GROUND ? this.y - Commons.SCENE_GROUND :
+                            this.height);
     }
 
     @Override

@@ -54,9 +54,13 @@ public abstract class Entity implements Drawable {
             this.sprite.draw(gc, this.x + this.spriteXOffset, this.y + this.spriteYOffset);
         }
 
-        if (Commons.SHOW_BOUNDING_BOXES) {
+        if (Commons.DEBUG) {
             gc.setStroke(Color.WHITE);
             gc.strokeRect(this.x, this.y, this.width, this.height);
+
+            gc.setFill(Color.WHITE);
+            gc.fillText(this.getClass().getSimpleName() + "\n[" + this.x + " " + this.y + "]\n" +
+                    this.dx + " " + this.dy, this.x + this.width, this.y);
         }
     }
 

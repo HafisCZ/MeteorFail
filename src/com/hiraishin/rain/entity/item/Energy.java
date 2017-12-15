@@ -14,7 +14,7 @@ public class Energy extends Item {
 
     public static final double WIDTH = 7;
     public static final double HEIGHT = 7;
-    public static final Image IMAGE = ImageLoader.INTERNAL.getImage("entity/energy");
+    public static final Image IMAGE = ImageLoader.getLoader().getImage("entity/energy");
     public static final int IMAGE_ROWS = 1;
     public static final int IMAGE_COLS = 1;
     public static final double SPRITE_X_OFFSET = -4;

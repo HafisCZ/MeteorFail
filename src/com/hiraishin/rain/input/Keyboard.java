@@ -6,6 +6,7 @@ package com.hiraishin.rain.input;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -18,8 +19,8 @@ public class Keyboard implements EventHandler<KeyEvent> {
     private final Map<KeyCode, Boolean> currentMap = new HashMap<>();
     private final Map<KeyCode, Boolean> previousMap = new HashMap<>();
 
-    public Keyboard(Stage stage) {
-        synchronized (stage) {
+    public void addEventSource(Stage stage) {
+        synchronized (Objects.requireNonNull(stage)) {
             stage.addEventHandler(KeyEvent.KEY_PRESSED, this);
             stage.addEventHandler(KeyEvent.KEY_RELEASED, this);
         }

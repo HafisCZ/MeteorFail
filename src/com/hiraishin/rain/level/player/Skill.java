@@ -16,17 +16,18 @@ public enum Skill {
     SHIELD_SPAWN((X, Y, L, PP) -> PP.addShield(), 30, 3),
     EXPERIENCE_BOOST((X, Y, L, PP) -> PP.setTemporaryExperienceBoost(2, 60 * 60), 60 * 60, 1);
 
-    private final QuadConsumer<Double, Double, Level, PlayerData> effect;
+    private final QuadConsumer<Double, Double, Level, PlayerProperties> effect;
     private final int burnoutTicks;
     private final int powerGain;
 
-    private Skill(QuadConsumer<Double, Double, Level, PlayerData> consumer, int burnout, int rate) {
+    private Skill(QuadConsumer<Double, Double, Level, PlayerProperties> consumer, int burnout,
+                  int rate) {
         this.effect = consumer;
         this.burnoutTicks = burnout;
         this.powerGain = rate;
     }
 
-    public void applyEffect(double x, double y, Level level, PlayerData properties) {
+    public void applyEffect(double x, double y, Level level, PlayerProperties properties) {
         effect.accept(x, y, level, properties);
     }
 
