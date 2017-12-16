@@ -27,7 +27,7 @@ public class Player extends Mob {
     public static final double SPEED_X_INCREMENT = 0.5;
     public static final double SPEED_X_INCREMENT2 = 0.6;
     public static final double SPEED_Y_INCREMENT = 0.5;
-    public static final Image IMAGE = ImageLoader.getLoader().getImage("entity/player");
+    public static final Image IMAGE = ImageLoader.INSTANCE.getImage("entity/player");
     public static final int IMAGE_ROWS = 2;
     public static final int IMAGE_COLS = 4;
     public static final double SPRITE_X_OFFSET = -4;

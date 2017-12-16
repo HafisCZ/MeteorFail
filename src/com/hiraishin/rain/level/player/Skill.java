@@ -6,9 +6,9 @@ package com.hiraishin.rain.level.player;
 
 import com.hiraishin.rain.entity.particle.ShockParticle;
 import com.hiraishin.rain.level.Level;
+import com.hiraishin.rain.level.Timescale;
 import com.hiraishin.rain.util.Commons;
 import com.hiraishin.rain.util.QuadConsumer;
-import com.hiraishin.rain.util.Timescale;
 
 public enum Skill {
 

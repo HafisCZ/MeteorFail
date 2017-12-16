@@ -85,6 +85,7 @@ public class StatPane extends BorderPane {
         addEntry(vbox1, vbox2, GameData.STAT_COUNT_EXPERIENCE);
         addEntry(vbox1, vbox2, GameData.STAT_COUNT_JUMP);
         addEntry(vbox1, vbox2, GameData.STAT_COUNT_NODES);
+        addEntry(vbox1, vbox2, GameData.STAT_COUNT_STARS);
         addEntry(vbox1, vbox2, GameData.STAT_COUNT_SHIELD);
         addEntry(vbox1, vbox2, GameData.STAT_COUNT_SKILLACTIVATION);
     }

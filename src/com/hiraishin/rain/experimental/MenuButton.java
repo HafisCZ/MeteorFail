@@ -21,7 +21,7 @@ public class MenuButton extends HBox {
      * Constructors
      */
     public MenuButton(EventType<StateEvent> eventType) {
-        ImageView imageView = new ImageView(ImageLoader.INTERNAL.getImage("gui/icons/back"));
+        ImageView imageView = new ImageView(ImageLoader.INSTANCE.getImage("gui/icons/back"));
         imageView.setOpacity(0.1);
 
         this.setOnMouseClicked(event -> {

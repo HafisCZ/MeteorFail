@@ -26,7 +26,6 @@ import com.hiraishin.rain.input.Keyboard;
 import com.hiraishin.rain.level.player.PlayerProperties;
 import com.hiraishin.rain.util.Commons;
 import com.hiraishin.rain.util.ImageLoader;
-import com.hiraishin.rain.util.Timescale;
 
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
@@ -38,7 +37,7 @@ public class Level {
     private final List<Entity> mobs = new ArrayList<>();
     private final List<Entity> particles = new ArrayList<>();
     private final List<Spawner> spawners = new ArrayList<>();
-    private final Image background = ImageLoader.getLoader().getImage("background/background");
+    private final Image background = ImageLoader.INSTANCE.getImage("background/background");
     private final Keyboard keyboard;
     private final LevelController levelController = new LevelController(this);
 

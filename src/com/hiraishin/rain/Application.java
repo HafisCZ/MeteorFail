@@ -24,6 +24,12 @@ import javafx.stage.Stage;
 
 public class Application extends javafx.application.Application {
 
+    private static final String VERSION = "v3.4.6";
+    private static final String TITLE_DEBUG_PREFIX = "[DEBUG MODE]";
+    private static final String TITLE = "Rain";
+
+    private static final String ARG_DEBUG = "-debug";
+
     public static boolean DEBUG_MODE = false;
 
     private Scene scene;
@@ -42,7 +48,7 @@ public class Application extends javafx.application.Application {
 
     public static void main(String... args) {
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-debug")) {
+            if (args[i].equals(ARG_DEBUG)) {
                 DEBUG_MODE = true;
             }
         }
@@ -62,12 +68,27 @@ public class Application extends javafx.application.Application {
     public void init() {
         GameData.load();
 
-        ImageLoader.INTERNAL.loadAll("background/background", "entity/acid", "entity/armor",
-                                     "entity/energy", "entity/player", "entity/star",
-                                     "gui/bars/armor", "gui/bars/energy", "gui/bars/experience",
-                                     "gui/bars/frame", "gui/bars/health", "gui/icons/ability",
-                                     "gui/icons/back", "gui/icons/energy", "gui/icons/experience",
-                                     "gui/icons/frame", "gui/icons/health");
+        ImageLoader.INSTANCE.setCommonPrefix("res/");
+        ImageLoader.INSTANCE.setCommonSuffix(".png");
+        ImageLoader.INSTANCE.preferExternalSources(true);
+
+        ImageLoader.INSTANCE.load("background/background");
+        ImageLoader.INSTANCE.load("entity/acid");
+        ImageLoader.INSTANCE.load("entity/armor");
+        ImageLoader.INSTANCE.load("entity/energy");
+        ImageLoader.INSTANCE.load("entity/player");
+        ImageLoader.INSTANCE.load("entity/star");
+        ImageLoader.INSTANCE.load("gui/bars/armor");
+        ImageLoader.INSTANCE.load("gui/bars/energy");
+        ImageLoader.INSTANCE.load("gui/bars/experience");
+        ImageLoader.INSTANCE.load("gui/bars/frame");
+        ImageLoader.INSTANCE.load("gui/bars/health");
+        ImageLoader.INSTANCE.load("gui/icons/ability");
+        ImageLoader.INSTANCE.load("gui/icons/back");
+        ImageLoader.INSTANCE.load("gui/icons/energy");
+        ImageLoader.INSTANCE.load("gui/icons/experience");
+        ImageLoader.INSTANCE.load("gui/icons/frame");
+        ImageLoader.INSTANCE.load("gui/icons/health");
 
         this.paneMenu = new MenuPane();
         this.paneShop = new ShopPane();
@@ -122,7 +143,7 @@ public class Application extends javafx.application.Application {
             event.consume();
         });
 
-        stage.setTitle("Rain - Hiraishin Software (c) 2017");
+        stage.setTitle((DEBUG_MODE ? TITLE_DEBUG_PREFIX + " " : "") + TITLE + " " + VERSION);
         stage.setResizable(false);
         stage.show();
 

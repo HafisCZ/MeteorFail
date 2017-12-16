@@ -67,7 +67,7 @@ public class ShopPane extends BorderPane {
      * Static functions
      */
     private static void addEntry(ShopPane p, VBox v1, VBox v2, VBox v3, GameData pd) {
-        Text t1 = new Text(pd.getName() + ":");
+        Text t1 = new Text(pd.getName());
         t1.setOpacity(0.5);
 
         if (pd.getValue() < pd.getMax()) {

@@ -7,61 +7,82 @@ package com.hiraishin.rain.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 
 import javafx.scene.image.Image;
 
 public enum ImageLoader {
 
-    INTERNAL("/res/", ".png", S -> {
-        return new Image(ClassLoader.class.getResourceAsStream(S));
-    }),
+    INSTANCE;
 
-    EXTERNAL("res/", ".png", S -> {
-        try (FileInputStream fiStream = new FileInputStream(new File(S))) {
-            return new Image(fiStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return INTERNAL.getImage(S);
-        }
-    });
+    private static final File EXTERNAL_IMAGE_FOLDER = new File("res");
+    private static final boolean EXTERNAL_IMAGE_ENABLE = EXTERNAL_IMAGE_FOLDER.isDirectory();
 
-    private static final File EXTERNAL_LOADER_MARKER = new File("res");
-    private static final boolean EXTERNAL_LOADER_ENABLED = EXTERNAL_LOADER_MARKER.isDirectory();
+    private final Map<String, Image> buffer = new HashMap<>();
+    private String prefix = "";
+    private String suffix = "";
+    private boolean enableExternalSources = false;
 
-    private final Map<String, Image> loadedImages = new HashMap<>();
-    private final Function<String, Image> loader;
-    private final String prefix;
-    private final String suffix;
-
-    public static final ImageLoader getLoader() {
-        return (EXTERNAL_LOADER_ENABLED ? EXTERNAL : INTERNAL);
+    public void setCommonPrefix(String prefix) {
+        this.prefix = Objects.requireNonNull(prefix);
     }
 
-    private ImageLoader(String prefix, String suffix, Function<String, Image> loader) {
-        this.loader = Objects.requireNonNull(loader);
-        this.prefix = prefix;
-        this.suffix = suffix;
+    public void setCommonSuffix(String suffix) {
+        this.suffix = Objects.requireNonNull(suffix);
     }
 
-    public Image getImage(String token) {
-        if (!this.loadedImages.containsKey(token)) {
-            load(token);
-        }
-
-        return this.loadedImages.get(token);
+    private InputStream toInternalInputStream(String token) {
+        return ClassLoader.class.getResourceAsStream("/" + this.prefix + token + this.suffix);
     }
 
-    public void loadAll(String... tokens) {
-        for (String token : tokens) {
-            load(token);
-        }
+    private InputStream toExternalInputStream(String token) throws IOException {
+        return new FileInputStream(new File(this.prefix + token + this.suffix));
+    }
+
+    public void preferExternalSources(boolean prefer) {
+        this.enableExternalSources = prefer;
     }
 
     public void load(String token) {
-        this.loadedImages.put(token, this.loader.apply(this.prefix + token + this.suffix));
+        load(token, -1, -1, false, false);
     }
+
+    public void load(String token, int width, int height) {
+        load(token, width, height, false, false);
+    }
+
+    public void load(String token, int width, int height, boolean keepAspectRatio, boolean smooth) {
+        InputStream stream;
+
+        if (this.enableExternalSources && EXTERNAL_IMAGE_ENABLE) {
+            try {
+                stream = toExternalInputStream(token);
+            } catch (IOException e) {
+                stream = toInternalInputStream(token);
+            }
+        } else {
+            stream = toInternalInputStream(token);
+        }
+
+        Image image;
+        if (width > 0 && height > 0) {
+            image = new Image(stream, width, height, keepAspectRatio, smooth);
+        } else {
+            image = new Image(stream);
+        }
+
+        this.buffer.put(token, image);
+    }
+
+    public Image getImage(String token) {
+        if (!this.buffer.containsKey(token)) {
+            load(token);
+        }
+
+        return this.buffer.get(token);
+    }
+
 }

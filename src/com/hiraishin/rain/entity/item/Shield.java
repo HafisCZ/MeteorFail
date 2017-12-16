@@ -14,7 +14,7 @@ public class Shield extends Item {
 
     public static final double WIDTH = 20;
     public static final double HEIGHT = 30;
-    public static final Image IMAGE = ImageLoader.getLoader().getImage("entity/armor");
+    public static final Image IMAGE = ImageLoader.INSTANCE.getImage("entity/armor");
     public static final int IMAGE_ROWS = 1;
     public static final int IMAGE_COLS = 1;
     public static final double SPRITE_X_OFFSET = 0;

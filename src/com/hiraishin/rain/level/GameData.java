@@ -17,6 +17,7 @@ public enum GameData {
     STAT_COUNT_DAMAGE(0, Integer.MAX_VALUE, "Damage taken"),
     STAT_COUNT_SHIELD(0, Integer.MAX_VALUE, "Shields collected"),
     STAT_COUNT_NODES(0, Integer.MAX_VALUE, "Nodes collected"),
+    STAT_COUNT_STARS(0, Integer.MAX_VALUE, "Stars collected"),
     STAT_COUNT_JUMP(0, Integer.MAX_VALUE, "Times jumped"),
     STAT_COUNT_SKILLACTIVATION(0, Integer.MAX_VALUE, "Skills activated"),
 
@@ -41,7 +42,7 @@ public enum GameData {
 
     public static GameData[] getStatistics() {
         return new GameData[] { STAT_COUNT_EXPERIENCE, STAT_COUNT_DAMAGE, STAT_COUNT_SHIELD,
-                STAT_COUNT_NODES, STAT_COUNT_JUMP, STAT_COUNT_SKILLACTIVATION };
+                STAT_COUNT_NODES, STAT_COUNT_STARS, STAT_COUNT_JUMP, STAT_COUNT_SKILLACTIVATION };
     }
 
     public static GameData[] getPlayerProperties() {
